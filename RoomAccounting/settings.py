@@ -10,6 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+HOST = "127.0.0.1"
+PORT = "8000"
+
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
