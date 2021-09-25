@@ -1,10 +1,10 @@
 from django.contrib.auth import authenticate
 from django.contrib.auth import login
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http.response import HttpResponse
 
-from .models import User
+from .models import User, Room
 
 from RoomAccounting.settings import HOST, PORT
 
@@ -12,6 +12,13 @@ from RoomAccounting.settings import HOST, PORT
 def landing_page(request):
     context = {'HOST': HOST, 'PORT': PORT}
     return render(request, 'index.html', context=context)
+
+
+def home(request):
+    user = request.user
+    rooms = Room.objects.filter(creator=user)
+    context = {'HOST': HOST, 'PORT': PORT, 'username': user.username, 'rooms': rooms}
+    return render(request, 'home.html', context=context)
 
 
 def signUp(request):
@@ -40,6 +47,18 @@ def signIn(request):
             return HttpResponse('Wrong username/password')
 
         login(request, user)
-        return HttpResponse('Login completed successfully')
+        return redirect('home')
 
     return HttpResponse('Please login with post method')
+
+
+def addRoom(request):
+    if request.method == 'GET':
+        room_name = request.GET['room_name']
+
+        if request.user.is_authenticated:
+            Room.objects.create(name=room_name, creator=request.user)
+            return HttpResponse('Room created successfully')
+        return HttpResponse('Please signIn')
+
+    return HttpResponse('Please add room with get method')

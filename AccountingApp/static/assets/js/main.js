@@ -17,10 +17,9 @@ $(document).ready(function () {
 
     $(".animated-text").typed({
         strings: [
-            "fully responsive",
-            "onepage template",
-            "mobile first",
-            "startup template"
+            "add a new room",
+            "remove a room",
+            "manage a room",
         ],
         typeSpeed: 40,
         loop: true,
