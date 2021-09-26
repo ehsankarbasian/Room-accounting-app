@@ -52,6 +52,11 @@ def signIn(request):
     return HttpResponse('Please login with post method')
 
 
+def logout(request):
+    request.user = None
+    return redirect('landing_page')
+
+
 def addRoom(request):
     if request.method == 'GET':
         room_name = request.GET['room_name']
