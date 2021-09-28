@@ -16,12 +16,12 @@ def landing_page(request):
 
 def home(request):
     user = request.user
-    rooms = Room.objects.filter(creator=user)
+    rooms = Room.objects.filter(creator=user)[::-1]
     context = {'HOST': HOST, 'PORT': PORT, 'username': user.username, 'rooms': rooms}
     return render(request, 'home.html', context=context)
 
 
-def signUp(request):
+def sign_up(request):
     if request.method == 'POST':
         fullname = request.POST['fullname']
         email = request.POST['email']
@@ -37,7 +37,7 @@ def signUp(request):
     return HttpResponse('Please signup with post method')
 
 
-def signIn(request):
+def sign_in(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -57,13 +57,18 @@ def logout(request):
     return redirect('landing_page')
 
 
-def addRoom(request):
+def add_room(request):
     if request.method == 'GET':
         room_name = request.GET['room_name']
 
         if request.user.is_authenticated:
             Room.objects.create(name=room_name, creator=request.user)
-            return HttpResponse('Room created successfully')
+            return redirect('home')
         return HttpResponse('Please signIn')
 
     return HttpResponse('Please add room with get method')
+
+
+def delete_room(request, room_id):
+    Room.objects.get(id=room_id).delete()
+    return redirect('home')

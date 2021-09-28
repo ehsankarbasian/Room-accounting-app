@@ -66,11 +66,37 @@
 
                     </h2>
 
-                    {% for room in rooms %}
+                    <div id="room_item">
+                        <ul data-role="listview" data-inset="true">
 
-                        <h3>{{ room.name }}</h3>
+                            {% for room in rooms %}
+                                <hr>
 
-                    {% endfor %}
+                                <li style="font-size: 50px; background-color: #ffffff">
+
+                                    <div>
+                                        <div style="padding: 16px;"><b>{{ room.name }}</b></div>
+                                        <div style="padding: 16px; font-size: 35px;"><i class="fa fa-users" style="padding: 5px; color: #265a88"></i> {{ room.person_set.count }}</div>
+                                    </div>
+
+                                    <div style="padding-left: 15px; padding-bottom: 5px">
+                                        <a href="http://{{HOST}}:{{PORT}}/accounting_app/deleteRoom/{{ room.id }}"><i class="fa fa-trash" style="padding: 5px"></i></a>
+                                        <a href="http://{{HOST}}:{{PORT}}/accounting_app/editRoom/{{ room.id }}"><i class="fa fa-edit" style="padding: 5px"></i></a>
+                                        <a href="http://{{HOST}}:{{PORT}}/accounting_app/addPerson/{{ room.id }}"><i class="fa fa-user-plus" style="padding: 5px"></i></a>
+                                        <a href="http://{{HOST}}:{{PORT}}/accounting_app/addBuy/{{ room.id }}"><i class="fa fa-cart-plus" style="padding: 5px"></i></a>
+                                        <a href="http://{{HOST}}:{{PORT}}/accounting_app/allBuys/{{ room.id }}"><i class="fa fa-shopping-cart" style="padding: 5px"></i></a>
+                                        <a href="http://{{HOST}}:{{PORT}}/accounting_app/allTransactions/{{ room.id }}"><i class="fa fa-money" style="padding: 5px"></i></a>
+                                        <a href="http://{{HOST}}:{{PORT}}/accounting_app/reportForClearing/{{ room.id }}"><i class="fa fa-code" style="padding: 5px"></i></a>
+                                        <a href="http://{{HOST}}:{{PORT}}/accounting_app/completeLog/{{ room.id }}"><i class="fa fa-terminal" style="padding: 5px"></i></a>
+                                    </div>
+
+                                </li>
+
+                            {% endfor %}
+
+                        </ul><br>
+
+                    </div>
 
                 </div>
 
