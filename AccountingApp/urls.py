@@ -14,4 +14,5 @@ urlpatterns = [
     path('addPerson/<int:room_id>', add_person),
 
     path('addBuy/<int:room_id>', add_buy),
+    path('allBuys/<int:room_id>', all_buys),
 ]

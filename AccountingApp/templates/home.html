@@ -82,28 +82,28 @@
                                     <div style="padding: 16px;"><b>{{ room.name }}</b></div>
                                     <button type="button" data-toggle="modal" data-target="#PersonSet{{ room.id }}"
                                             style="padding:0;border: none;background: none;"><i class="fa fa-users"
-                                                                                                style="padding: 15px;color: #1b6d85"></i>{{ room.person_set.count }}
+                                                                                                style="padding: 15px;color: #1b6d85" title="Show room members"></i>{{ room.person_set.count }}
                                     </button>
                                 </div>
 
                                 <div style="padding-left: 15px; padding-bottom: 5px">
-                                    <a href="http://{{ HOST }}:{{ PORT }}/accounting_app/deleteRoom/{{ room.id }}"><i
+                                    <a href="http://{{ HOST }}:{{ PORT }}/accounting_app/deleteRoom/{{ room.id }}" title="Delete room"><i
                                             class="fa fa-trash" style="padding: 5px"></i></a>
                                     <button type="button" data-toggle="modal" data-target="#GetRoomName{{ room.id }}"
                                             style="padding: 0;border: none;background: none;"><i class="fa fa-edit"
-                                                                                                 style="padding: 5px;color: #1b6d85"></i>
+                                                                                                 style="padding: 5px;color: #1b6d85" title="Edit room name"></i>
                                     </button>
                                     <button type="button" data-toggle="modal" data-target="#AddPerson{{ room.id }}"
                                             style="padding: 0;border: none;background: none;"><i class="fa fa-user-plus"
-                                                                                                 style="padding: 5px;color: #1b6d85"></i>
+                                                                                                 style="padding: 5px;color: #1b6d85" title="Add new person to room"></i>
                                     </button>
                                     <button type="button" data-toggle="modal" data-target="#AddBuy{{ room.id }}"
                                             style="padding: 0;border: none;background: none;"><i class="fa fa-cart-plus"
-                                                                                                 style="padding: 5px;color: #1b6d85"></i>
+                                                                                                 style="padding: 5px;color: #1b6d85" title="Add a spent to room"></i>
                                     </button>
 
 
-                                    <a href="http://{{ HOST }}:{{ PORT }}/accounting_app/allBuys/{{ room.id }}"><i
+                                    <a href="http://{{ HOST }}:{{ PORT }}/accounting_app/allBuys/{{ room.id }}" title="Show all buys of room"><i
                                             class="fa fa-shopping-cart" style="padding: 5px"></i></a>
                                     <a href="http://{{ HOST }}:{{ PORT }}/accounting_app/allTransactions/{{ room.id }}"><i
                                             class="fa fa-money" style="padding: 5px"></i></a>

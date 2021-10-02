@@ -109,7 +109,7 @@ def add_buy(request, room_id):
 
         if room in request.user.room_set.all():
             amount = request.POST['amount']
-            description = request.POST['amount']
+            description = request.POST['description']
             spend = Spend.objects.create(amount=amount,
                                          description=description,
                                          room=room)
@@ -132,3 +132,15 @@ def add_buy(request, room_id):
         return HttpResponse("You're not the owner of the room")
 
     return HttpResponse("please use POST method")
+
+
+def all_buys(request, room_id):
+    room = Room.objects.get(id=room_id)
+
+    if room in request.user.room_set.all():
+        spends = room.spend_set.all()
+
+        context = {'spends': spends, 'room_name':room.name}
+        return render(request, 'log.html', context=context)
+
+    return HttpResponse("You're not the owner of the room")

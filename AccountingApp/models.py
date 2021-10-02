@@ -18,6 +18,7 @@ class Spend(models.Model):
     amount = models.IntegerField(default=0)
     description = models.CharField(max_length=256, blank=True)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now=True)
 
 
 class Spenders(models.Model):
