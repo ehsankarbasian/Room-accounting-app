@@ -97,9 +97,12 @@
                                             style="padding: 0;border: none;background: none;"><i class="fa fa-user-plus"
                                                                                                  style="padding: 5px;color: #1b6d85"></i>
                                     </button>
+                                    <button type="button" data-toggle="modal" data-target="#AddBuy{{ room.id }}"
+                                            style="padding: 0;border: none;background: none;"><i class="fa fa-cart-plus"
+                                                                                                 style="padding: 5px;color: #1b6d85"></i>
+                                    </button>
 
-                                    <a href="http://{{ HOST }}:{{ PORT }}/accounting_app/addBuy/{{ room.id }}"><i
-                                            class="fa fa-cart-plus" style="padding: 5px"></i></a>
+
                                     <a href="http://{{ HOST }}:{{ PORT }}/accounting_app/allBuys/{{ room.id }}"><i
                                             class="fa fa-shopping-cart" style="padding: 5px"></i></a>
                                     <a href="http://{{ HOST }}:{{ PORT }}/accounting_app/allTransactions/{{ room.id }}"><i
@@ -211,6 +214,7 @@
 
                                     </div>
 
+
                                     <div class="modal fade" id="PersonSet{{ room.id }}" tabindex="-1" role="dialog"
                                          aria-labelledby="myModalLabel">
 
@@ -229,7 +233,7 @@
 
                                                     {% for person in room.person_set.all %}
 
-                                                        {{ person.name }}<hr>
+                                                        <hr>{{ person.name }}
 
                                                     {% endfor %}
 
@@ -249,7 +253,8 @@
                                                         <div class="form-group">
 
                                                             <input type="text" name="person_name" class="form-control"
-                                                                   placeholder="Name" required="required">
+                                                                   placeholder="Name" required="required"
+                                                                   style="margin-top: 10px">
 
                                                         </div>
 
@@ -257,6 +262,92 @@
 
                                                             <button type="submit" class="btn btn-blue btn-block">Add the
                                                                 new person
+                                                            </button>
+
+                                                        </div>
+
+                                                    </form>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="modal fade" id="AddBuy{{ room.id }}" tabindex="-1" role="dialog"
+                                         aria-labelledby="myModalLabel">
+
+                                        <div class="modal-dialog" role="document">
+
+                                            <div class="modal-content">
+
+                                                <div class="modal-header">
+
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close"><span aria-hidden="true">&times;</span>
+                                                    </button>
+
+                                                    <h2 class="modal-title text-center" id="myModalLabel">Enter details
+                                                    </h2>
+
+                                                </div>
+
+                                                <div class="modal-body">
+
+                                                    <form id="modal_form" class="signup-form"
+                                                          action="http://{{ HOST }}:{{ PORT }}/accounting_app/addBuy/{{ room.id }}"
+                                                          method="post">
+                                                        {% csrf_token %}
+
+                                                        <div class="form-group">
+
+                                                            <h3 class="modal-title text-center" id="myModalLabel">Select
+                                                                the spender(s)
+                                                            </h3>
+
+
+                                                            {% for person in room.person_set.all %}
+
+                                                                <hr>
+                                                                <input type="checkbox" name="spender{{ person.id }}"
+                                                                       value="spender{{ person.id }}"
+                                                                       style="height: 32px;width: 32px;background-color: #eee">
+                                                                {{ person.name }}
+
+                                                            {% endfor %}
+
+                                                            <hr>
+                                                            <h3 class="modal-title text-center" id="myModalLabel">Select
+                                                                the partner(s)
+                                                            </h3>
+
+                                                            {% for person in room.person_set.all %}
+
+                                                                <hr>
+                                                                <input type="checkbox" name="partner{{ person.id }}"
+                                                                       value="spender{{ person.id }}"
+                                                                       style="height: 32px;width: 32px;background-color: #eee">
+                                                                {{ person.name }}
+
+                                                            {% endfor %}
+                                                            <hr>
+
+                                                            <input type="number" name="amount" class="form-control"
+                                                                   placeholder="Amount" required="required"
+                                                                   style="margin-top:10px">
+
+                                                            <input type="text" name="description" class="form-control"
+                                                                   placeholder="Description" required="required"
+                                                                   style="margin-top:10px">
+
+                                                        </div>
+
+                                                        <div class="form-group text-center">
+
+                                                            <button type="submit" class="btn btn-blue btn-block">Add buy
                                                             </button>
 
                                                         </div>

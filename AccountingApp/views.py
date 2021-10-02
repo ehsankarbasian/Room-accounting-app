@@ -4,7 +4,7 @@ from django.contrib.auth import login
 from django.shortcuts import render, redirect
 from django.http.response import HttpResponse
 
-from .models import User, Room, Person
+from .models import User, Room, Person, Spend, Spenders, Partners
 
 from RoomAccounting.settings import HOST, PORT
 
@@ -102,3 +102,33 @@ def add_person(request, room_id):
 
     return HttpResponse("please use POST method")
 
+
+def add_buy(request, room_id):
+    if request.method == 'POST':
+        room = Room.objects.get(id=room_id)
+
+        if room in request.user.room_set.all():
+            amount = request.POST['amount']
+            description = request.POST['amount']
+            spend = Spend.objects.create(amount=amount,
+                                         description=description,
+                                         room=room)
+            person_set = room.person_set.all()
+
+            for person in person_set:
+                # Create Spenders
+                ID = str(person.id)
+                if "spender"+ID in request.POST:
+                    Spenders.objects.create(spender_person=person,
+                                            spender_spend=spend) # TODO: weight
+
+                # Create Partners
+                if "partner"+ID in request.POST:
+                    Partners.objects.create(partner_person=person,
+                                            partner_spend=spend) # TODO: weight
+
+            return redirect('home')
+
+        return HttpResponse("You're not the owner of the room")
+
+    return HttpResponse("please use POST method")
