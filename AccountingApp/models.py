@@ -18,12 +18,12 @@ class Spend(models.Model):
     amount = models.IntegerField(default=0)
     description = models.CharField(max_length=256, blank=True)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
-    spenders = models.ForeignKey("Spenders", on_delete=models.DO_NOTHING)
-    partners = models.ForeignKey("Partners", on_delete=models.DO_NOTHING)
 
 
 class Spenders(models.Model):
     weight = models.IntegerField(default=1)
+    spender_person = models.ForeignKey("Person", on_delete=models.DO_NOTHING, default=None)
+    spender_spend = models.ForeignKey("Spend", on_delete=models.DO_NOTHING, default=None)
 
     class Meta:
         verbose_name_plural = 'spender (Person m2m Spend)'
@@ -31,6 +31,8 @@ class Spenders(models.Model):
 
 class Partners(models.Model):
     weight = models.IntegerField(default=1)
+    partner_person = models.ForeignKey("Person", on_delete=models.DO_NOTHING, default=None)
+    partner_spend = models.ForeignKey("Spend", on_delete=models.DO_NOTHING, default=None)
 
     class Meta:
         verbose_name_plural = 'partner (Person m2m Spend)'
@@ -39,8 +41,6 @@ class Partners(models.Model):
 class Person(models.Model):
     name = models.CharField(max_length=100, default="new_person")
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
-    spenders = models.ForeignKey("Spenders", on_delete=models.DO_NOTHING)
-    partners = models.ForeignKey("Partners", on_delete=models.DO_NOTHING)
 
 
 class Transaction(models.Model):

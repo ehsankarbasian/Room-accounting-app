@@ -4,7 +4,7 @@ from django.contrib.auth import login
 from django.shortcuts import render, redirect
 from django.http.response import HttpResponse
 
-from .models import User, Room
+from .models import User, Room, Person
 
 from RoomAccounting.settings import HOST, PORT
 
@@ -81,6 +81,21 @@ def edit_room(request, room_id):
         if room in request.user.room_set.all():
             room.name = request.POST['room_name']
             room.save()
+            return redirect('home')
+
+        return HttpResponse("You're not the owner of the room")
+
+    return HttpResponse("please use POST method")
+
+
+def add_person(request, room_id):
+    if request.method == 'POST':
+        room = Room.objects.get(id=room_id)
+
+        if room in request.user.room_set.all():
+            name = request.POST['person_name']
+            Person.objects.create(name=name,
+                                  room=room)
             return redirect('home')
 
         return HttpResponse("You're not the owner of the room")

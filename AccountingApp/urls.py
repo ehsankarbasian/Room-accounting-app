@@ -11,4 +11,5 @@ urlpatterns = [
 
     path('deleteRoom/<int:room_id>', delete_room),
     path('editRoom/<int:room_id>', edit_room),
+    path('addPerson/<int:room_id>', add_person),
 ]
