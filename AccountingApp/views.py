@@ -4,7 +4,7 @@ from django.contrib.auth import login
 from django.shortcuts import render, redirect
 from django.http.response import HttpResponse
 
-from .models import User, Room, Person, Spend, Spenders, Partners
+from .models import User, Room, Person, Spend, Spenders, Partners, Transaction
 
 from RoomAccounting.settings import HOST, PORT
 
@@ -144,3 +144,26 @@ def all_buys(request, room_id):
         return render(request, 'log.html', context=context)
 
     return HttpResponse("You're not the owner of the room")
+
+
+def add_transaction(request, room_id):
+    if request.method == 'POST':
+        room = Room.objects.get(id=room_id)
+
+        if room in request.user.room_set.all():
+            amount = request.POST['amount']
+            payer_id = request.POST['Payer']
+            receiver_id = request.POST['Receiver']
+            if payer_id == receiver_id:
+                return HttpResponse('ERROR: The payer and the receiver are the same')
+            payer = Person.objects.get(id=payer_id)
+            receiver = Person.objects.get(id=receiver_id)
+            Transaction.objects.create(amount=amount,
+                                       payer=payer,
+                                       receiver=receiver)
+            return redirect('home')
+
+        return HttpResponse("You're not the owner of the room")
+
+    return HttpResponse("please use POST method")
+
