@@ -72,3 +72,17 @@ def add_room(request):
 def delete_room(request, room_id):
     Room.objects.get(id=room_id).delete()
     return redirect('home')
+
+
+def edit_room(request, room_id):
+    if request.method == 'POST':
+        room = Room.objects.get(id=room_id)
+
+        if room in request.user.room_set.all():
+            room.name = request.POST['room_name']
+            room.save()
+            return redirect('home')
+
+        return HttpResponse("You're not the owner of the room")
+
+    return HttpResponse("please use POST method")
