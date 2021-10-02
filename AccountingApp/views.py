@@ -101,3 +101,4 @@ def add_person(request, room_id):
         return HttpResponse("You're not the owner of the room")
 
     return HttpResponse("please use POST method")
+
