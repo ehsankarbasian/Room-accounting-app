@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate
 from django.contrib.auth import login
+from django.db.models import Q
 
 from django.shortcuts import render, redirect
 from django.http.response import HttpResponse
@@ -138,9 +139,9 @@ def all_buys(request, room_id):
     room = Room.objects.get(id=room_id)
 
     if room in request.user.room_set.all():
-        spends = room.spend_set.all()
+        spends = room.spend_set.all().order_by('-created_at')
 
-        context = {'spends': spends, 'room_name':room.name}
+        context = {'spends': spends, 'mode': 'spend_log', 'room_name': room.name}
         return render(request, 'log.html', context=context)
 
     return HttpResponse("You're not the owner of the room")
@@ -167,3 +168,16 @@ def add_transaction(request, room_id):
 
     return HttpResponse("please use POST method")
 
+
+def all_transactions(request, room_id):
+    room = Room.objects.get(id=room_id)
+
+    if room in request.user.room_set.all():
+        persons = room.person_set.all()
+        payer_query = Q(payer__in=persons)
+        receiver_query = Q(receiver__in=persons)
+        transactions = Transaction.objects.filter(payer_query | receiver_query).order_by('-date')
+        context = {'transactions': transactions, 'mode': 'transaction_log', 'room_name': room.name}
+        return render(request, 'log.html', context=context)
+
+    return HttpResponse("You're not the owner of the room")

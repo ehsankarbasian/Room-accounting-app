@@ -107,7 +107,7 @@
                                                                                                  title="Add a spent to room"></i>
                                     </button>
                                     <a href="http://{{ HOST }}:{{ PORT }}/accounting_app/allBuys/{{ room.id }}"
-                                       title="Show all buys of room"><i
+                                       title="Show all buys of room" target="_blank"><i
                                             class="fa fa-shopping-cart" style="padding: 5px"></i></a>
                                     <button type="button" data-toggle="modal" data-target="#AddPayment{{ room.id }}"
                                             style="padding: 0;border: none;background: none;"><i
@@ -115,10 +115,11 @@
                                             style="padding: 5px;color: #1b6d85"
                                             title="Add a payment"></i>
                                     </button>
-
-
-                                    <a href="http://{{ HOST }}:{{ PORT }}/accounting_app/allTransactions/{{ room.id }}"><i
+                                    <a href="http://{{ HOST }}:{{ PORT }}/accounting_app/allTransactions/{{ room.id }}"
+                                       title="Show all transactions of room" target="_blank"><i
                                             class="fa fa-money" style="padding: 5px"></i></a>
+
+
                                     <a href="http://{{ HOST }}:{{ PORT }}/accounting_app/reportForClearing/{{ room.id }}"><i
                                             class="fa fa-code" style="padding: 5px"></i></a>
                                     <a href="http://{{ HOST }}:{{ PORT }}/accounting_app/completeLog/{{ room.id }}"><i
@@ -489,7 +490,8 @@
 
                                                             <hr>
 
-                                                            <input type="number" name="amount" class="btn btn-success btn-block"
+                                                            <input type="number" name="amount"
+                                                                   class="btn btn-success btn-block"
                                                                    placeholder="Money amount" required="required"
                                                                    style="background-color: #ffffff; color: #0f0f0f; margin-top: 32px;margin-bottom: 32px; height: 64px; font-size: 32px;">
 
@@ -497,7 +499,8 @@
 
                                                         <div class="form-group text-center">
 
-                                                            <button type="submit" class="btn btn-blue btn-block" style="font-size: 24px">Add
+                                                            <button type="submit" class="btn btn-blue btn-block"
+                                                                    style="font-size: 24px">Add
                                                                 transaction
                                                             </button>
 
