@@ -118,12 +118,13 @@
                                     <a href="http://{{ HOST }}:{{ PORT }}/accounting_app/allTransactions/{{ room.id }}"
                                        title="Show all transactions of room" target="_blank"><i
                                             class="fa fa-money" style="padding: 5px"></i></a>
+                                    <a href="http://{{ HOST }}:{{ PORT }}/accounting_app/roomLog/{{ room.id }}"
+                                       title="Show all of transactions and buys of room sorted by date" target="_blank"><i
+                                            class="fa fa-terminal" style="padding: 5px"></i></a>
 
 
                                     <a href="http://{{ HOST }}:{{ PORT }}/accounting_app/reportForClearing/{{ room.id }}"><i
                                             class="fa fa-code" style="padding: 5px"></i></a>
-                                    <a href="http://{{ HOST }}:{{ PORT }}/accounting_app/completeLog/{{ room.id }}"><i
-                                            class="fa fa-terminal" style="padding: 5px"></i></a>
 
                                     <!-- Modals -->
                                     <div class="modal fade" id="GetRoomName{{ room.id }}" tabindex="-1" role="dialog"

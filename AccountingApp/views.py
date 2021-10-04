@@ -5,6 +5,8 @@ from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.http.response import HttpResponse
 
+from itertools import chain
+
 from .models import User, Room, Person, Spend, Spenders, Partners, Transaction
 
 from RoomAccounting.settings import HOST, PORT
@@ -139,7 +141,7 @@ def all_buys(request, room_id):
     room = Room.objects.get(id=room_id)
 
     if room in request.user.room_set.all():
-        spends = room.spend_set.all().order_by('-created_at')
+        spends = room.spend_set.all().order_by('-date')
 
         context = {'spends': spends, 'mode': 'spend_log', 'room_name': room.name}
         return render(request, 'log.html', context=context)
@@ -178,6 +180,27 @@ def all_transactions(request, room_id):
         receiver_query = Q(receiver__in=persons)
         transactions = Transaction.objects.filter(payer_query | receiver_query).order_by('-date')
         context = {'transactions': transactions, 'mode': 'transaction_log', 'room_name': room.name}
+        return render(request, 'log.html', context=context)
+
+    return HttpResponse("You're not the owner of the room")
+
+
+def room_log(request, room_id):
+    room = Room.objects.get(id=room_id)
+
+    if room in request.user.room_set.all():
+        persons = room.person_set.all()
+        payer_query = Q(payer__in=persons)
+        receiver_query = Q(receiver__in=persons)
+        transactions = Transaction.objects.filter(payer_query | receiver_query).order_by('-date')
+
+        spends = room.spend_set.all().order_by('-date')
+
+        log = sorted(
+            chain(transactions, spends),
+            key=lambda item: item.date, reverse=True)
+
+        context = {'log': log, 'mode': 'room_log', 'room_name': room.name}
         return render(request, 'log.html', context=context)
 
     return HttpResponse("You're not the owner of the room")

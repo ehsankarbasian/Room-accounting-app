@@ -18,7 +18,11 @@ class Spend(models.Model):
     amount = models.IntegerField(default=0)
     description = models.CharField(max_length=256, blank=True)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now=True)
+    date = models.DateTimeField(auto_now=True)
+
+    @property
+    def is_transaction(self):
+        return False
 
 
 class Spenders(models.Model):
@@ -49,3 +53,7 @@ class Transaction(models.Model):
     receiver = models.ForeignKey("Person", related_name="receiver", on_delete=models.DO_NOTHING)
     date = models.DateTimeField(auto_now=True)
     amount = models.IntegerField(default=0)
+
+    @property
+    def is_transaction(self):
+        return True

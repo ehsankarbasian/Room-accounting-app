@@ -76,7 +76,7 @@
                                             border-radius: 20px;">
 
                                 <div style="padding-bottom: 16px; padding-left: 16px;padding-right: 16px"
-                                     title="created at: {{ spend.created_at }}">{{ spend.amount }}
+                                     title="date: {{ spend.date }}">{{ spend.amount }}
                                     for {{ spend.description }}</div>
                                 <br>
 
@@ -128,8 +128,8 @@
                                             border-radius: 20px;">
 
                                 <div style="padding-bottom: 16px; padding-left: 16px;padding-right: 16px"
-                                     title="created at: {{ transaction.date }}">Amount: {{ transaction.amount }}
-                                    </div>
+                                     title="date: {{ transaction.date }}">Amount: {{ transaction.amount }}
+                                </div>
 
 
                                 <div style="font-size: 25px; margin-left: 8px">
@@ -141,7 +141,7 @@
                                                 border-top: 1px solid rgba(0, 0, 0, 0.2);
                                                 border-bottom: 1px solid rgba(255, 255, 255, 0.5);">
                                     <b><i>payer: </i></b>
-                                        {{ transaction.payer.name }}
+                                    {{ transaction.payer.name }}
                                     <br>
                                     <hr style="font: 14px Georgia,serif;
                                                 padding: 0;
@@ -151,10 +151,91 @@
                                                 border-top: 1px solid rgba(0, 0, 0, 0.2);
                                                 border-bottom: 1px solid rgba(255, 255, 255, 0.3);">
                                     <b><i>receiver: </i></b>
-                                        {{ transaction.receiver.name }}
+                                    {{ transaction.receiver.name }}
                                     <br>
-                            </div>
+                                </div>
                             </li>
+
+                        {% endfor %}
+
+                    {% endif %}
+
+                    {% if mode == 'room_log' %}
+
+                        <h1 style="color: #122b40;margin-left: 48px" title="room log">
+                            Room name: {{ room_name }}</h1>
+                        <ul>
+
+                        {% for item in log %}
+
+                            {% if item.is_transaction %}
+
+                                <li style="font-size: 50px; background-color: chartreuse; padding: 8px; margin-bottom: 8px">
+
+                                    <div style="padding-left: 16px;padding-right: 16px; margin-top: 10px"
+                                         title="date: {{ item.date }}">{{ item.amount }}</div>
+                                    <br>
+
+                                    <div style="font-size: 25px; margin-left: 8px">
+                                        <hr style="font: 14px Georgia,serif;
+                                                padding: 0;
+                                                border: 0;
+                                                height: 0;
+                                                margin: 0 16px 2px 0;
+                                                border-top: 1px solid rgba(0, 0, 0, 0.2);
+                                                border-bottom: 1px solid rgba(255, 255, 255, 0.5);">
+                                        <b><i>payer: </i></b>
+                                        {{ item.payer.name }}
+                                        <br>
+                                        <hr style="font: 14px Georgia,serif;
+                                                padding: 0;
+                                                border: 0;
+                                                height: 0;
+                                                margin: 4px 16px 2px 0;
+                                                border-top: 1px solid rgba(0, 0, 0, 0.2);
+                                                border-bottom: 1px solid rgba(255, 255, 255, 0.3);">
+                                        <b><i>receiver: </i></b>
+                                        {{ item.receiver.name }}
+                                        <br>
+                                    </div>
+                                </li>
+
+                            {% else %}
+
+                                <li style="font-size: 50px; background-color: darksalmon; padding: 8px; margin-bottom: 8px">
+
+                                    <div style="padding-left: 16px;padding-right: 16px; margin-top: 10px"
+                                         title="date: {{ item.date }}">{{ item.amount }}
+                                        for {{ item.description }}</div>
+                                    <br>
+
+                                    <div style="font-size: 25px; margin-left: 8px">
+                                        <hr style="font: 14px Georgia,serif;
+                                                padding: 0;
+                                                border: 0;
+                                                height: 0;
+                                                margin: 0 16px 2px 0;
+                                                border-top: 1px solid rgba(0, 0, 0, 0.2);
+                                                border-bottom: 1px solid rgba(255, 255, 255, 0.5);">
+                                        <b><i>spenders:</i></b><br>
+                                        {% for spender in item.spenders_set.all %}
+                                            {{ spender.spender_person.name }}<br>
+                                        {% endfor %}
+                                        <hr style="font: 14px Georgia,serif;
+                                                padding: 0;
+                                                border: 0;
+                                                height: 0;
+                                                margin: 4px 16px 2px 0;
+                                                border-top: 1px solid rgba(0, 0, 0, 0.2);
+                                                border-bottom: 1px solid rgba(255, 255, 255, 0.3);">
+                                        <b><i>partners:</i></b><br>
+                                        {% for partner in item.partners_set.all %}
+                                            {{ partner.partner_person.name }}<br>
+                                        {% endfor %}</div>
+
+                                </li>
+
+                            {% endif %}
 
                         {% endfor %}
 

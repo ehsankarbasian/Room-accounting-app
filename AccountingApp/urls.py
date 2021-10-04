@@ -18,4 +18,6 @@ urlpatterns = [
 
     path('addTransaction/<int:room_id>', add_transaction),
     path('allTransactions/<int:room_id>', all_transactions),
+
+    path('roomLog/<int:room_id>', room_log),
 ]
