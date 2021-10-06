@@ -7,11 +7,18 @@ class User(AbstractUser):
     phone_number = models.CharField(max_length=20, blank=True, null=True)
     fullname = models.CharField(max_length=100, blank=True)
 
+    def __str__(self):
+        name = [self.fullname if self.fullname else self.username][0]
+        return name + " (room_count:" + str(self.room_set.count()) + ")"
+
 
 class Room(models.Model):
     created_at = models.DateTimeField(auto_now=True)
     name = models.CharField(max_length=100, default="new_room")
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name + " (creator: " + self.creator.fullname + ")"
 
 
 class Spend(models.Model):
@@ -24,6 +31,9 @@ class Spend(models.Model):
     def is_transaction(self):
         return False
 
+    def __str__(self):
+        return str(self.amount) + " for " + self.description + " (room:" + self.room.name + ")"
+
 
 class Spenders(models.Model):
     weight = models.IntegerField(default=1)
@@ -32,6 +42,9 @@ class Spenders(models.Model):
 
     class Meta:
         verbose_name_plural = 'spender (Person m2m Spend)'
+
+    def __str__(self):
+        return "spender " + str(self.spender_person.id) + " <--> " + str(self.spender_spend.id) + " spend"
 
 
 class Partners(models.Model):
@@ -42,10 +55,16 @@ class Partners(models.Model):
     class Meta:
         verbose_name_plural = 'partner (Person m2m Spend)'
 
+    def __str__(self):
+        return "partner " + str(self.partner_person.id) + " <--> " + str(self.partner_spend.id) + " spend"
+
 
 class Person(models.Model):
     name = models.CharField(max_length=100, default="new_person")
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name + " (room:" + self.room.name + ")"
 
 
 class Transaction(models.Model):
@@ -57,3 +76,7 @@ class Transaction(models.Model):
     @property
     def is_transaction(self):
         return True
+
+    def __str__(self):
+        return str(self.amount) + " from " + self.payer.name + " to " + self.receiver.name\
+               + " (room:" + self.payer.room.name + ")"

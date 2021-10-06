@@ -17,8 +17,11 @@ from django.contrib import admin
 from django.urls import path
 from django.urls import include
 
+from AccountingApp.views import landing_page
+from .settings import ROOM_ACCOUNTING_APP_BASE_URL
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounting_app/', include('AccountingApp.urls')),
-    path('', include('AccountingApp.landing_url')),
+    path('', landing_page, name='landing_page'),
+    path(ROOM_ACCOUNTING_APP_BASE_URL, include('AccountingApp.urls')),
 ]

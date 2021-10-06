@@ -13,7 +13,8 @@
     <meta name="keywords" content="landing,startup,flat">
     <meta name="author" content="Made By GN DESIGNS">
 
-    <title>Vortex - Startup Landing Page</title>
+    <title>Room Accounting</title>
+    <link rel="icon" href="../static/assets/img/logo.png">
 
     <!-- // PLUGINS (css files) // -->
 
@@ -80,53 +81,62 @@
 
                                 <div>
                                     <div style="padding: 16px;"><b>{{ room.name }}</b></div>
+
                                     <button type="button" data-toggle="modal" data-target="#PersonSet{{ room.id }}"
-                                            style="padding:0;border: none;background: none;"><i class="fa fa-users"
-                                                                                                style="padding: 15px;color: #1b6d85"
-                                                                                                title="Show room members"></i>{{ room.person_set.count }}
+                                            style="padding:0;border: none;background: none;">
+                                        <i class="fa fa-users" style="padding: 15px;color: #1b6d85" title="Show room members"></i>
+                                        {{ room.person_set.count }}
                                     </button>
                                 </div>
 
                                 <div style="padding-left: 15px; padding-bottom: 5px">
                                     <a href="http://{{ HOST }}:{{ PORT }}/accounting_app/deleteRoom/{{ room.id }}"
-                                       title="Delete room"><i
-                                            class="fa fa-trash" style="padding: 5px"></i></a>
+                                       title="Delete room">
+                                        <i class="fa fa-trash" style="padding: 5px"></i>
+                                    </a>
+
                                     <button type="button" data-toggle="modal" data-target="#GetRoomName{{ room.id }}"
-                                            style="padding: 0;border: none;background: none;"><i class="fa fa-edit"
-                                                                                                 style="padding: 5px;color: #1b6d85"
-                                                                                                 title="Edit room name"></i>
+                                            style="padding: 0;border: none;background: none;">
+                                        <i class="fa fa-edit" style="padding: 5px;color: #1b6d85" title="Edit room name"></i>
                                     </button>
+
                                     <button type="button" data-toggle="modal" data-target="#AddPerson{{ room.id }}"
-                                            style="padding: 0;border: none;background: none;"><i class="fa fa-user-plus"
-                                                                                                 style="padding: 5px;color: #1b6d85"
-                                                                                                 title="Add new person to room"></i>
+                                            style="padding: 0;border: none;background: none;">
+                                        <i class="fa fa-user-plus" style="padding: 5px;color: #1b6d85" title="Add new person to room"></i>
                                     </button>
+
                                     <button type="button" data-toggle="modal" data-target="#AddBuy{{ room.id }}"
-                                            style="padding: 0;border: none;background: none;"><i class="fa fa-cart-plus"
-                                                                                                 style="padding: 5px;color: #1b6d85"
-                                                                                                 title="Add a spent to room"></i>
+                                            style="padding: 0;border: none;background: none;">
+                                        <i class="fa fa-cart-plus" style="padding: 5px;color: #1b6d85" title="Add a spent to room"></i>
                                     </button>
+
                                     <a href="http://{{ HOST }}:{{ PORT }}/accounting_app/allBuys/{{ room.id }}"
-                                       title="Show all buys of room" target="_blank"><i
-                                            class="fa fa-shopping-cart" style="padding: 5px"></i></a>
+                                       title="Show all buys of room" target="_blank">
+                                        <i class="fa fa-shopping-cart" style="padding: 5px"></i>
+                                    </a>
+
                                     <button type="button" data-toggle="modal" data-target="#AddPayment{{ room.id }}"
-                                            style="padding: 0;border: none;background: none;"><i
-                                            class="fa fa-credit-card-alt fa-1"
-                                            style="padding: 5px;color: #1b6d85"
-                                            title="Add a payment"></i>
+                                            style="padding: 0;border: none;background: none;">
+                                        <i class="fa fa-credit-card-alt fa-1" style="padding: 5px;color: #1b6d85" title="Add a payment"></i>
                                     </button>
+
                                     <a href="http://{{ HOST }}:{{ PORT }}/accounting_app/allTransactions/{{ room.id }}"
-                                       title="Show all transactions of room" target="_blank"><i
-                                            class="fa fa-money" style="padding: 5px"></i></a>
+                                       title="Show all transactions of room" target="_blank">
+                                        <i class="fa fa-money" style="padding: 5px"></i>
+                                    </a>
+
                                     <a href="http://{{ HOST }}:{{ PORT }}/accounting_app/roomLog/{{ room.id }}"
-                                       title="Show all of transactions and buys of room sorted by date" target="_blank"><i
-                                            class="fa fa-terminal" style="padding: 5px"></i></a>
+                                       title="Show all of transactions and buys of room sorted by date" target="_blank">
+                                        <i class="fa fa-terminal" style="padding: 5px"></i>
+                                    </a>
+
+                                    <a href="http://{{ HOST }}:{{ PORT }}/accounting_app/reportForClearing/{{ room.id }}">
+                                        <i class="fa fa-code" style="padding: 5px"></i>
+                                    </a>
 
 
-                                    <a href="http://{{ HOST }}:{{ PORT }}/accounting_app/reportForClearing/{{ room.id }}"><i
-                                            class="fa fa-code" style="padding: 5px"></i></a>
+                                    <!-- Modals for defined actions-->
 
-                                    <!-- Modals -->
                                     <div class="modal fade" id="GetRoomName{{ room.id }}" tabindex="-1" role="dialog"
                                          aria-labelledby="myModalLabel">
 
@@ -530,6 +540,7 @@
                 </div>
 
             </div>
+
 
             <!-- Functions -->
 

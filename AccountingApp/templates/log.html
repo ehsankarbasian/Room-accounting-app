@@ -13,7 +13,8 @@
     <meta name="keywords" content="landing,startup,flat">
     <meta name="author" content="Made By GN DESIGNS">
 
-    <title>Vortex - Startup Landing Page</title>
+    <title>{{ mode }}</title>
+    <link rel="icon" href="../../static/assets/img/logo.png">
 
     <!-- // PLUGINS (css files) // -->
 
@@ -60,6 +61,7 @@
                     {% if mode  == 'spend_log' %}
                         <h1 style="color: #122b40;margin-left: 48px" title="Room name: {{ room_name }}">List of
                             spends</h1>
+
                         <ul>
 
                         {% for spend in spends %}
@@ -77,7 +79,8 @@
 
                                 <div style="padding-bottom: 16px; padding-left: 16px;padding-right: 16px"
                                      title="date: {{ spend.date }}">{{ spend.amount }}
-                                    for {{ spend.description }}</div>
+                                    for {{ spend.description }}
+                                </div>
                                 <br>
 
                                 <div style="font-size: 25px">
@@ -89,9 +92,11 @@
                                                 border-top: 1px solid rgba(0, 0, 0, 0.2);
                                                 border-bottom: 1px solid rgba(255, 255, 255, 0.5);">
                                     <b><i>spenders:</i></b><br>
+
                                     {% for spender in spend.spenders_set.all %}
                                         {{ spender.spender_person.name }}<br>
                                     {% endfor %}
+
                                     <hr style="font: 14px Georgia,serif;
                                                 padding: 0;
                                                 border: 0;
@@ -100,6 +105,7 @@
                                                 border-top: 1px solid rgba(0, 0, 0, 0.2);
                                                 border-bottom: 1px solid rgba(255, 255, 255, 0.3);">
                                     <b><i>partners:</i></b><br>
+
                                     {% for partner in spend.partners_set.all %}
                                         {{ partner.partner_person.name }}<br>
                                     {% endfor %}</div>
@@ -107,6 +113,7 @@
                             </li>
 
                         {% endfor %}
+
                     {% endif %}
 
                     {% if mode == 'transaction_log' %}
@@ -154,6 +161,7 @@
                                     {{ transaction.receiver.name }}
                                     <br>
                                 </div>
+
                             </li>
 
                         {% endfor %}
@@ -198,6 +206,7 @@
                                         {{ item.receiver.name }}
                                         <br>
                                     </div>
+
                                 </li>
 
                             {% else %}
@@ -231,7 +240,8 @@
                                         <b><i>partners:</i></b><br>
                                         {% for partner in item.partners_set.all %}
                                             {{ partner.partner_person.name }}<br>
-                                        {% endfor %}</div>
+                                        {% endfor %}
+                                    </div>
 
                                 </li>
 
