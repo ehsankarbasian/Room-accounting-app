@@ -19,4 +19,6 @@ urlpatterns = [
     path('allBuys/<int:room_id>', all_buys),
     path('allTransactions/<int:room_id>', all_transactions),
     path('roomLog/<int:room_id>', room_log),
+
+    path('reportForClearing/<int:room_id>', report_for_clearing),
 ]

@@ -84,7 +84,8 @@
 
                                     <button type="button" data-toggle="modal" data-target="#PersonSet{{ room.id }}"
                                             style="padding:0;border: none;background: none;">
-                                        <i class="fa fa-users" style="padding: 15px;color: #1b6d85" title="Show room members"></i>
+                                        <i class="fa fa-users" style="padding: 15px;color: #1b6d85"
+                                           title="Show room members"></i>
                                         {{ room.person_set.count }}
                                     </button>
                                 </div>
@@ -97,17 +98,20 @@
 
                                     <button type="button" data-toggle="modal" data-target="#GetRoomName{{ room.id }}"
                                             style="padding: 0;border: none;background: none;">
-                                        <i class="fa fa-edit" style="padding: 5px;color: #1b6d85" title="Edit room name"></i>
+                                        <i class="fa fa-edit" style="padding: 5px;color: #1b6d85"
+                                           title="Edit room name"></i>
                                     </button>
 
                                     <button type="button" data-toggle="modal" data-target="#AddPerson{{ room.id }}"
                                             style="padding: 0;border: none;background: none;">
-                                        <i class="fa fa-user-plus" style="padding: 5px;color: #1b6d85" title="Add new person to room"></i>
+                                        <i class="fa fa-user-plus" style="padding: 5px;color: #1b6d85"
+                                           title="Add new person to room"></i>
                                     </button>
 
                                     <button type="button" data-toggle="modal" data-target="#AddBuy{{ room.id }}"
                                             style="padding: 0;border: none;background: none;">
-                                        <i class="fa fa-cart-plus" style="padding: 5px;color: #1b6d85" title="Add a spent to room"></i>
+                                        <i class="fa fa-cart-plus" style="padding: 5px;color: #1b6d85"
+                                           title="Add a spent to room"></i>
                                     </button>
 
                                     <a href="http://{{ HOST }}:{{ PORT }}/accounting_app/allBuys/{{ room.id }}"
@@ -117,7 +121,8 @@
 
                                     <button type="button" data-toggle="modal" data-target="#AddPayment{{ room.id }}"
                                             style="padding: 0;border: none;background: none;">
-                                        <i class="fa fa-credit-card-alt fa-1" style="padding: 5px;color: #1b6d85" title="Add a payment"></i>
+                                        <i class="fa fa-credit-card-alt fa-1" style="padding: 5px;color: #1b6d85"
+                                           title="Add a payment"></i>
                                     </button>
 
                                     <a href="http://{{ HOST }}:{{ PORT }}/accounting_app/allTransactions/{{ room.id }}"
@@ -130,7 +135,8 @@
                                         <i class="fa fa-terminal" style="padding: 5px"></i>
                                     </a>
 
-                                    <a href="http://{{ HOST }}:{{ PORT }}/accounting_app/reportForClearing/{{ room.id }}">
+                                    <a href="http://{{ HOST }}:{{ PORT }}/accounting_app/reportForClearing/{{ room.id }}"
+                                       target="_blank">
                                         <i class="fa fa-code" style="padding: 5px"></i>
                                     </a>
 

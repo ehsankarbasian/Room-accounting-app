@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db.models import Q
 
 
 class User(AbstractUser):
@@ -17,6 +18,13 @@ class Room(models.Model):
     name = models.CharField(max_length=100, default="new_room")
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    @property
+    def transaction_set(self):
+        persons = self.person_set.all()
+        payer_query = Q(payer__in=persons)
+        receiver_query = Q(receiver__in=persons)
+        return Transaction.objects.filter(payer_query | receiver_query).order_by('-date')
+
     def __str__(self):
         return self.name + " (creator: " + self.creator.fullname + ")"
 
@@ -26,6 +34,28 @@ class Spend(models.Model):
     description = models.CharField(max_length=256, blank=True)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now=True)
+
+    def partner_dict(self):
+        result = dict({})
+        room = self.room
+
+        for person in room.person_set.all():
+            result[person.id] = 0
+        for partner in self.partners_set.all():
+            result[partner.partner_person.id] = partner.weight
+
+        return result
+
+    def spender_dict(self):
+        result = dict({})
+        room = self.room
+
+        for person in room.person_set.all():
+            result[person.id] = 0
+        for spender in self.spenders_set.all():
+            result[spender.spender_person.id] = spender.weight
+
+        return result
 
     @property
     def is_transaction(self):

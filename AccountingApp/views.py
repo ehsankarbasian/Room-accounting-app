@@ -5,7 +5,6 @@ from django.contrib.auth import login, logout
 from django.shortcuts import render, redirect
 from django.http.response import HttpResponse
 from django.views.decorators.http import require_http_methods
-from django.db.models import Q
 
 from .models import *
 from RoomAccounting.settings import HOST, PORT
@@ -198,11 +197,7 @@ def room_log(request, room_id):
     room = Room.objects.get(id=room_id)
 
     if room in request.user.room_set.all():
-        persons = room.person_set.all()
-        payer_query = Q(payer__in=persons)
-        receiver_query = Q(receiver__in=persons)
-        transactions = Transaction.objects.filter(payer_query | receiver_query).order_by('-date')
-
+        transactions = room.transaction_set
         spends = room.spend_set.all().order_by('-date')
 
         log = sorted(chain(transactions, spends),
@@ -213,3 +208,103 @@ def room_log(request, room_id):
         return render(request, 'log.html', context=context)
 
     return HttpResponse("You're not the owner of the room")
+
+
+def report_for_clearing(request, room_id):
+    if request.user.is_anonymous:
+        return HttpResponse("Please sign in")
+
+    room = Room.objects.get(id=room_id)
+    if room not in request.user.room_set.all():
+        return HttpResponse("You're not the owner of the room")
+
+    # The core algorithm:
+    final_dict = calculate_result(room)
+
+    result = []
+    for k, v in final_dict.items():
+        result.append(k+": "+str(v))
+    return render(request, 'result.html', context={'result': result})
+
+
+def calculate_result(room):
+    persons = list(room.person_set.all())
+
+    result_dict = dict({})
+    max_index = len(persons) - 1
+    for p1 in persons:
+        p1_index = persons.index(p1)
+        if p1_index < max_index:
+            remaining_persons = persons[p1_index + 1:]
+            for p2 in remaining_persons:
+                result_dict[str(p1.id) + '  ---->  ' + str(p2.id)] = 0
+
+    spends_list = []
+    for spend in room.spend_set.all():
+        amount = spend.amount
+
+        partner_dict = spend.partner_dict()
+        partners_sum_of_weight = 0
+        for k, v in partner_dict.items():
+            partners_sum_of_weight += partner_dict[k]
+        # part_of_each_partner_weight = [amount / partners_sum_of_weight if partners_sum_of_weight else 0][0]
+
+        spender_dict = spend.spender_dict()
+        spenders_sum_of_weight = 0
+        for k in spender_dict:
+            spenders_sum_of_weight += spender_dict[k]
+        # part_of_each_spender_weight = [amount / spenders_sum_of_weight if spenders_sum_of_weight else 0][0]
+
+        the_spent = {'amount': amount,
+                     'partner_dict': partner_dict,
+                     'spender_dict': spender_dict,
+                     # 'part_of_each_partner_weight': part_of_each_partner_weight,
+                     # 'part_of_each_spender_weight': part_of_each_spender_weight
+                     }
+
+        spends_list.append(the_spent)
+
+    # result_dict complement:
+    for spend in spends_list:
+        amount = spend['amount']
+        spender_dict = spend['spender_dict']
+        # part_of_each_spender_weight = spend['part_of_each_spender_weight']
+        partner_dict = spend['partner_dict']
+        # part_of_each_partner_weight = spend['part_of_each_partner_weight']
+
+        partners_sum_of_weight = 0
+        spenders_sum_of_weight = 0
+        for k, v in partner_dict.items():
+            partners_sum_of_weight += partner_dict[k]
+        for k, v in spender_dict.items():
+            spenders_sum_of_weight += spender_dict[k]
+
+        for k, v in result_dict.items():
+            if spender_dict[int(k.split()[0])] and partner_dict[int(k.split()[2])]:
+                result_dict[k] -= amount * partner_dict[int(k.split()[2])] / partners_sum_of_weight\
+                                  * spender_dict[int(k.split()[0])] / spenders_sum_of_weight
+
+            if partner_dict[int(k.split()[0])] and spender_dict[int(k.split()[2])]:
+                result_dict[k] += amount * partner_dict[int(k.split()[2])] / partners_sum_of_weight\
+                                  * spender_dict[int(k.split()[0])] / spenders_sum_of_weight
+
+    transactions = room.transaction_set
+    for transaction in transactions:
+        payer_id = transaction.payer.id
+        receiver_id = transaction.receiver.id
+        amount = transaction.amount
+        for k, v in result_dict.items():
+            if payer_id == int(k.split()[0]) and receiver_id == int(k.split()[2]):
+                result_dict[k] -= amount
+            elif payer_id == int(k.split()[2]) and receiver_id == int(k.split()[0]):
+                result_dict[k] += amount
+
+    final_dict = {}
+    for k, v in result_dict.items():
+        key_lst = k.split()
+        if v < 0:
+            key_lst = key_lst[::-1]
+        key = key_lst[0] + ' ' + key_lst[1] + ' ' + key_lst[2]
+        final_dict[key] = int(abs(v))
+
+    return final_dict
