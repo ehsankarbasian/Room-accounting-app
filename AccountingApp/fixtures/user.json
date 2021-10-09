@@ -1,0 +1,11 @@
+[
+    {
+        "model": "AccountingApp.User",
+        "pk": 1,
+        "fields": {
+            "username": "user_1",
+            "password": "12345",
+            "email": "email"
+        }
+    }
+]

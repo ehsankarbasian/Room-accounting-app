@@ -251,6 +251,37 @@
 
                     {% endif %}
 
+                    {% if mode  == 'report_for_clearing' %}
+                        <h1 style="color: #122b40;margin-left: 48px">Result of room '{{ room_name }}'</h1>
+
+                        <ul>
+
+                        {% for k, v in result.items %}
+                            {% if v.0 != 0 %}
+
+                            <li style="font-size: 50px">
+
+                                <hr style="font: 14px Georgia,serif;
+                                                padding: 0;
+                                                border: 0;
+                                                height: 0;
+                                                margin: 0 0 0 0;
+                                                border-top: 1px solid rgba(0, 0, 0, 0.2);
+                                                border-bottom: 1px solid rgba(255, 255, 255, 0.3);">
+
+                                <div style="padding-left: 16px;padding-right: 16px">
+                                    <h2 title="#TODO: Debtor email: { v.1.email }, Creditor email: { v.2.email }, Debtor phone: {}, Creditor phone{}">
+                                        {{ k }}: </h2> <h1>{{ v.0 }}</h1>
+                                </div>
+                                <br>
+
+                            </li>
+
+                            {% endif %}
+                        {% endfor %}
+
+                    {% endif %}
+
                     </ul>
                     <br>
 

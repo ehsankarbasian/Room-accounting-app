@@ -1,0 +1,82 @@
+[
+    {
+        "model": "AccountingApp.Spend",
+        "pk": 1,
+        "fields": {
+            "room": 1,
+            "amount": 9000,
+            "date": "2020-10-8",
+            "description": "default"
+        }
+    },
+    {
+        "model": "AccountingApp.Spend",
+        "pk": 2,
+        "fields": {
+            "room": 1,
+            "amount": 5000,
+            "date": "2020-10-8",
+            "description": "default"
+        }
+    },
+    {
+        "model": "AccountingApp.Spend",
+        "pk": 3,
+        "fields": {
+            "room": 1,
+            "amount": 20000,
+            "date": "2020-10-8",
+            "description": "default"
+        }
+    },
+    {
+        "model": "AccountingApp.Spend",
+        "pk": 4,
+        "fields": {
+            "room": 1,
+            "amount": 21000,
+            "date": "2020-10-8",
+            "description": "default"
+        }
+    },
+    {
+        "model": "AccountingApp.Spend",
+        "pk": 5,
+        "fields": {
+            "room": 2,
+            "amount": 90000,
+            "date": "2020-10-8",
+            "description": "default"
+        }
+    },
+    {
+        "model": "AccountingApp.Spend",
+        "pk": 6,
+        "fields": {
+            "room": 2,
+            "amount": 10000,
+            "date": "2020-10-8",
+            "description": "default"
+        }
+    },
+    {
+        "model": "AccountingApp.Spend",
+        "pk": 7,
+        "fields": {
+            "room": 2,
+            "amount": 48000,
+            "date": "2020-10-8",
+            "description": "default"
+        }
+    },
+    {
+        "model": "AccountingApp.Spend",
+        "pk": 8,
+        "fields": {
+            "room": 2,
+            "amount": 35000,
+            "date": "2020-10-8",
+            "description": "default"
+        }
+    }
+]

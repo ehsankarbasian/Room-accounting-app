@@ -21,4 +21,5 @@ urlpatterns = [
     path('roomLog/<int:room_id>', room_log),
 
     path('reportForClearing/<int:room_id>', report_for_clearing),
+    path('reportForClearingAPI', report_for_clearing_API),
 ]
