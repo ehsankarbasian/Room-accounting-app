@@ -5,6 +5,7 @@ urlpatterns = [
     path('signin', sign_in),
     path('signup', sign_up),
     path('logout', log_out),
+    path('verifyEmail', verify_email),
 
     path('', home, name='home'),
 

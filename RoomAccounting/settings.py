@@ -19,6 +19,15 @@ HOST = "127.0.0.1"
 PORT = "8000"
 ROOM_ACCOUNTING_APP_BASE_URL = "accounting_app/"
 
+# Email config:
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'ntm.patronage@gmail.com'
+EMAIL_HOST_PASSWORD = 'NTM1400NTM'
+DEFAULT_FROM_EMAIL = 'ntm.patronage@gmail.com'
+DEFAULT_TO_EMAIL = 'ehsan.karbasian@gmail.com'
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 

@@ -5,12 +5,27 @@ from django.db.models import Q
 
 class User(AbstractUser):
     email = models.EmailField(unique=True)
-    phone_number = models.CharField(max_length=20, blank=True, null=True)
+    phone_number = models.CharField(unique=True, max_length=20, blank=True, null=True)
     fullname = models.CharField(max_length=100, blank=True)
+
+    verified_email = models.BooleanField(default=False)
+    verified_phone = models.BooleanField(default=False)
+    token = models.OneToOneField("Token", on_delete=models.DO_NOTHING, null=True)
 
     def __str__(self):
         name = [self.fullname if self.fullname else self.username][0]
         return name + " (room_count:" + str(self.room_set.count()) + ")"
+
+
+class Token(models.Model):
+    verify_email_token = models.CharField(max_length=64, null=True)
+    verify_email_code = models.IntegerField(null=True)
+
+    reset_pass_token = models.CharField(max_length=64, null=True)
+    reset_pass_code = models.IntegerField(null=True)
+
+    def __str__(self):
+        return "Tokens of: " + self.user.username
 
 
 class Room(models.Model):
@@ -91,10 +106,24 @@ class Partners(models.Model):
 
 class Person(models.Model):
     name = models.CharField(max_length=100, default="new_person")
+    phone = models.CharField(max_length=20)
+    email = models.EmailField(unique=False)
+
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
 
+    verify_email_token = models.CharField(max_length=64, null=True)
+    verify_phone_code = models.IntegerField(null=True)
+
+    @property
+    def verified_email(self):
+        return self.verify_email_token == "verified email"
+
+    @property
+    def verified_phone(self):
+        return self.verify_phone_code == 0
+
     def __str__(self):
-        return self.name + " (room:" + self.room.name + ")"
+        return self.name + " (room: " + self.room.name + ")"
 
 
 class Transaction(models.Model):

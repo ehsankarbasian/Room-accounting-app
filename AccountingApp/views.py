@@ -1,17 +1,21 @@
 from itertools import chain
+from secrets import token_hex
+from random import randint
 
 from django.contrib.auth import authenticate
 from django.contrib.auth import login, logout
 from django.shortcuts import render, redirect
 from django.http.response import HttpResponse
 from django.views.decorators.http import require_http_methods
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import get_template
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 
 from .models import *
-from RoomAccounting.settings import HOST, PORT
+from RoomAccounting.settings import HOST, PORT, ROOM_ACCOUNTING_APP_BASE_URL, EMAIL_HOST_USER
 
 
 def landing_page(request):
@@ -29,17 +33,72 @@ def home(request):
     return render(request, 'home.html', context=context)
 
 
+def send_email(subject, message, to_list, html_content):
+    message = EmailMultiAlternatives(subject,
+                                     message,
+                                     EMAIL_HOST_USER,
+                                     to_list)
+    message.attach_alternative(html_content, "text/html")
+    message.send()
+
+
+def send_text_email(subject, message, to_list):
+    for address in to_list:
+        message = EmailMultiAlternatives(subject,
+                                         message,
+                                         EMAIL_HOST_USER,
+                                         [address])
+        message.send()
+
+
 @require_http_methods(["POST"])
 def sign_up(request):
     fullname = request.POST['fullname']
+    phone_number = request.POST['phone_number']
     email = request.POST['email']
     username = request.POST['username']
     password = request.POST['password']
+
+    verify_email_token = token_hex(64)
+    token = Token.objects.create(verify_email_token=verify_email_token, verify_email_code=randint(1, 999999))
+
     User.objects.create_user(username=username,
                              password=password,
                              email=email,
-                             fullname=fullname)
-    return HttpResponse("Signed up successfully, now sign in please")
+                             phone_number=phone_number,
+                             fullname=fullname,
+                             token=token)
+
+    message = "Hello " + fullname + ". please click on the button below to verify your email"
+    html_content = get_template('email_verification.html').render(context={'HOST': HOST,
+                                                                           'PORT': PORT,
+                                                                           'email': email,
+                                                                           'name': username,
+                                                                           'app_base_url': ROOM_ACCOUNTING_APP_BASE_URL,
+                                                                           'verify_email_token': verify_email_token})
+    send_email("Verify email", message, [email], html_content)
+
+    return HttpResponse("Signed up successfully,"
+                        + " now verify at least one of your email or phone number and then sign in please")
+
+
+@api_view(['POST'])
+def verify_email(request):
+    token = request.POST['token']
+    email = request.POST['email']
+
+    user = User.objects.filter(email=email)
+    if user.count() == 0:
+        return HttpResponse("User not found")
+
+    user = user[0]
+    if user.verified_email:
+        return HttpResponse("Your email verified before")
+
+    if token == user.token.verify_email_token:
+        user.verified_email = True
+        user.save()
+    return HttpResponse("Email verified successfully. you can sign in.")
 
 
 @require_http_methods(["POST"])
@@ -50,6 +109,9 @@ def sign_in(request):
     user = authenticate(username=username, password=password)
     if user is None:
         return HttpResponse('Wrong username/password')
+
+    if not (user.verified_email or user.verified_phone):
+        return HttpResponse("Verify at least one of your email or phone number to sign in")
 
     login(request, user)
     return redirect('home')
@@ -104,7 +166,9 @@ def add_person(request, room_id):
 
     if room in request.user.room_set.all():
         name = request.POST['person_name']
-        Person.objects.create(name=name, room=room)
+        email = request.POST['email']
+        phone = request.POST['phone']
+        Person.objects.create(name=name, email=email, phone=phone, room=room)
         return redirect('home')
     return HttpResponse("You're not the owner of the room")
 
