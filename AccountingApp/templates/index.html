@@ -343,9 +343,50 @@
 
                 <div class="modal-footer text-center">
 
-                    <a href="#">Forgot your password /</a>
+                    <button type="button" class="btn-link" data-toggle="modal" data-target="#forgot_password"><span aria-hidden="true">forgot password</span></button>
 
-                    <a href="#">Signup</a>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="modal fade" id="forgot_password" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+
+        <div class="modal-dialog" role="document">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+                    <h4 class="modal-title text-center" id="myModalLabel">Reset password request</h4><br>
+
+                </div>
+
+                <div class="modal-body">
+
+                    <form class="signup-form" action="http://{{HOST}}:{{PORT}}/accounting_app/forgotPassword" method="get">
+
+                        <div class="form-group"><br>
+
+                            <input type="email" name="email" class="form-control" placeholder="Email" required="required">
+
+                        </div>
+
+                        <div class="form-group text-center"><br>
+
+                            <button type="submit" class="btn btn-blue btn-block">Send email to me</button>
+                            <br>
+
+                        </div>
+
+                    </form>
 
                 </div>
 

@@ -60,7 +60,10 @@ def sign_up(request):
     password = request.POST['password']
 
     verify_email_token = token_hex(64)
-    token = Token.objects.create(verify_email_token=verify_email_token, verify_email_code=randint(1, 999999))
+    token = Token.objects.create(verify_email_token=verify_email_token,
+                                 verify_email_code=randint(100000, 999999),
+                                 reset_pass_token=token_hex(64),
+                                 reset_pass_code=randint(100000, 999999))
 
     User.objects.create_user(username=username,
                              password=password,
@@ -95,10 +98,66 @@ def verify_email(request):
     if user.verified_email:
         return HttpResponse("Your email verified before")
 
-    if token == user.token.verify_email_token:
-        user.verified_email = True
-        user.save()
+    if token != user.token.verify_email_token:
+        return HttpResponse("Wrong token")
+
+    user.verified_email = True
+    user.save()
     return HttpResponse("Email verified successfully. you can sign in.")
+
+
+def forgot_password(request):
+    email = request.GET['email']
+
+    user = User.objects.filter(email=email)
+    if user.count() == 0:
+        return HttpResponse("User not found")
+
+    user = user[0]
+    reset_password_token = user.token.reset_pass_token
+
+    html_content = get_template('reset_password.html').render(context={
+        'HOST': HOST,
+        'PORT': PORT,
+        'app_base_url': ROOM_ACCOUNTING_APP_BASE_URL,
+        'email': email,
+        'name': user.fullname,
+        'token': reset_password_token})
+    send_email(subject='reset password',
+               message='message',
+               to_list=[email],
+               html_content=html_content)
+
+    return HttpResponse("Email sent")
+
+
+@api_view(['POST'])
+def reset_password_token_based(request):
+    token = request.POST['token']
+    email = request.POST['email']
+    password_1 = request.POST['password_1']
+    password_2 = request.POST['password_2']
+
+    user = User.objects.filter(email=email)
+    if user.count() == 0:
+        return HttpResponse("User not found")
+
+    if password_1 != password_2:
+        return HttpResponse("the passwords are not equal")
+
+    user = user[0]
+    if not user.verified_email:
+        return HttpResponse("Your email is not verified")
+
+    if user.token.reset_pass_token != token:
+        print(user.token.reset_pass_token)
+        print(token)
+        return HttpResponse("Wrong token")
+
+    user.set_password(password_1)
+    user.token.reset_pass_token = token_hex(64)
+    user.save()
+    return HttpResponse("Password changed successfully. you can sign in.")
 
 
 @require_http_methods(["POST"])

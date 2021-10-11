@@ -10,7 +10,7 @@ class User(AbstractUser):
 
     verified_email = models.BooleanField(default=False)
     verified_phone = models.BooleanField(default=False)
-    token = models.OneToOneField("Token", on_delete=models.DO_NOTHING, null=True)
+    token = models.OneToOneField("Token", on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         name = [self.fullname if self.fullname else self.username][0]
