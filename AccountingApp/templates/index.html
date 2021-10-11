@@ -143,7 +143,7 @@
 
                 <div class="col-md-5 col-md-offset-1">
 
-                    <form class="signup-form" action="http://{{HOST}}:{{PORT}}/accounting_app/signup" method="post">
+                    <form class="signup-form" action="http://{{HOST}}:{{PORT}}/{{app_base_url}}/signup" method="post">
                         {% csrf_token %}
 
                         <h2 class="text-center">Signup Now</h2>
@@ -235,9 +235,9 @@
 
                         <i class="material-icons">format_list_bulleted</i>
 
-                        <h4>TODO</h4>
+                        <h4>Room log</h4>
 
-                        <p>room log</p>
+                        <p>see the spends and transactions of room</p>
 
                     </div>
 
@@ -316,7 +316,7 @@
 
                 <div class="modal-body">
 
-                    <form class="signup-form" action="http://{{HOST}}:{{PORT}}/accounting_app/signin" method="post">
+                    <form class="signup-form" action="http://{{HOST}}:{{PORT}}/{{app_base_url}}/signin" method="post">
                         {% csrf_token %}
 
                         <div class="form-group">
@@ -371,7 +371,7 @@
 
                 <div class="modal-body">
 
-                    <form class="signup-form" action="http://{{HOST}}:{{PORT}}/accounting_app/forgotPassword" method="get">
+                    <form class="signup-form" action="http://{{HOST}}:{{PORT}}/{{app_base_url}}/forgotPassword" method="get">
 
                         <div class="form-group"><br>
 

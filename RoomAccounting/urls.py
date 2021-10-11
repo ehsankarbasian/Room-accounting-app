@@ -23,5 +23,5 @@ from .settings import ROOM_ACCOUNTING_APP_BASE_URL
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', landing_page, name='landing_page'),
-    path(ROOM_ACCOUNTING_APP_BASE_URL, include('AccountingApp.urls')),
+    path(ROOM_ACCOUNTING_APP_BASE_URL + "/", include('AccountingApp.urls')),
 ]

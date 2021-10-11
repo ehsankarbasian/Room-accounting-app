@@ -91,7 +91,7 @@
                                 </div>
 
                                 <div style="padding-left: 15px; padding-bottom: 5px">
-                                    <a href="http://{{ HOST }}:{{ PORT }}/accounting_app/deleteRoom/{{ room.id }}"
+                                    <a href="http://{{ HOST }}:{{ PORT }}/{{ app_base_url }}/deleteRoom/{{ room.id }}"
                                        title="Delete room">
                                         <i class="fa fa-trash" style="padding: 5px"></i>
                                     </a>
@@ -114,7 +114,7 @@
                                            title="Add a spent to room"></i>
                                     </button>
 
-                                    <a href="http://{{ HOST }}:{{ PORT }}/accounting_app/allBuys/{{ room.id }}"
+                                    <a href="http://{{ HOST }}:{{ PORT }}/{{ app_base_url }}/allBuys/{{ room.id }}"
                                        title="Show all buys of room" target="_blank">
                                         <i class="fa fa-shopping-cart" style="padding: 5px"></i>
                                     </a>
@@ -125,17 +125,17 @@
                                            title="Add a payment"></i>
                                     </button>
 
-                                    <a href="http://{{ HOST }}:{{ PORT }}/accounting_app/allTransactions/{{ room.id }}"
+                                    <a href="http://{{ HOST }}:{{ PORT }}/{{ app_base_url }}/allTransactions/{{ room.id }}"
                                        title="Show all transactions of room" target="_blank">
                                         <i class="fa fa-money" style="padding: 5px"></i>
                                     </a>
 
-                                    <a href="http://{{ HOST }}:{{ PORT }}/accounting_app/roomLog/{{ room.id }}"
+                                    <a href="http://{{ HOST }}:{{ PORT }}/{{ app_base_url }}/roomLog/{{ room.id }}"
                                        title="Show all of transactions and buys of room sorted by date" target="_blank">
                                         <i class="fa fa-terminal" style="padding: 5px"></i>
                                     </a>
 
-                                    <a href="http://{{ HOST }}:{{ PORT }}/accounting_app/reportForClearing/{{ room.id }}"
+                                    <a href="http://{{ HOST }}:{{ PORT }}/{{ app_base_url }}/reportForClearing/{{ room.id }}"
                                        target="_blank">
                                         <i class="fa fa-code" style="padding: 5px"></i>
                                     </a>
@@ -164,7 +164,7 @@
                                                 <div class="modal-body">
 
                                                     <form id="modal_form" class="signup-form"
-                                                          action="http://{{ HOST }}:{{ PORT }}/accounting_app/editRoom/{{ room.id }}"
+                                                          action="http://{{ HOST }}:{{ PORT }}/{{ app_base_url }}/editRoom/{{ room.id }}"
                                                           method="post">
                                                         {% csrf_token %}
 
@@ -215,7 +215,7 @@
                                                 <div class="modal-body">
 
                                                     <form id="modal_form" class="signup-form"
-                                                          action="http://{{ HOST }}:{{ PORT }}/accounting_app/addPerson/{{ room.id }}"
+                                                          action="http://{{ HOST }}:{{ PORT }}/{{ app_base_url }}/addPerson/{{ room.id }}"
                                                           method="post">
                                                         {% csrf_token %}
 
@@ -282,7 +282,7 @@
                                                     </h4>
 
                                                     <form id="modal_form" class="signup-form"
-                                                          action="http://{{ HOST }}:{{ PORT }}/accounting_app/addPerson/{{ room.id }}"
+                                                          action="http://{{ HOST }}:{{ PORT }}/{{ app_base_url }}/addPerson/{{ room.id }}"
                                                           method="post">
                                                         {% csrf_token %}
 
@@ -334,7 +334,7 @@
                                                 <div class="modal-body">
 
                                                     <form id="modal_form" class="signup-form"
-                                                          action="http://{{ HOST }}:{{ PORT }}/accounting_app/addBuy/{{ room.id }}"
+                                                          action="http://{{ HOST }}:{{ PORT }}/{{ app_base_url }}/addBuy/{{ room.id }}"
                                                           method="post">
                                                         {% csrf_token %}
 
@@ -417,7 +417,7 @@
                                                 <div class="modal-body">
 
                                                     <form id="modal_form" class="signup-form"
-                                                          action="http://{{ HOST }}:{{ PORT }}/accounting_app/addTransaction/{{ room.id }}"
+                                                          action="http://{{ HOST }}:{{ PORT }}/{{ app_base_url }}/addTransaction/{{ room.id }}"
                                                           method="post">
                                                         {% csrf_token %}
 
@@ -557,7 +557,7 @@
             <!-- Functions -->
 
             <div class="col-md-5 col-md-offset-1">
-                <form class="signup-form" action="http://{{ HOST }}:{{ PORT }}/accounting_app/addRoom" method="get">
+                <form class="signup-form" action="http://{{ HOST }}:{{ PORT }}/{{ app_base_url }}/addRoom" method="get">
                     {% csrf_token %}
 
                     <h2 class="text-center">Add a new room</h2>

@@ -1,13 +1,7 @@
 from django.test import TestCase
-from django.test import Client
 
-from RoomAccounting.settings import ROOM_ACCOUNTING_APP_BASE_URL
 from AccountingApp.models import *
-
-
-def client_post(url, json):
-    response = Client().post("/" + ROOM_ACCOUNTING_APP_BASE_URL + url, json, format='json')
-    return response.data
+from .functions.helper_functions import client_post
 
 
 def create_transactions():

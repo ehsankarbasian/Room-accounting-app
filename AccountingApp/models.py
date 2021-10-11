@@ -12,9 +12,11 @@ class User(AbstractUser):
     verified_phone = models.BooleanField(default=False)
     token = models.OneToOneField("Token", on_delete=models.CASCADE, null=True)
 
+    class Meta:
+        verbose_name_plural = '       Users'
+
     def __str__(self):
-        name = [self.fullname if self.fullname else self.username][0]
-        return name + " (room_count:" + str(self.room_set.count()) + ")"
+        return self.username + " (room_count:" + str(self.room_set.count()) + ")"
 
 
 class Token(models.Model):
@@ -24,6 +26,9 @@ class Token(models.Model):
     reset_pass_token = models.CharField(max_length=64, null=True)
     reset_pass_code = models.IntegerField(null=True)
 
+    class Meta:
+        verbose_name_plural = '      Tokens'
+
     def __str__(self):
         return "Tokens of: " + self.user.username
 
@@ -32,6 +37,9 @@ class Room(models.Model):
     created_at = models.DateTimeField(auto_now=True)
     name = models.CharField(max_length=100, default="new_room")
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = '     Rooms'
 
     @property
     def transaction_set(self):
@@ -49,6 +57,9 @@ class Spend(models.Model):
     description = models.CharField(max_length=256, blank=True)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name_plural = '  Spends'
 
     def partner_dict(self):
         result = dict({})
@@ -86,7 +97,7 @@ class Spenders(models.Model):
     spender_spend = models.ForeignKey("Spend", on_delete=models.DO_NOTHING, default=None)
 
     class Meta:
-        verbose_name_plural = 'spender (Person m2m Spend)'
+        verbose_name_plural = ' spender (Person m2m Spend)'
 
     def __str__(self):
         return "spender " + str(self.spender_person.id) + " <--> " + str(self.spender_spend.id) + " spend"
@@ -114,6 +125,9 @@ class Person(models.Model):
     verify_email_token = models.CharField(max_length=64, null=True)
     verify_phone_code = models.IntegerField(null=True)
 
+    class Meta:
+        verbose_name_plural = '    Persons'
+
     @property
     def verified_email(self):
         return self.verify_email_token == "verified email"
@@ -131,6 +145,9 @@ class Transaction(models.Model):
     receiver = models.ForeignKey("Person", related_name="receiver", on_delete=models.DO_NOTHING)
     date = models.DateTimeField(auto_now=True)
     amount = models.IntegerField(default=0)
+
+    class Meta:
+        verbose_name_plural = '   Transactions'
 
     @property
     def is_transaction(self):
