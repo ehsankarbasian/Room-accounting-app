@@ -11,6 +11,7 @@ auth_urls = [
     path('logout', log_out),
 
     path('verifyEmail', verify_email),
+    path('verifyPersonEmail', verify_person_email),
 
     path('forgotPassword', forgot_password),
     path('resetPasswordTokenBased', reset_password_token_based),

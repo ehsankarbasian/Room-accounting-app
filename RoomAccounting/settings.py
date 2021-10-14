@@ -28,6 +28,18 @@ EMAIL_HOST_PASSWORD = 'NTM1400NTM'
 DEFAULT_FROM_EMAIL = 'ntm.patronage@gmail.com'
 DEFAULT_TO_EMAIL = 'ehsan.karbasian@gmail.com'
 
+# Django admin panel
+ADMIN_PRIORITY = [
+    "Users",
+    "Tokens",
+    "Rooms",
+    "Persons",
+    "Transactions",
+    "Spends",
+    "spender (Person m2m Spend)",
+    "partner (Person m2m Spend)",
+]
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 

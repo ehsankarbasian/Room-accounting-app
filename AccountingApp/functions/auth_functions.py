@@ -1,6 +1,3 @@
-from secrets import token_hex
-from random import randint
-
 from django.contrib.auth import authenticate
 from django.contrib.auth import login, logout
 from django.shortcuts import redirect
@@ -24,9 +21,7 @@ def sign_up(request):
 
     verify_email_token = token_hex(64)
     token = Token.objects.create(verify_email_token=verify_email_token,
-                                 verify_email_code=randint(100000, 999999),
-                                 reset_pass_token=token_hex(64),
-                                 reset_pass_code=randint(100000, 999999))
+                                 verify_email_code=randint(100000, 999999))
 
     User.objects.create_user(username=username,
                              password=password,
@@ -40,6 +35,7 @@ def sign_up(request):
                                                                            'PORT': PORT,
                                                                            'email': email,
                                                                            'name': username,
+                                                                           'mode': 'verifyEmail',
                                                                            'app_base_url': ROOM_ACCOUNTING_APP_BASE_URL,
                                                                            'verify_email_token': verify_email_token})
     send_email("Verify email", message, [email], html_content)
@@ -67,6 +63,26 @@ def verify_email(request):
     user.verified_email = True
     user.save()
     return result_page(request, "Email verified successfully. you can sign in.")
+
+
+@api_view(['POST'])
+def verify_person_email(request):
+    token = request.POST['token']
+    email = request.POST['email']
+
+    person = Person.objects.filter(email=email)
+    if person.count() == 0:
+        return result_page(request, "Person not found")
+
+    person = person[0]
+    if person.verified_email:
+        return result_page(request, "Your email verified before")
+
+    if token != person.verify_email_token:
+        return result_page(request, "Wrong token")
+
+    person.verify_email()
+    return result_page(request, "Email verified successfully")
 
 
 def forgot_password(request):

@@ -3,9 +3,11 @@ from itertools import chain
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.views.decorators.http import require_http_methods
+from django.template.loader import get_template
 
 from AccountingApp.models import *
-from .helper_functions import result_page
+from .helper_functions import send_email, result_page
+from RoomAccounting.settings import HOST, PORT, ROOM_ACCOUNTING_APP_BASE_URL
 
 
 def add_room(request):
@@ -54,8 +56,22 @@ def add_person(request, room_id):
         name = request.POST['person_name']
         email = request.POST['email']
         phone = request.POST['phone']
-        Person.objects.create(name=name, email=email, phone=phone, room=room)
+        person = Person.objects.create(name=name, email=email, phone=phone, room=room)
+
+        html_content = get_template('email_verification.html')\
+            .render(context={'HOST': HOST,
+                             'PORT': PORT,
+                             'email': email,
+                             'name': name,
+                             'mode': 'verifyPersonEmail',
+                             'app_base_url': ROOM_ACCOUNTING_APP_BASE_URL,
+                             'verify_email_token': person.verify_email_token})
+
+        message = "Hello " + name + ". please click on the button below to verify your email"
+        send_email("Verify email", message, [email], html_content)
+
         return redirect('home')
+
     return result_page(request, "You're not the owner of the room")
 
 
