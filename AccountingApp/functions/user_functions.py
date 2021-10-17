@@ -1,12 +1,11 @@
 from itertools import chain
 
-from django.shortcuts import render
 from django.shortcuts import redirect
 from django.views.decorators.http import require_http_methods
 from django.template.loader import get_template
 
 from AccountingApp.models import *
-from .helper_functions import send_email, result_page
+from .helper_functions import *
 from RoomAccounting.settings import HOST, PORT, ROOM_ACCOUNTING_APP_BASE_URL
 
 
@@ -102,9 +101,10 @@ def add_buy(request, room_id):
             if "partner" + ID in request.POST:
                 weight = request.POST['person_weight' + ID]
                 weight = [int(weight) if weight else 1][0]
-                print('spender_weight' + ID + ": " + str(weight))
                 Partners.objects.create(partner_person=person, partner_spend=spend, weight=weight)
 
+        spend = Spend.objects.get(id=spend.id)
+        send_new_spend_to_person(spend)
         return redirect('home')
 
     return result_page(request, "You're not the owner of the room")
@@ -141,7 +141,9 @@ def add_transaction(request, room_id):
 
         payer = Person.objects.get(id=payer_id)
         receiver = Person.objects.get(id=receiver_id)
-        Transaction.objects.create(amount=amount, payer=payer, receiver=receiver)
+        transaction = Transaction.objects.create(amount=amount, payer=payer, receiver=receiver)
+
+        send_new_transaction_to_person(transaction)
         return redirect('home')
 
     return result_page(request, "You're not the owner of the room")

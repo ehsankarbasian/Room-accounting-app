@@ -72,6 +72,17 @@ class Spend(models.Model):
     class Meta:
         verbose_name_plural = verbose_name_plural('Spends')
 
+    @property
+    def related_persons(self):
+        not_related_persons = self.room.person_set.all()
+        for spender in self.spenders_set.all():
+            if spender.spender_person in not_related_persons:
+                not_related_persons = not_related_persons.exclude(id=spender.spender_person.id)
+        related_persons = self.room.person_set.all()
+        for person in not_related_persons:
+            related_persons = related_persons.exclude(id=person.id)
+        return related_persons
+
     def partner_dict(self):
         result = dict({})
         room = self.room
