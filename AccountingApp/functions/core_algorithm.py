@@ -130,3 +130,11 @@ def simple_result(final_dict):
         result[k] = v[0]
 
     return result
+
+
+def is_room_cleared(final_dict):
+    cleared = 1
+    for k, v in final_dict.items():
+        if v[0]:
+            cleared = 0
+    return cleared

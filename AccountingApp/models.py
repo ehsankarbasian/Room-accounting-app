@@ -60,7 +60,7 @@ class Room(models.Model):
         return Transaction.objects.filter(payer_query | receiver_query).order_by('-date')
 
     def __str__(self):
-        return self.name + " (creator: " + self.creator.fullname + ")"
+        return self.name + " (creator: " + self.creator.username + ")"
 
 
 class Spend(models.Model):

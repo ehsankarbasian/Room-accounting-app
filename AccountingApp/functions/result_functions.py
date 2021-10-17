@@ -6,7 +6,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 
 from AccountingApp.models import *
-from .core_algorithm import calculate_result, simple_result
+from .core_algorithm import calculate_result, simple_result, is_room_cleared
 
 
 def report_for_clearing(request, room_id):
@@ -19,8 +19,9 @@ def report_for_clearing(request, room_id):
 
     # The core algorithm:
     final_dict = calculate_result(room)
+    cleared = is_room_cleared(final_dict)
 
-    context = {'result': final_dict, 'mode': 'report_for_clearing', 'room_name': room.name}
+    context = {'result': final_dict, 'mode': 'report_for_clearing', 'room_name': room.name, 'cleared': cleared}
     return render(request, 'log.html', context=context)
 
 

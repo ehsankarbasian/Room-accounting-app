@@ -23,25 +23,30 @@ def sign_up(request):
     token = Token.objects.create(verify_email_token=verify_email_token,
                                  verify_email_code=randint(100000, 999999))
 
-    User.objects.create_user(username=username,
-                             password=password,
-                             email=email,
-                             phone_number=phone_number,
-                             fullname=fullname,
-                             token=token)
+    user = User.objects.create_user(username=username,
+                                    password=password,
+                                    email=email,
+                                    phone_number=phone_number,
+                                    fullname=fullname,
+                                    token=token)
 
-    message = "Hello " + fullname + ". please click on the button below to verify your email"
-    html_content = get_template('email_verification.html').render(context={'HOST': HOST,
-                                                                           'PORT': PORT,
-                                                                           'email': email,
-                                                                           'name': username,
-                                                                           'mode': 'verifyEmail',
-                                                                           'app_base_url': ROOM_ACCOUNTING_APP_BASE_URL,
-                                                                           'verify_email_token': verify_email_token})
-    send_email("Verify email", message, [email], html_content)
+    send_email_to_new_user(user)
 
     return result_page(request, "Signed up successfully,"
                                 + " now verify at least one of your email or phone number and then sign in please")
+
+
+def send_email_to_new_user(user):
+    message = "Hello " + user.fullname + ". please click on the button below to verify your email"
+    context = {'HOST': HOST,
+               'PORT': PORT,
+               'email': user.email,
+               'name': user.username,
+               'mode': 'verifyEmail',
+               'app_base_url': ROOM_ACCOUNTING_APP_BASE_URL,
+               'verify_email_token': user.verify_email_token}
+    html_content = get_template('email_verification.html').render(context=context)
+    send_email("Verify email", message, [user.email], html_content)
 
 
 @api_view(['POST'])
@@ -94,20 +99,24 @@ def forgot_password(request):
 
     user = user[0]
     reset_password_token = user.token.reset_pass_token
+    send_reset_pass_email(email, user.fullname, reset_password_token)
 
-    html_content = get_template('reset_password.html').render(context={
+    return result_page(request, "Email sent")
+
+
+def send_reset_pass_email(email, fullname, token):
+    context = {
         'HOST': HOST,
         'PORT': PORT,
         'app_base_url': ROOM_ACCOUNTING_APP_BASE_URL,
         'email': email,
-        'name': user.fullname,
-        'token': reset_password_token})
+        'name': fullname,
+        'token': token}
+    html_content = get_template('reset_password.html').render(context=context)
     send_email(subject='reset password',
                message='message',
                to_list=[email],
                html_content=html_content)
-
-    return result_page(request, "Email sent")
 
 
 @api_view(['POST'])

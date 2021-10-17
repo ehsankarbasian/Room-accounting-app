@@ -94,7 +94,7 @@
                                     <b><i>spenders:</i></b><br>
 
                                     {% for spender in spend.spenders_set.all %}
-                                        {{ spender.spender_person.name }}<br>
+                                        {{ spender.spender_person.name }} (w=<b>{{ spender.weight }}</b>)<br>
                                     {% endfor %}
 
                                     <hr style="font: 14px Georgia,serif;
@@ -107,7 +107,7 @@
                                     <b><i>partners:</i></b><br>
 
                                     {% for partner in spend.partners_set.all %}
-                                        {{ partner.partner_person.name }}<br>
+                                        {{ partner.partner_person.name }} (w=<b>{{ partner.weight }}</b>)<br>
                                     {% endfor %}</div>
 
                             </li>
@@ -228,7 +228,7 @@
                                                 border-bottom: 1px solid rgba(255, 255, 255, 0.5);">
                                         <b><i>spenders:</i></b><br>
                                         {% for spender in item.spenders_set.all %}
-                                            {{ spender.spender_person.name }}<br>
+                                            {{ spender.spender_person.name }} (w=<b>{{ spender.weight }}</b>)<br>
                                         {% endfor %}
                                         <hr style="font: 14px Georgia,serif;
                                                 padding: 0;
@@ -239,7 +239,7 @@
                                                 border-bottom: 1px solid rgba(255, 255, 255, 0.3);">
                                         <b><i>partners:</i></b><br>
                                         {% for partner in item.partners_set.all %}
-                                            {{ partner.partner_person.name }}<br>
+                                            {{ partner.partner_person.name }} (w=<b>{{ partner.weight }}</b>)<br>
                                         {% endfor %}
                                     </div>
 
@@ -253,6 +253,13 @@
 
                     {% if mode  == 'report_for_clearing' %}
                         <h1 style="color: #122b40;margin-left: 48px">Result of room '{{ room_name }}'</h1>
+
+                        {% if cleared %}
+
+                            <hr>
+                            <h1 style="color: #122b40;margin-left: 48px">The room is cleared</h1>
+
+                        {% endif %}
 
                         <ul>
 

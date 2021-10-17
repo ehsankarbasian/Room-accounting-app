@@ -58,17 +58,19 @@ def add_person(request, room_id):
         phone = request.POST['phone']
         person = Person.objects.create(name=name, email=email, phone=phone, room=room)
 
-        html_content = get_template('email_verification.html')\
-            .render(context={'HOST': HOST,
-                             'PORT': PORT,
-                             'email': email,
-                             'name': name,
-                             'mode': 'verifyPersonEmail',
-                             'app_base_url': ROOM_ACCOUNTING_APP_BASE_URL,
-                             'verify_email_token': person.verify_email_token})
+        context = {'HOST': HOST,
+                   'PORT': PORT,
+                   'email': email,
+                   'name': name,
+                   'mode': 'verifyPersonEmail',
+                   'app_base_url': ROOM_ACCOUNTING_APP_BASE_URL,
+                   'verify_email_token': person.verify_email_token}
+        html_content = get_template('email_verification.html').render(context=context)
 
         message = "Hello " + name + ". please click on the button below to verify your email"
+        print("sending email ...")
         send_email("Verify email", message, [email], html_content)
+        print("SENT !!!")
 
         return redirect('home')
 
@@ -91,14 +93,17 @@ def add_buy(request, room_id):
         for person in room.person_set.all():
             # Create Spenders
             ID = str(person.id)
-            if "spender"+ID in request.POST:
-                # TODO: get and save weight
-                Spenders.objects.create(spender_person=person, spender_spend=spend)
+            if "spender" + ID in request.POST:
+                weight = request.POST['spender_weight' + ID]
+                weight = [int(weight) if weight else 1][0]
+                Spenders.objects.create(spender_person=person, spender_spend=spend, weight=weight)
 
             # Create Partners
-            if "partner"+ID in request.POST:
-                # TODO: get and save weight
-                Partners.objects.create(partner_person=person, partner_spend=spend)
+            if "partner" + ID in request.POST:
+                weight = request.POST['person_weight' + ID]
+                weight = [int(weight) if weight else 1][0]
+                print('spender_weight' + ID + ": " + str(weight))
+                Partners.objects.create(partner_person=person, partner_spend=spend, weight=weight)
 
         return redirect('home')
 
