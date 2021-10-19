@@ -1,3 +1,5 @@
+from itertools import chain
+
 from django.core.mail import EmailMultiAlternatives
 from RoomAccounting.settings import EMAIL_HOST_USER
 
@@ -79,3 +81,52 @@ def transaction_message_creator(transaction):
               + "From:" + "\n" + "'" + transaction.payer.name + "'" + "\n" + "\n"\
               + "To:" + "\n" + "'" + transaction.receiver.name + "'"
     return message
+
+
+def send_room_log_email(person):
+    subject = "Room log before you verify your email"
+    log = room_log_helper_related(person)
+    message = room_log_message_creator(log)
+
+    send_text_email(subject, message, [person.email])
+
+
+def room_log_helper_related(person):
+    transactions = person.related_transactions
+    spends = person.related_spends
+
+    log = sorted(chain(transactions, spends),
+                 key=lambda item: item.date,
+                 reverse=True)
+    return log
+
+
+def room_log_message_creator(log):
+    message = "Thanks you for verify your email" + "\n"\
+              + "Your room records before you verify your email are as below:" + "\n" + "\n"
+
+    for item in log:
+        if item.is_transaction:
+            date = str(item.date)
+            message += "\n" + "'" + str(item.amount) + "' FROM '" + item.payer.name + "' TO '" + item.receiver.name\
+                       + "' (date:" + date + ")\n"
+        else:
+            date = str(item.date)
+            message += "\n" + "'" + str(item.amount) + "' FOR '" + item.description + "' (date:" + date + ")\n"
+            message += "Spenders:" + "\n"
+            for spender in item.spenders_set.all():
+                message += "\t" + spender.spender_person.name + " (w=" + str(spender.weight) + ")" + "\n"
+            message += "Partners:" + "\n"
+            for partner in item.partners_set.all():
+                message += "\t" + partner.partner_person.name + " (w=" + str(partner.weight) + ")" + "\n"
+    return message
+
+
+def room_log_helper(room):
+    transactions = room.transaction_set
+    spends = room.spend_set.all().order_by('-date')
+
+    log = sorted(chain(transactions, spends),
+                 key=lambda item: item.date,
+                 reverse=True)
+    return log

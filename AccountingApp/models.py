@@ -78,6 +78,7 @@ class Spend(models.Model):
         for spender in self.spenders_set.all():
             if spender.spender_person in not_related_persons:
                 not_related_persons = not_related_persons.exclude(id=spender.spender_person.id)
+
         related_persons = self.room.person_set.all()
         for person in not_related_persons:
             related_persons = related_persons.exclude(id=person.id)
@@ -148,6 +149,21 @@ class Person(models.Model):
 
     class Meta:
         verbose_name_plural = verbose_name_plural('Persons')
+
+    @property
+    def related_transactions(self):
+        query = Q(payer=self) | Q(receiver=self)
+        return Transaction.objects.filter(query)
+
+    @property
+    def related_spends(self):
+        related_id = []
+        for spend in Spend.objects.filter(room=self.room):
+            union_spenders = self.spenders_set.filter(id__in=spend.spenders_set.values_list('id', flat=True))
+            union_partners = self.partners_set.filter(id__in=spend.partners_set.values_list('id', flat=True))
+            if union_spenders.count() or union_partners.count():
+                related_id.append(spend.id)
+        return Spend.objects.filter(id__in=related_id)
 
     @property
     def verified_email(self):

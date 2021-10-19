@@ -1,5 +1,3 @@
-from itertools import chain
-
 from django.shortcuts import redirect
 from django.views.decorators.http import require_http_methods
 from django.template.loader import get_template
@@ -59,7 +57,7 @@ def add_person(request, room_id):
 
         context = {'HOST': HOST,
                    'PORT': PORT,
-                   'email': email,
+                   'person_id': person.id,
                    'name': name,
                    'mode': 'verifyPersonEmail',
                    'app_base_url': ROOM_ACCOUNTING_APP_BASE_URL,
@@ -67,9 +65,7 @@ def add_person(request, room_id):
         html_content = get_template('email_verification.html').render(context=context)
 
         message = "Hello " + name + ". please click on the button below to verify your email"
-        print("sending email ...")
         send_email("Verify email", message, [email], html_content)
-        print("SENT !!!")
 
         return redirect('home')
 
@@ -174,12 +170,7 @@ def room_log(request, room_id):
     room = Room.objects.get(id=room_id)
 
     if room in request.user.room_set.all():
-        transactions = room.transaction_set
-        spends = room.spend_set.all().order_by('-date')
-
-        log = sorted(chain(transactions, spends),
-                     key=lambda item: item.date,
-                     reverse=True)
+        log = room_log_helper(room)
 
         context = {'log': log, 'mode': 'room_log', 'room_name': room.name}
         return render(request, 'log.html', context=context)

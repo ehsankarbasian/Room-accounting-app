@@ -8,7 +8,7 @@ from rest_framework.decorators import api_view
 
 from AccountingApp.models import *
 from RoomAccounting.settings import HOST, PORT, ROOM_ACCOUNTING_APP_BASE_URL
-from .helper_functions import send_email, result_page
+from .helper_functions import send_email, result_page, send_room_log_email
 
 
 @require_http_methods(["POST"])
@@ -73,9 +73,9 @@ def verify_email(request):
 @api_view(['POST'])
 def verify_person_email(request):
     token = request.POST['token']
-    email = request.POST['email']
+    person_id = int(request.POST['person_id'])
 
-    person = Person.objects.filter(email=email)
+    person = Person.objects.filter(id=person_id)
     if person.count() == 0:
         return result_page(request, "Person not found")
 
@@ -87,6 +87,7 @@ def verify_person_email(request):
         return result_page(request, "Wrong token")
 
     person.verify_email()
+    send_room_log_email(person)
     return result_page(request, "Email verified successfully")
 
 
