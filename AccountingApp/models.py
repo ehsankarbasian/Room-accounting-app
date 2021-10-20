@@ -144,8 +144,8 @@ class Person(models.Model):
     email = models.EmailField(unique=False)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
 
-    verify_email_token = models.CharField(max_length=64, default=token_hex(64))
-    verify_phone_code = models.IntegerField(default=randint(100000, 999999))
+    verify_email_token = models.CharField(max_length=64)
+    verify_phone_code = models.IntegerField()
 
     class Meta:
         verbose_name_plural = verbose_name_plural('Persons')

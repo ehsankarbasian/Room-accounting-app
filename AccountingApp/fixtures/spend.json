@@ -5,7 +5,7 @@
         "fields": {
             "room": 1,
             "amount": 9000,
-            "date": "2020-10-8",
+            "date": "2020-10-8 00:00:00+00:00",
             "description": "default"
         }
     },
@@ -15,7 +15,7 @@
         "fields": {
             "room": 1,
             "amount": 5000,
-            "date": "2020-10-8",
+            "date": "2020-10-8 00:00:00+00:00",
             "description": "default"
         }
     },
@@ -25,7 +25,7 @@
         "fields": {
             "room": 1,
             "amount": 20000,
-            "date": "2020-10-8",
+            "date": "2020-10-8 00:00:00+00:00",
             "description": "default"
         }
     },
@@ -35,7 +35,7 @@
         "fields": {
             "room": 1,
             "amount": 21000,
-            "date": "2020-10-8",
+            "date": "2020-10-8 00:00:00+00:00",
             "description": "default"
         }
     },
@@ -45,7 +45,7 @@
         "fields": {
             "room": 2,
             "amount": 90000,
-            "date": "2020-10-8",
+            "date": "2020-10-8 00:00:00+00:00",
             "description": "default"
         }
     },
@@ -55,7 +55,7 @@
         "fields": {
             "room": 2,
             "amount": 10000,
-            "date": "2020-10-8",
+            "date": "2020-10-8 00:00:00+00:00",
             "description": "default"
         }
     },
@@ -65,7 +65,7 @@
         "fields": {
             "room": 2,
             "amount": 48000,
-            "date": "2020-10-8",
+            "date": "2020-10-8 00:00:00+00:00",
             "description": "default"
         }
     },
@@ -75,7 +75,7 @@
         "fields": {
             "room": 2,
             "amount": 35000,
-            "date": "2020-10-8",
+            "date": "2020-10-8 00:00:00+00:00",
             "description": "default"
         }
     }

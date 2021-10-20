@@ -53,7 +53,8 @@ def add_person(request, room_id):
         name = request.POST['person_name']
         email = request.POST['email']
         phone = request.POST['phone']
-        person = Person.objects.create(name=name, email=email, phone=phone, room=room)
+        person = Person.objects.create(name=name, email=email, phone=phone, room=room,
+                                       verify_email_token=token_hex(64), verify_phone_code=randint(100000, 999999))
 
         context = {'HOST': HOST,
                    'PORT': PORT,

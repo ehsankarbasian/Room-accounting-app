@@ -4,7 +4,9 @@
         "pk": 1,
         "fields": {
             "name": "person_1",
-            "room": 1
+            "room": 1,
+            "verify_email_token": "verify_email_token_1",
+            "verify_phone_code": "021851"
         }
     },
     {
@@ -12,7 +14,9 @@
         "pk": 2,
         "fields": {
             "name": "person_2",
-            "room": 1
+            "room": 1,
+            "verify_email_token": "verify_email_token_2",
+            "verify_phone_code": "021852"
         }
     },
     {
@@ -20,7 +24,9 @@
         "pk": 3,
         "fields": {
             "name": "person_3",
-            "room": 1
+            "room": 1,
+            "verify_email_token": "verify_email_token_3",
+            "verify_phone_code": "021853"
         }
     },
     {
@@ -28,7 +34,9 @@
         "pk": 4,
         "fields": {
             "name": "person_4",
-            "room": 2
+            "room": 2,
+            "verify_email_token": "verify_email_token_4",
+            "verify_phone_code": "021854"
         }
     },
     {
@@ -36,7 +44,9 @@
         "pk": 5,
         "fields": {
             "name": "person_5",
-            "room": 2
+            "room": 2,
+            "verify_email_token": "verify_email_token_5",
+            "verify_phone_code": "021855"
         }
     },
     {
@@ -44,7 +54,9 @@
         "pk": 6,
         "fields": {
             "name": "person_6",
-            "room": 2
+            "room": 2,
+            "verify_email_token": "verify_email_token_6",
+            "verify_phone_code": "021856"
         }
     },
     {
@@ -52,7 +64,9 @@
         "pk": 7,
         "fields": {
             "name": "person_7",
-            "room": 2
+            "room": 2,
+            "verify_email_token": "verify_email_token_7",
+            "verify_phone_code": "021857"
         }
     }
 ]

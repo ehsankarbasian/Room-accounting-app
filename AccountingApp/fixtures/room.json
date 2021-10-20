@@ -5,7 +5,7 @@
         "fields": {
             "name": "room_1",
             "creator": 1,
-            "created_at": "1996-06-13"
+            "created_at": "1996-06-13 00:00:00+00:00"
         }
     },
     {
@@ -14,7 +14,7 @@
         "fields": {
             "name": "room_2",
             "creator": 1,
-            "created_at": "1950-02-05"
+            "created_at": "1950-02-05 00:00:00+00:00"
         }
     }
 ]
