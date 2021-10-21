@@ -147,6 +147,8 @@ class Person(models.Model):
     verify_email_token = models.CharField(max_length=64)
     verify_phone_code = models.IntegerField()
 
+    cleared = models.BooleanField(default=False)
+
     class Meta:
         verbose_name_plural = verbose_name_plural('Persons')
 

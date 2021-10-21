@@ -1,7 +1,7 @@
 from AccountingApp.models import *
 
 
-def calculate_result(room):
+def calculate_result_with_id(room):
     persons = list(room.person_set.all())
     result_dict = initial_result_dict(persons)
 
@@ -9,6 +9,12 @@ def calculate_result(room):
     result_dict = impact_transactions(room, result_dict)
 
     result_dict = reverse_negatives(result_dict)
+
+    return result_dict
+
+
+def calculate_result(room):
+    result_dict = calculate_result_with_id(room)
     result_dict = replace_person_id_with_name(result_dict)
 
     return result_dict
@@ -138,3 +144,25 @@ def is_room_cleared(final_dict):
         if v[0]:
             cleared = 0
     return cleared
+
+
+def related_result(final_dict, person_id):
+    person = Person.objects.get(id=person_id)
+    result = dict({})
+
+    for k, v in final_dict.items():
+        if person in [v[1], v[2]] and v[0]:
+            result[k] = v[0]
+
+    if len(result):
+        return result
+
+    return False
+
+
+def cleared_person(person):
+    final_dict = calculate_result_with_id(person.room)
+    for k, v in final_dict.items():
+        if v != 0 and str(person.id) in [x for x in k.split()]:
+            return True
+    return False

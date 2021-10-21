@@ -130,3 +130,10 @@ def room_log_helper(room):
                  key=lambda item: item.date,
                  reverse=True)
     return log
+
+
+def create_clearing_message(content, initial_message):
+    result = initial_message + "\n" + "\n"
+    for k, v in content.items():
+        result += k + ": " + str(v) + "\n"
+    return result

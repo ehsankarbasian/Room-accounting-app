@@ -34,6 +34,7 @@ user_functions = [
 result_functions = [
     path('reportForClearing/<int:room_id>', report_for_clearing),
     path('reportForClearingAPI', report_for_clearing_API),
+    path('sendResultEmail', send_result_email),
 ]
 
 
