@@ -79,7 +79,8 @@ class PersonAdmin(admin.ModelAdmin):
 
 @admin.register(Spend)
 class SpendAdmin(admin.ModelAdmin):
-    list_display = ['amount', 'description', 'room', 'date']
+    list_display = ['amount', 'description','room', 'date']
+    list_editable = ['description']
     fields = ['amount', 'room', 'description']
     readonly_fields = ['amount', 'room', 'description']
     search_fields = ['room__creator__username']

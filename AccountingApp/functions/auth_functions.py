@@ -44,7 +44,7 @@ def send_email_to_new_user(user):
                'name': user.username,
                'mode': 'verifyEmail',
                'app_base_url': ROOM_ACCOUNTING_APP_BASE_URL,
-               'verify_email_token': user.verify_email_token}
+               'verify_email_token': user.token.verify_email_token}
     html_content = get_template('email_verification.html').render(context=context)
     send_email("Verify email", message, [user.email], html_content)
 

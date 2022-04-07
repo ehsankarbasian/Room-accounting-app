@@ -18,21 +18,23 @@ def client_post(url, json):
 
 
 def send_email(subject, message, to_list, html_content):
-    message = EmailMultiAlternatives(subject,
-                                     message,
-                                     EMAIL_HOST_USER,
-                                     to_list)
-    message.attach_alternative(html_content, "text/html")
-    message.send()
+    pass
+    #message = EmailMultiAlternatives(subject,
+    #                                 message,
+    #                                 EMAIL_HOST_USER,
+    #                                 to_list)
+    #message.attach_alternative(html_content, "text/html")
+    #message.send()
 
 
 def send_text_email(subject, message, to_list):
-    for address in to_list:
-        message = EmailMultiAlternatives(subject,
-                                         message,
-                                         EMAIL_HOST_USER,
-                                         [address])
-        message.send()
+    pass
+    #for address in to_list:
+    #    message = EmailMultiAlternatives(subject,
+    #                                     message,
+    #                                     EMAIL_HOST_USER,
+    #                                     [address])
+    #    message.send()
 
 
 def send_new_spend_to_person(spend):
