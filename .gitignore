@@ -11,6 +11,7 @@ __pycache__/
 
 # Distribution / packaging
 .Python
+.vscode
 build/
 develop-eggs/
 dist/
@@ -61,7 +62,6 @@ coverage.xml
 # Django stuff:
 *.log
 local_settings.py
-db.sqlite3
 Proj/db.sqlite3
 db.sqlite3-journal
 

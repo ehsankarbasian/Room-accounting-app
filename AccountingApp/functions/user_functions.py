@@ -23,7 +23,7 @@ def delete_room(request, room_id):
     room = Room.objects.get(id=room_id)
 
     if room in request.user.room_set.all():
-        room.delete()
+        # room.delete()
         return redirect('home')
     return result_page(request, "You're not the owner of the room")
 

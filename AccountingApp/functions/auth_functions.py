@@ -19,76 +19,13 @@ def sign_up(request):
     username = request.POST['username']
     password = request.POST['password']
 
-    verify_email_token = token_hex(64)
-    token = Token.objects.create(verify_email_token=verify_email_token,
-                                 verify_email_code=randint(100000, 999999))
+    User.objects.create_user(username=username,
+                             password=password,
+                             email=email,
+                             phone_number=phone_number,
+                             fullname=fullname)
 
-    user = User.objects.create_user(username=username,
-                                    password=password,
-                                    email=email,
-                                    phone_number=phone_number,
-                                    fullname=fullname,
-                                    token=token)
-
-    send_email_to_new_user(user)
-
-    return result_page(request, "Signed up successfully,"
-                                + " now verify at least one of your email or phone number and then sign in please")
-
-
-def send_email_to_new_user(user):
-    message = "Hello " + user.fullname + ". please click on the button below to verify your email"
-    context = {'HOST': HOST,
-               'PORT': PORT,
-               'email': user.email,
-               'name': user.username,
-               'mode': 'verifyEmail',
-               'app_base_url': ROOM_ACCOUNTING_APP_BASE_URL,
-               'verify_email_token': user.token.verify_email_token}
-    html_content = get_template('email_verification.html').render(context=context)
-    send_email("Verify email", message, [user.email], html_content)
-
-
-@api_view(['POST'])
-def verify_email(request):
-    token = request.POST['token']
-    email = request.POST['email']
-
-    user = User.objects.filter(email=email)
-    if user.count() == 0:
-        return result_page(request, "User not found")
-
-    user = user[0]
-    if user.verified_email:
-        return result_page(request, "Your email verified before")
-
-    if token != user.token.verify_email_token:
-        return result_page(request, "Wrong token")
-
-    user.verified_email = True
-    user.save()
-    return result_page(request, "Email verified successfully. you can sign in.")
-
-
-@api_view(['POST'])
-def verify_person_email(request):
-    token = request.POST['token']
-    person_id = int(request.POST['person_id'])
-
-    person = Person.objects.filter(id=person_id)
-    if person.count() == 0:
-        return result_page(request, "Person not found")
-
-    person = person[0]
-    if person.verified_email:
-        return result_page(request, "Your email verified before")
-
-    if token != person.verify_email_token:
-        return result_page(request, "Wrong token")
-
-    person.verify_email()
-    send_room_log_email(person)
-    return result_page(request, "Email verified successfully")
+    return result_page(request, "Signed up successfully")
 
 
 def forgot_password(request):
@@ -158,8 +95,8 @@ def sign_in(request):
     if user is None:
         return result_page(request, "Wrong username/password")
 
-    if not (user.verified_email or user.verified_phone):
-        return result_page(request, "Verify at least one of your email or phone number to sign in")
+    # if not (user.verified_email or user.verified_phone):
+    #     return result_page(request, "Verify at least one of your email or phone number to sign in")
 
     login(request, user)
     return redirect('home')
