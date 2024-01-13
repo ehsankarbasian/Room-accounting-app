@@ -11,6 +11,10 @@ from .core_algorithm import calculate_result, simple_result, is_room_cleared, re
 import json
 
 
+def sort_dict_by_values(d, reverse=False):
+    return {k: v for k, v in sorted(d.items(), key=lambda item: item[1], reverse=reverse)}
+
+
 def pretty_print(d):
     p = json.dumps(d, sort_keys=True, indent=4)
     print(p)
@@ -54,7 +58,8 @@ def report_for_clearing(request, room_id):
     #TODO: detect way
     #TODO: detect cycle
     
-    context = {'result': final_dict, 'mode': 'report_for_clearing', 'room_name': room.name, 'cleared': cleared}
+    srted_final_dict = sort_dict_by_values(final_dict, reverse=True)
+    context = {'result': srted_final_dict, 'mode': 'report_for_clearing', 'room_name': room.name, 'cleared': cleared}
     return render(request, 'log.html', context=context)
 
 
