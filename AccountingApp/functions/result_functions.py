@@ -8,6 +8,29 @@ from rest_framework.decorators import api_view
 from AccountingApp.models import *
 from .core_algorithm import calculate_result, simple_result, is_room_cleared, related_result
 
+import json
+
+
+def pretty_print(d):
+    p = json.dumps(d, sort_keys=True, indent=4)
+    print(p)
+
+
+class DictOfSets(dict):
+    
+    def __setitem__(self, key, value):
+        value_type = type(value).__name__
+        if value_type != 'set':
+            value = {value}
+            
+        dict.__setitem__(self, key, value)
+    
+    
+    def __getitem__(self, key):
+        if key not in list(self.keys()):
+            self[key] = set({})
+        return super().__getitem__(key)
+
 
 def report_for_clearing(request, room_id):
     if request.user.is_anonymous:
@@ -21,6 +44,16 @@ def report_for_clearing(request, room_id):
     final_dict = calculate_result(room)
     cleared = is_room_cleared(final_dict)
 
+    borders = [item.split(' --> ') for item in list(final_dict.keys()) if final_dict[item] != 0]
+    zero_borders = []
+    for b in borders:
+        if final_dict[' --> '.join(b)][0] == 0:
+            zero_borders.append(b)
+    
+    neighbours = DictOfSets()
+    #TODO: detect way
+    #TODO: detect cycle
+    
     context = {'result': final_dict, 'mode': 'report_for_clearing', 'room_name': room.name, 'cleared': cleared}
     return render(request, 'log.html', context=context)
 
