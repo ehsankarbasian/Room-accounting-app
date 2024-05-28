@@ -54,7 +54,7 @@ def simplify_dict(d):
         not_zero = int(d[k][0]) > 0
         if p_1 in getters and not_duplicate and not_zero:
             to_simplify.append(f'{k}: {d[k][0]}')
-        if p_2 in givers and not_duplicate and not_zero:
+        elif p_2 in givers and not_duplicate and not_zero:
             to_simplify.append(f'{k}: {d[k][0]}')
     
     
