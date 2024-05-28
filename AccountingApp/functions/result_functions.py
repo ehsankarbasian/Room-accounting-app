@@ -62,9 +62,39 @@ def simplify_dict(d):
     print('TO_SIMPLIFY:')
     for i in to_simplify:
         print(i)
+    if len(to_simplify) == 0:
+        print('Nothing :)')
     print('###############################\n')
     
     return d
+
+
+def print_sum_of_all_in_cmd(d):
+    sum_of_all = {}
+    for k, v in d.items():
+        p_1, _, p_2 = k.split()
+        v = int(v[0])
+        if p_1 not in sum_of_all:
+            sum_of_all[p_1] = -v
+        else:
+            sum_of_all[p_1] -= v
+        if p_2 not in sum_of_all:
+            sum_of_all[p_2] = v
+        else:
+            sum_of_all[p_2] += v
+    sum_of_all = {k: v for k, v in sorted(sum_of_all.items(), key=lambda item: abs(item[1]), reverse=True)}
+    
+    print('###############################')
+    print('KOLLAN_BEDEHKAR:')
+    for k, v in sum_of_all.items():
+        if v < 0:
+            print(k, ':', -v)
+    print()
+    print('KOLLAN_TALABKAR:')
+    for k, v in sum_of_all.items():
+        if v > 0:
+            print(k, ':', v)
+    print('###############################\n')
 
 
 def pretty_print(d):
@@ -111,6 +141,7 @@ def report_for_clearing(request, room_id):
     #TODO: detect cycle
     
     simplified_dict = simplify_dict(final_dict)
+    print_sum_of_all_in_cmd(simplified_dict)
     sorted_final_dict = sort_dict_by_values(simplified_dict, reverse=True)
     context = {'result': sorted_final_dict, 'mode': 'report_for_clearing', 'room_name': room.name, 'cleared': cleared}
     return render(request, 'log.html', context=context)
