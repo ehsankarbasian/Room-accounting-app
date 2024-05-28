@@ -12,7 +12,7 @@ import json
 
 
 def sort_dict_by_values(d, reverse=False):
-    return {k: v for k, v in sorted(d.items(), key=lambda item: item[1], reverse=reverse)}
+    return {k: v for k, v in sorted(d.items(), key=lambda item: item[1][0], reverse=reverse)}
 
 
 def pretty_print(d):
