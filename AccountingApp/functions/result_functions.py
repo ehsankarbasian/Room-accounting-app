@@ -15,6 +15,58 @@ def sort_dict_by_values(d, reverse=False):
     return {k: v for k, v in sorted(d.items(), key=lambda item: item[1][0], reverse=reverse)}
 
 
+def simplify_dict(d):
+    all_persons = []
+    for k in d.keys():
+        p_1, _, p_2 = k.split()
+        if p_1 not in all_persons:
+            all_persons.append(p_1)
+        if p_2 not in all_persons:
+            all_persons.append(p_2)
+    
+    getter_scores = {p: 0 for p in all_persons}
+    giver_scores = {p: 0 for p in all_persons}
+    
+    for k in d.keys():
+        if int(d[k][0]) > 0:
+            p_1, _, p_2 = k.split()
+            giver_scores[p_1] = giver_scores[p_1]+1
+            getter_scores[p_2] = getter_scores[p_2]+1
+    
+    getters = []
+    givers = []
+    
+    for getter in getter_scores:
+        for giver in giver_scores:
+            if getter_scores[getter] > 0 and giver_scores[giver] > 0 and getter == giver:
+                must_be_getter = getter_scores[getter] > giver_scores[giver]
+                if must_be_getter:
+                    getters.append(getter)
+                else:
+                    givers.append(giver)
+    
+    to_simplify = []
+    
+    for k in d.keys():
+        p_1, _, p_2 = k.split()
+        item = f'{k}: {d[k][0]}'
+        not_duplicate = item not in to_simplify
+        not_zero = int(d[k][0]) > 0
+        if p_1 in getters and not_duplicate and not_zero:
+            to_simplify.append(f'{k}: {d[k][0]}')
+        if p_2 in givers and not_duplicate and not_zero:
+            to_simplify.append(f'{k}: {d[k][0]}')
+    
+    
+    print('\n###############################')
+    print('TO_SIMPLIFY:')
+    for i in to_simplify:
+        print(i)
+    print('###############################\n')
+    
+    return d
+
+
 def pretty_print(d):
     p = json.dumps(d, sort_keys=True, indent=4)
     print(p)
@@ -58,8 +110,9 @@ def report_for_clearing(request, room_id):
     #TODO: detect way
     #TODO: detect cycle
     
-    srted_final_dict = sort_dict_by_values(final_dict, reverse=True)
-    context = {'result': srted_final_dict, 'mode': 'report_for_clearing', 'room_name': room.name, 'cleared': cleared}
+    simplified_dict = simplify_dict(final_dict)
+    sorted_final_dict = sort_dict_by_values(simplified_dict, reverse=True)
+    context = {'result': sorted_final_dict, 'mode': 'report_for_clearing', 'room_name': room.name, 'cleared': cleared}
     return render(request, 'log.html', context=context)
 
 
