@@ -53,9 +53,9 @@ def simplify_dict(d):
         not_duplicate = item not in to_simplify
         not_zero = int(d[k][0]) > 0
         if p_1 in getters and not_duplicate and not_zero:
-            to_simplify.append(f'{k}: {d[k][0]}')
+            to_simplify.append(f'{k}: {d[k][0]:,}')
         elif p_2 in givers and not_duplicate and not_zero:
-            to_simplify.append(f'{k}: {d[k][0]}')
+            to_simplify.append(f'{k}: {d[k][0]:,}')
     
     
     print('\n###############################')
@@ -88,12 +88,12 @@ def print_sum_of_all_in_cmd(d):
     print('KOLLAN_BEDEHKAR:')
     for k, v in sum_of_all.items():
         if v < 0:
-            print(k, ':', -v)
+            print(k, ':', f'{-v:,}')
     print()
     print('KOLLAN_TALABKAR:')
     for k, v in sum_of_all.items():
         if v > 0:
-            print(k, ':', v)
+            print(k, ':', f'{v:,}')
     print('###############################\n')
 
 
@@ -139,6 +139,9 @@ def report_for_clearing(request, room_id):
     neighbours = DictOfSets()
     #TODO: detect way
     #TODO: detect cycle
+    
+    for k, v in final_dict.items():
+        final_dict[k] = v + [f'{v[0]:,}']
     
     simplified_dict = simplify_dict(final_dict)
     print_sum_of_all_in_cmd(simplified_dict)
