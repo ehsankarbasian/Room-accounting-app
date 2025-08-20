@@ -5,7 +5,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 
 from AccountingApp.models import Room
-from utils.helper_functions import result_page, send_text_email
+from AccountingApp.views import _result_page
+from utils.email import send_text_email
 from AccountingApp.algorithm.core_algorithm import calculate_result, simple_result, is_room_cleared, related_result
 
 import json
@@ -104,11 +105,11 @@ def pretty_print(d):
 
 def report_for_clearing(request, room_id):
     if request.user.is_anonymous:
-        return result_page(request, "Please sign in")
+        return _result_page(request, "Please sign in")
 
     room = Room.objects.get(id=room_id)
     if room not in request.user.room_set.all():
-        return result_page(request, "You're not the owner of the room")
+        return _result_page(request, "You're not the owner of the room")
 
     # The core algorithm:
     final_dict = calculate_result(room)
@@ -150,13 +151,13 @@ def send_result_email(request):
     room = Room.objects.get(id=room_id)
 
     if request.user.is_anonymous:
-        return result_page(request, "Please sign in")
+        return _result_page(request, "Please sign in")
 
     if room in request.user.room_set.all():
 
         final_dict = calculate_result(room)
         if is_room_cleared(final_dict):
-            return result_page(request, "room is cleared")
+            return _result_page(request, "room is cleared")
 
         for person in room.person_set.all():
             ID = str(person.id)
@@ -173,7 +174,7 @@ def send_result_email(request):
 
         return redirect('home')
 
-    return result_page(request, "You're not the owner of the room")
+    return _result_page(request, "You're not the owner of the room")
 
 
 def __create_clearing_message(content, initial_message):

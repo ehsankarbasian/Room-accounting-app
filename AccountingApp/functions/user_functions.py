@@ -9,7 +9,8 @@ from django.template.loader import get_template
 from AccountingApp.models import Room, Person, Spend, Spenders, Partners, Transaction
 from django.db.models import Q
 
-from utils.helper_functions import result_page, send_new_spend_to_person, send_new_transaction_to_person
+from AccountingApp.views import _result_page
+from AccountingApp.email_generator import EmailGenerator
 from utils.email import send_email
 from RoomAccounting.settings import HOST, PORT, ROOM_ACCOUNTING_APP_BASE_URL
 
@@ -20,25 +21,25 @@ def add_room(request):
     if request.user.is_authenticated:
         Room.objects.create(name=room_name, creator=request.user)
         return redirect('home')
-    return result_page(request, "Please sign in.")
+    return _result_page(request, "Please sign in.")
 
 
 def delete_room(request, room_id):
     if request.user.is_anonymous:
-        return result_page(request, "Please sign in")
+        return _result_page(request, "Please sign in")
 
     room = Room.objects.get(id=room_id)
 
     if room in request.user.room_set.all():
         # room.delete()
         return redirect('home')
-    return result_page(request, "You're not the owner of the room")
+    return _result_page(request, "You're not the owner of the room")
 
 
 @require_http_methods(["POST"])
 def edit_room(request, room_id):
     if request.user.is_anonymous:
-        return result_page(request, "Please sign in")
+        return _result_page(request, "Please sign in")
 
     room = Room.objects.get(id=room_id)
 
@@ -46,13 +47,13 @@ def edit_room(request, room_id):
         room.name = request.POST['room_name']
         room.save()
         return redirect('home')
-    return result_page(request, "You're not the owner of the room")
+    return _result_page(request, "You're not the owner of the room")
 
 
 @require_http_methods(["POST"])
 def add_person(request, room_id):
     if request.user.is_anonymous:
-        return result_page(request, "Please sign in")
+        return _result_page(request, "Please sign in")
 
     room = Room.objects.get(id=room_id)
 
@@ -77,13 +78,13 @@ def add_person(request, room_id):
 
         return redirect('home')
 
-    return result_page(request, "You're not the owner of the room")
+    return _result_page(request, "You're not the owner of the room")
 
 
 @require_http_methods(["POST"])
 def add_buy(request, room_id):
     if request.user.is_anonymous:
-        return result_page(request, "Please sign in")
+        return _result_page(request, "Please sign in")
 
     room = Room.objects.get(id=room_id)
 
@@ -108,15 +109,15 @@ def add_buy(request, room_id):
                 Partners.objects.create(partner_person=person, partner_spend=spend, weight=weight)
 
         spend = Spend.objects.get(id=spend.id)
-        send_new_spend_to_person(spend)
+        EmailGenerator.send_new_spend_to_person(spend)
         return redirect('home')
 
-    return result_page(request, "You're not the owner of the room")
+    return _result_page(request, "You're not the owner of the room")
 
 
 def all_buys(request, room_id):
     if request.user.is_anonymous:
-        return result_page(request, "Please sign in")
+        return _result_page(request, "Please sign in")
 
     room = Room.objects.get(id=room_id)
     if room in request.user.room_set.all():
@@ -125,13 +126,13 @@ def all_buys(request, room_id):
         context = {'spends': spends, 'mode': 'spend_log', 'room_name': room.name}
         return render(request, 'log.html', context=context)
 
-    return result_page(request, "You're not the owner of the room")
+    return _result_page(request, "You're not the owner of the room")
 
 
 @require_http_methods(["POST"])
 def add_transaction(request, room_id):
     if request.user.is_anonymous:
-        return result_page(request, "Please sign in")
+        return _result_page(request, "Please sign in")
 
     room = Room.objects.get(id=room_id)
 
@@ -141,21 +142,21 @@ def add_transaction(request, room_id):
         receiver_id = request.POST['Receiver']
 
         if payer_id == receiver_id:
-            return result_page(request, "ERROR: The payer and the receiver are the same")
+            return _result_page(request, "ERROR: The payer and the receiver are the same")
 
         payer = Person.objects.get(id=payer_id)
         receiver = Person.objects.get(id=receiver_id)
         transaction = Transaction.objects.create(amount=amount, payer=payer, receiver=receiver)
 
-        send_new_transaction_to_person(transaction)
+        EmailGenerator.send_new_transaction_to_person(transaction)
         return redirect('home')
 
-    return result_page(request, "You're not the owner of the room")
+    return _result_page(request, "You're not the owner of the room")
 
 
 def all_transactions(request, room_id):
     if request.user.is_anonymous:
-        return result_page(request, "Please sign in")
+        return _result_page(request, "Please sign in")
 
     room = Room.objects.get(id=room_id)
 
@@ -168,12 +169,12 @@ def all_transactions(request, room_id):
         context = {'transactions': transactions, 'mode': 'transaction_log', 'room_name': room.name}
         return render(request, 'log.html', context=context)
 
-    return result_page(request, "You're not the owner of the room")
+    return _result_page(request, "You're not the owner of the room")
 
 
 def room_log(request, room_id):
     if request.user.is_anonymous:
-        return result_page(request, "Please sign in")
+        return _result_page(request, "Please sign in")
 
     room = Room.objects.get(id=room_id)
 
@@ -183,7 +184,7 @@ def room_log(request, room_id):
         context = {'log': log, 'mode': 'room_log', 'room_name': room.name}
         return render(request, 'log.html', context=context)
 
-    return result_page(request, "You're not the owner of the room")
+    return _result_page(request, "You're not the owner of the room")
 
 
 def __room_log_helper(room):

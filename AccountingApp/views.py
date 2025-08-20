@@ -10,8 +10,11 @@ from django.views.decorators.http import require_http_methods
 
 from AccountingApp.models import Room, User
 from utils.email import send_email
-from utils.helper_functions import result_page
 from RoomAccounting.settings import HOST, PORT, ROOM_ACCOUNTING_APP_BASE_URL
+
+
+def _result_page(request, result):
+    return render(request, 'result.html', context={'result': result})
 
 
 def landing_page(request):
@@ -44,7 +47,7 @@ def sign_up(request):
                              phone_number=phone_number,
                              fullname=fullname)
 
-    return result_page(request, "Signed up successfully")
+    return _result_page(request, "Signed up successfully")
 
 
 def forgot_password(request):
@@ -52,13 +55,13 @@ def forgot_password(request):
 
     user = User.objects.filter(email=email)
     if user.count() == 0:
-        return result_page(request, "User not found")
+        return _result_page(request, "User not found")
 
     user = user[0]
     reset_password_token = user.token.reset_pass_token
     __send_reset_pass_email(email, user.fullname, reset_password_token)
 
-    return result_page(request, "Email sent")
+    return _result_page(request, "Email sent")
 
 
 def __send_reset_pass_email(email, fullname, token):
@@ -85,24 +88,24 @@ def reset_password_token_based(request):
 
     user = User.objects.filter(email=email)
     if user.count() == 0:
-        return result_page(request, "User not found")
+        return _result_page(request, "User not found")
 
     if password_1 != password_2:
-        return result_page(request, "the passwords are not equal")
+        return _result_page(request, "the passwords are not equal")
 
     user = user[0]
     if not user.verified_email:
-        return result_page(request, "Your email is not verified")
+        return _result_page(request, "Your email is not verified")
 
     if user.token.reset_pass_token != token:
         print(user.token.reset_pass_token)
         print(token)
-        return result_page(request, "Wrong token")
+        return _result_page(request, "Wrong token")
 
     user.set_password(password_1)
     user.token.reset_pass_token = token_hex(64)
     user.save()
-    return result_page(request, "Password changed successfully. you can sign in.")
+    return _result_page(request, "Password changed successfully. you can sign in.")
 
 
 @require_http_methods(["POST"])
@@ -112,7 +115,7 @@ def sign_in(request):
 
     user = authenticate(username=username, password=password)
     if user is None:
-        return result_page(request, "Wrong username/password")
+        return _result_page(request, "Wrong username/password")
 
     # if not (user.verified_email or user.verified_phone):
     #     return result_page(request, "Verify at least one of your email or phone number to sign in")
