@@ -1,3 +1,5 @@
+from secrets import token_hex
+
 from django.contrib.auth import authenticate
 from django.contrib.auth import login, logout
 from django.shortcuts import redirect
@@ -6,7 +8,7 @@ from django.template.loader import get_template
 
 from rest_framework.decorators import api_view
 
-from AccountingApp.models import *
+from AccountingApp.models import User
 from RoomAccounting.settings import HOST, PORT, ROOM_ACCOUNTING_APP_BASE_URL
 from .helper_functions import send_email, result_page, send_room_log_email
 

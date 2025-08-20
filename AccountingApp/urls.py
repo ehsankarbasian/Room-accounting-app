@@ -1,5 +1,9 @@
 from django.urls import path
-from .views import *
+from .views import home
+from .functions.auth_functions import sign_in, sign_up, log_out, forgot_password, reset_password_token_based
+from .functions.user_functions import add_room, delete_room, edit_room, add_person, add_buy, add_transaction, all_buys, all_transactions, room_log
+from .functions.result_functions import report_for_clearing, report_for_clearing_API, send_result_email
+
 
 urlpatterns = [
     path('', home, name='home'),

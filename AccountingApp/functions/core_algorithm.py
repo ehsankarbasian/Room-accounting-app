@@ -1,26 +1,26 @@
-from AccountingApp.models import *
+from AccountingApp.models import Person
 
 
-def calculate_result_with_id(room):
+def __calculate_result_with_id(room):
     persons = list(room.person_set.all())
-    result_dict = initial_result_dict(persons)
+    result_dict = __initial_result_dict(persons)
 
-    result_dict = calculate_room_result(room, result_dict)
-    result_dict = impact_transactions(room, result_dict)
+    result_dict = __calculate_room_result(room, result_dict)
+    result_dict = __impact_transactions(room, result_dict)
 
-    result_dict = reverse_negatives(result_dict)
-
-    return result_dict
-
-
-def calculate_result(room):
-    result_dict = calculate_result_with_id(room)
-    result_dict = replace_person_id_with_name(result_dict)
+    result_dict = __reverse_negatives(result_dict)
 
     return result_dict
 
 
-def initial_result_dict(persons):
+def calculate_result(room):##
+    result_dict = __calculate_result_with_id(room)
+    result_dict = __replace_person_id_with_name(result_dict)
+
+    return result_dict
+
+
+def __initial_result_dict(persons):
     result_dict = dict({})
     max_index = len(persons) - 1
     for p1 in persons:
@@ -33,8 +33,8 @@ def initial_result_dict(persons):
     return result_dict
 
 
-def calculate_room_result(room, result_dict):
-    spend_list = spend_list_generator(room)
+def __calculate_room_result(room, result_dict):
+    spend_list = __spend_list_generator(room)
 
     for spend in spend_list:
         amount = spend['amount']
@@ -67,7 +67,7 @@ def calculate_room_result(room, result_dict):
     return result_dict
 
 
-def spend_list_generator(room):
+def __spend_list_generator(room):
     spend_list = []
     for spend in room.spend_set.all():
         amount = spend.amount
@@ -91,7 +91,7 @@ def spend_list_generator(room):
     return spend_list
 
 
-def impact_transactions(room, result_dict):
+def __impact_transactions(room, result_dict):
     transactions = room.transaction_set
     for transaction in transactions:
         payer_id = transaction.payer.id
@@ -106,7 +106,7 @@ def impact_transactions(room, result_dict):
     return result_dict
 
 
-def reverse_negatives(result_dict):
+def __reverse_negatives(result_dict):
     final_dict = {}
     for k, v in result_dict.items():
         key_lst = k.split()
@@ -118,7 +118,7 @@ def reverse_negatives(result_dict):
     return final_dict
 
 
-def replace_person_id_with_name(result_dict):
+def __replace_person_id_with_name(result_dict):
     result = dict({})
     for k, v in result_dict.items():
         person_1 = Person.objects.get(id=int(k.split()[0]))
@@ -130,7 +130,7 @@ def replace_person_id_with_name(result_dict):
     return result
 
 
-def simple_result(final_dict):
+def simple_result(final_dict):##
     result = dict({})
     for k, v in final_dict.items():
         result[k] = v[0]
@@ -138,15 +138,14 @@ def simple_result(final_dict):
     return result
 
 
-def is_room_cleared(final_dict):
-    cleared = 1
-    for k, v in final_dict.items():
-        if v[0]:
-            cleared = 0
-    return cleared
+def is_room_cleared(final_dict):##
+    if any(v[0] for v in final_dict.values()):
+        return False
+    
+    return True
 
 
-def related_result(final_dict, person_id):
+def related_result(final_dict, person_id):##
     person = Person.objects.get(id=person_id)
     result = dict({})
 
@@ -160,8 +159,8 @@ def related_result(final_dict, person_id):
     return False
 
 
-def cleared_person(person):
-    final_dict = calculate_result_with_id(person.room)
+def cleared_person(person):##
+    final_dict = __calculate_result_with_id(person.room)
     for k, v in final_dict.items():
         if v != 0 and str(person.id) in [x for x in k.split()]:
             return True

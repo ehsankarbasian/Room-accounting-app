@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
 
-from AccountingApp.models import *
+from AccountingApp.models import Room
 from .core_algorithm import calculate_result, simple_result, is_room_cleared, related_result
 
 import json
@@ -102,22 +102,6 @@ def pretty_print(d):
     print(p)
 
 
-class DictOfSets(dict):
-    
-    def __setitem__(self, key, value):
-        value_type = type(value).__name__
-        if value_type != 'set':
-            value = {value}
-            
-        dict.__setitem__(self, key, value)
-    
-    
-    def __getitem__(self, key):
-        if key not in list(self.keys()):
-            self[key] = set({})
-        return super().__getitem__(key)
-
-
 def report_for_clearing(request, room_id):
     if request.user.is_anonymous:
         return result_page(request, "Please sign in")
@@ -136,7 +120,7 @@ def report_for_clearing(request, room_id):
         if final_dict[' --> '.join(b)][0] == 0:
             zero_borders.append(b)
     
-    neighbours = DictOfSets()
+    # neighbours = DictOfSets()
     #TODO: detect way
     #TODO: detect cycle
     

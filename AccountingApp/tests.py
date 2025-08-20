@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from AccountingApp.models import *
+from AccountingApp.models import Transaction
 from .functions.helper_functions import client_post
 
 
