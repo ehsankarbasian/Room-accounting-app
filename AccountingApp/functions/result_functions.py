@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect
-from .helper_functions import result_page, create_clearing_message, send_text_email
 
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
 
 from AccountingApp.models import Room
-from .core_algorithm import calculate_result, simple_result, is_room_cleared, related_result
+from AccountingApp.functions.helper_functions import result_page, create_clearing_message, send_text_email
+from AccountingApp.algorithm.core_algorithm import calculate_result, simple_result, is_room_cleared, related_result
 
 import json
 

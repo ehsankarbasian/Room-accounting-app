@@ -1,7 +1,12 @@
-from django.test import TestCase
+from django.test import TestCase, Client
 
 from AccountingApp.models import Transaction
-from .functions.helper_functions import client_post
+from RoomAccounting.settings import ROOM_ACCOUNTING_APP_BASE_URL
+
+
+def _client_post(url, json):
+    response = Client().post("/" + ROOM_ACCOUNTING_APP_BASE_URL + "/" + url, json, format='json')
+    return response.data
 
 
 def create_transactions():
@@ -19,8 +24,8 @@ class CoreAlgorithmTestCase(TestCase):
     fixtures = ['user.json', 'room.json', 'person.json', 'spend.json', 'spender_partner.json']
 
     def test_result(self):
-        response_1 = client_post('reportForClearingAPI', {"room_id": 1})
-        response_2 = client_post('reportForClearingAPI', {"room_id": 2})
+        response_1 = _client_post('reportForClearingAPI', {"room_id": 1})
+        response_2 = _client_post('reportForClearingAPI', {"room_id": 2})
 
         response_1_result = {'person_1 --> person_2': 6000, 'person_1 --> person_3': 11500,
                              'person_2 --> person_3': 1500}
@@ -34,8 +39,8 @@ class CoreAlgorithmTestCase(TestCase):
     def test_result_with_transactions(self):
         create_transactions()
 
-        response_1 = client_post('reportForClearingAPI', {"room_id": 1})
-        response_2 = client_post('reportForClearingAPI', {"room_id": 2})
+        response_1 = _client_post('reportForClearingAPI', {"room_id": 1})
+        response_2 = _client_post('reportForClearingAPI', {"room_id": 2})
 
         response_1_result = {'person_1 --> person_2': 1800, 'person_1 --> person_3': 11500,
                              'person_2 --> person_3': 0}

@@ -1,5 +1,5 @@
 from django import template
-from AccountingApp.functions.core_algorithm import cleared_person
+from AccountingApp.algorithm.core_algorithm import cleared_person
 
 
 register = template.Library()

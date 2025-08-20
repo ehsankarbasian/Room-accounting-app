@@ -1,7 +1,27 @@
 from AccountingApp.models import Person
 
 
-def __calculate_result_with_id(room):
+class ResultDictItem:
+    
+    def __init__(self, from_, to, fee):
+        self._from = from_
+        self._to = to
+        self._fee = fee
+        
+        if self._fee < 0:
+            self._fee = -self.__fee
+            self._from, self._to = self._to, self._from
+    
+    @property
+    def key(self):
+        return f'{self._from} --> {self._to}'
+    
+    @property
+    def value(self):
+        return self._fee
+
+
+def __calculate_result_of_room(room):
     persons = list(room.person_set.all())
     result_dict = __initial_result_dict(persons)
 
@@ -14,7 +34,7 @@ def __calculate_result_with_id(room):
 
 
 def calculate_result(room):##
-    result_dict = __calculate_result_with_id(room)
+    result_dict = __calculate_result_of_room(room)
     result_dict = __replace_person_id_with_name(result_dict)
 
     return result_dict
@@ -160,7 +180,7 @@ def related_result(final_dict, person_id):##
 
 
 def cleared_person(person):##
-    final_dict = __calculate_result_with_id(person.room)
+    final_dict = __calculate_result_of_room(person.room)
     for k, v in final_dict.items():
         if v != 0 and str(person.id) in [x for x in k.split()]:
             return True
