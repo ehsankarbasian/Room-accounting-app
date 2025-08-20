@@ -1,4 +1,5 @@
 from secrets import token_hex
+from itertools import chain
 from random import randint
 
 from django.shortcuts import redirect, render
@@ -8,7 +9,8 @@ from django.template.loader import get_template
 from AccountingApp.models import Room, Person, Spend, Spenders, Partners, Transaction
 from django.db.models import Q
 
-from AccountingApp.functions.helper_functions import result_page, send_email, send_new_spend_to_person, send_new_transaction_to_person, room_log_helper
+from utils.helper_functions import result_page, send_new_spend_to_person, send_new_transaction_to_person
+from utils.email import send_email
 from RoomAccounting.settings import HOST, PORT, ROOM_ACCOUNTING_APP_BASE_URL
 
 
@@ -176,9 +178,19 @@ def room_log(request, room_id):
     room = Room.objects.get(id=room_id)
 
     if room in request.user.room_set.all():
-        log = room_log_helper(room)
+        log = __room_log_helper(room)
 
         context = {'log': log, 'mode': 'room_log', 'room_name': room.name}
         return render(request, 'log.html', context=context)
 
     return result_page(request, "You're not the owner of the room")
+
+
+def __room_log_helper(room):
+    transactions = room.transaction_set
+    spends = room.spend_set.all().order_by('-date')
+
+    log = sorted(chain(transactions, spends),
+                 key=lambda item: item.date,
+                 reverse=True)
+    return log

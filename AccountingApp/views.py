@@ -9,7 +9,8 @@ from django.template.loader import get_template
 from django.views.decorators.http import require_http_methods
 
 from AccountingApp.models import Room, User
-from AccountingApp.functions.helper_functions import send_email, result_page
+from utils.email import send_email
+from utils.helper_functions import result_page
 from RoomAccounting.settings import HOST, PORT, ROOM_ACCOUNTING_APP_BASE_URL
 
 

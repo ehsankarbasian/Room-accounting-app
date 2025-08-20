@@ -5,7 +5,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 
 from AccountingApp.models import Room
-from AccountingApp.functions.helper_functions import result_page, create_clearing_message, send_text_email
+from utils.helper_functions import result_page, send_text_email
 from AccountingApp.algorithm.core_algorithm import calculate_result, simple_result, is_room_cleared, related_result
 
 import json
@@ -167,10 +167,17 @@ def send_result_email(request):
                                       + "Room admin: " + person.room.creator.fullname + "\n"\
                                       + "Room admin email: " + person.room.creator.email + "\n"\
                                       + "Do the below payment please:"
-                    message = create_clearing_message(content, initial_message)
+                    message = __create_clearing_message(content, initial_message)
                     if person.verified_email:
                         send_text_email("Bill of the room '" + room.name + "'", message, [person.email])
 
         return redirect('home')
 
     return result_page(request, "You're not the owner of the room")
+
+
+def __create_clearing_message(content, initial_message):
+    result = initial_message + "\n" + "\n"
+    for k, v in content.items():
+        result += k + ": " + str(v) + "\n"
+    return result
