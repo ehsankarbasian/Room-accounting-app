@@ -64,23 +64,23 @@ class AggregateDirectedGraph(_DirectedGraph):
             self.add_edge(cycle[-1], cycle[0], weight=-min_weight)
     
     
-    def simplify_graph_path(self):
+    def simplify_graph_donkey_path(self):
         pass
     
     
     @property
-    def sorted_graph_by_weight(self):
-        weight_labels = networkx.get_edge_attributes(self, 'weight')
-        return {k: v for k, v in sorted(weight_labels.items(), key=lambda item: item[1], reverse=True)}
+    def edges_sorted(self):
+        return sorted(self.edges(), key=lambda edge: self.get_edge_weight(*edge), reverse=True)
 
 
 def display_graph(graph):
-    pos = networkx.spring_layout(graph)
-    sorted_graph = graph.sorted_graph_by_weight
-    networkx.draw(graph, pos, with_labels=True, node_color='skyblue', edge_color='gray', node_size=700)
-    networkx.draw_networkx_edge_labels(graph, pos, edge_labels=sorted_graph)
+    graph.edges_sorted
+    # pos = networkx.spring_layout(graph)
+    # graph = graph.edges_sorted
+    # networkx.draw(graph, pos, with_labels=True, node_color='skyblue', edge_color='gray', node_size=700)
+    # networkx.draw_networkx_edge_labels(graph, pos, edge_labels=graph)
     
-    plt.get_current_fig_manager().window.attributes('-fullscreen', True)
+    # plt.get_current_fig_manager().window.attributes('-fullscreen', True)
     # plt.show()
     print('End')
 
@@ -98,7 +98,7 @@ graph.add_edge(5, 3, weight=-1)
 graph.add_edge(3, 5, weight=7)
 graph.add_edge(5, 0, weight=-4)
 
-graph.simplifiy_graph_cycle()
+# graph.simplifiy_graph_cycle()
 
 display_graph(graph)
 

@@ -1,5 +1,6 @@
 {% load static %}
 {% load customtags %}
+{% load humanize %}
 
 <!DOCTYPE html>
 
@@ -264,7 +265,7 @@
 
                         <ul>
 
-                        {% for k, v in graph.edges %}
+                        {% for k, v in result_graph.edges_sorted %}
                         
                             <li style="font-size: 50px">
                                 <hr style="font: 14px Georgia,serif;
@@ -278,7 +279,8 @@
                                 <div style="padding-left: 16px;padding-right: 16px">
                                 
                                     <h2 title="#TODO: Debtor email: { v.1.email }, Creditor email: { v.2.email }, Debtor phone: {}, Creditor phone{}">
-                                        {{ k }} --> {{ v }}: </h2> <h1 style="color: #130022">{% callmethod graph "get_edge_weight" k v %}</h1>
+                                        {% callmethod result_graph "get_edge_weight" k v as w %}
+                                        {% get_person_name_by_id k %} --> {% get_person_name_by_id v %}: </h2> <h1 style="color: #130022">{{ w|floatformat:0|intcomma }}</h1>
                                 </div>
                                 <br>
 

@@ -6,8 +6,7 @@ from rest_framework.decorators import api_view
 
 from AccountingApp.models import Room
 from AccountingApp.views import _result_page
-from utils.email import send_text_email
-from AccountingApp.algorithm.core_algorithm import calculate_result, simple_result, is_room_cleared, related_result
+from AccountingApp.algorithm.core_algorithm import calculate_result, is_room_cleared
 
 import json
 
@@ -111,17 +110,10 @@ def report_for_clearing(request, room_id):
     if room not in request.user.room_set.all():
         return _result_page(request, "You're not the owner of the room")
 
-    # The core algorithm:
-    final_graph = calculate_result(room)
-    cleared = is_room_cleared(final_graph)
+    result_graph = calculate_result(room)
+    cleared = is_room_cleared(result_graph)
 
-    for k, v in final_graph.edges():
-        print(k)
-        print(v)
-        print()
-
-    # context = {'result': final_graph, 'mode': 'report_for_clearing', 'room_name': room.name, 'cleared': cleared}
-    context = {'graph': final_graph, 'mode': 'report_for_clearing', 'room_name': room.name, 'cleared': False}
+    context = {'result_graph': result_graph, 'mode': 'report_for_clearing', 'room_name': room.name, 'cleared': cleared}
     return render(request, 'log.html', context=context)
 
 
@@ -131,44 +123,5 @@ def report_for_clearing_API(request):
     room = Room.objects.get(id=room_id)
 
     final_dict = calculate_result(room)
-    final_dict = simple_result(final_dict)
 
     return Response(final_dict, status=status.HTTP_200_OK)
-
-
-def send_result_email(request):
-    room_id = request.POST['room_id']
-    room = Room.objects.get(id=room_id)
-
-    if request.user.is_anonymous:
-        return _result_page(request, "Please sign in")
-
-    if room in request.user.room_set.all():
-
-        final_dict = calculate_result(room)
-        if is_room_cleared(final_dict):
-            return _result_page(request, "room is cleared")
-
-        for person in room.person_set.all():
-            ID = str(person.id)
-            if "person" + ID in request.POST:
-                content = related_result(final_dict, person.id)
-                if content:
-                    initial_message = "Hello dear " + person.name + "\n"\
-                                      + "Room admin: " + person.room.creator.fullname + "\n"\
-                                      + "Room admin email: " + person.room.creator.email + "\n"\
-                                      + "Do the below payment please:"
-                    message = __create_clearing_message(content, initial_message)
-                    if person.verified_email:
-                        send_text_email("Bill of the room '" + room.name + "'", message, [person.email])
-
-        return redirect('home')
-
-    return _result_page(request, "You're not the owner of the room")
-
-
-def __create_clearing_message(content, initial_message):
-    result = initial_message + "\n" + "\n"
-    for k, v in content.items():
-        result += k + ": " + str(v) + "\n"
-    return result

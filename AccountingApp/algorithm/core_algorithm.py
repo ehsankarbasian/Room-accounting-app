@@ -13,8 +13,6 @@ def __calculate_result_of_room(room):
 
 def calculate_result(room):##
     graph = __calculate_result_of_room(room)
-    # result_dict = __replace_person_id_with_name(graph)
-
     return graph
 
 
@@ -107,33 +105,8 @@ def __impact_transactions(room, graph):
     return graph
 
 
-def simple_result(final_dict):##
-    result = dict({})
-    for k, v in final_dict.items():
-        result[k] = v[0]
-
-    return result
-
-
-def is_room_cleared(graph):##
-    if len(graph.edges()) > 0:
-        return False
-    
-    return True
-
-
-def related_result(final_dict, person_id):##
-    person = Person.objects.get(id=person_id)
-    result = dict({})
-
-    for k, v in final_dict.items():
-        if person in [v[1], v[2]] and v[0]:
-            result[k] = v[0]
-
-    if len(result):
-        return result
-
-    return False
+def is_room_cleared(graph):
+    return len(graph.edges()) == 0
 
 
 def cleared_person(person):##
