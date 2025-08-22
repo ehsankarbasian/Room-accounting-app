@@ -121,7 +121,7 @@ def report_for_clearing(request, room_id):
         print()
 
     # context = {'result': final_graph, 'mode': 'report_for_clearing', 'room_name': room.name, 'cleared': cleared}
-    context = {'result': final_graph, 'mode': 'report_for_clearing', 'room_name': room.name, 'cleared': False}
+    context = {'graph': final_graph, 'mode': 'report_for_clearing', 'room_name': room.name, 'cleared': False}
     return render(request, 'log.html', context=context)
 
 

@@ -3,7 +3,7 @@ from AccountingApp.algorithm.graph import AggregateDirectedGraph
 
 
 def __calculate_result_of_room(room):
-    graph = AggregateDirectedGraph()
+    graph = AggregateDirectedGraph(potential_edges=__get_room_potential_edges(room))
     
     graph = __calculate_room_result(room, graph)
     graph = __impact_transactions(room, graph)
@@ -16,6 +16,21 @@ def calculate_result(room):##
     # result_dict = __replace_person_id_with_name(graph)
 
     return graph
+
+
+def __get_room_potential_edges(room):
+    persons = list(room.person_set.all())
+    
+    potential_edges = []
+    max_index = len(persons) - 1
+    for p1 in persons:
+        p1_index = persons.index(p1)
+        if p1_index < max_index:
+            remaining_persons = persons[p1_index + 1:]
+            for p2 in remaining_persons:
+                potential_edges.append((p1.id, p2.id))
+
+    return potential_edges
 
 
 def __calculate_room_result(room, graph):
@@ -32,7 +47,7 @@ def __calculate_room_result(room, graph):
             partners_sum_of_weight += partner_dict[k]
         for k, v in spender_dict.items():
             spenders_sum_of_weight += spender_dict[k]
-        for k, v in graph.edges():
+        for k, v in graph.potential_edges:
             spender_to_partner = spender_dict[k] and partner_dict[v]
             partner_to_spender = partner_dict[k] and spender_dict[v]
 
@@ -40,13 +55,15 @@ def __calculate_room_result(room, graph):
                 partnership_ratio = partner_dict[v] / partners_sum_of_weight
                 spendership_ratio = spender_dict[k] / spenders_sum_of_weight
 
-                graph.add_edge(k, v, -amount * partnership_ratio * spendership_ratio)
+                weight = -amount * partnership_ratio * spendership_ratio
+                graph.add_edge(k, v, weight=weight)
 
             if partner_to_spender:
                 partnership_ratio = (partner_dict[k] / partners_sum_of_weight)
                 spendership_ratio = (spender_dict[v] / spenders_sum_of_weight)
 
-                graph.add_edge(k, v, amount * partnership_ratio * spendership_ratio)
+                weight = amount * partnership_ratio * spendership_ratio
+                graph.add_edge(k, v, weight=weight)
 
     return graph
 
@@ -81,27 +98,13 @@ def __impact_transactions(room, graph):
         payer_id = transaction.payer.id
         receiver_id = transaction.receiver.id
         amount = transaction.amount
-        for k, v in graph.edges():
+        for k, v in graph.potential_edges:
             if payer_id == k and receiver_id == v:
-                graph.add_edge(k, v, -amount)
+                graph.add_edge(k, v, weight=-amount)
             elif payer_id == v and receiver_id == k:
-                graph.add_edge(k, v, amount)
+                graph.add_edge(k, v, weight=amount)
 
     return graph
-
-
-def __replace_person_id_with_name(graph):
-    result = dict({})
-    for k, j in graph.edges():
-        person_1 = Person.objects.get(id=k)
-        person_2 = Person.objects.get(id=j)
-        
-        key = person_1.name + " --> " + person_2.name
-        v = graph.get_edge_data(k, j)['weight']
-        value = [v, person_1, person_2]
-        result[key] = value
-
-    return result
 
 
 def simple_result(final_dict):##

@@ -17,7 +17,13 @@ class CustomTag:
 
 
 @register.simple_tag
-def call_method(method_name, *args):
+def call_function(method_name, *args):
     tag = CustomTag(cleared_person)
     method = getattr(tag, method_name)
     return method(*args)
+
+
+@register.simple_tag
+def callmethod(obj, method_name, *args, **kwargs):
+    method = getattr(obj, method_name)
+    return method(*args, **kwargs)

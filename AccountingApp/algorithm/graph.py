@@ -8,6 +8,23 @@ from networkx import DiGraph as _DirectedGraph
 class AggregateDirectedGraph(_DirectedGraph):
     # TODO: test and refactor
     
+    
+    def __init__(self, potential_edges=[], incoming_graph_data=None, **attr):
+        self._potential_edges = potential_edges
+        super().__init__(incoming_graph_data, **attr)
+    
+    
+    @property
+    def potential_edges(self):
+        return self._potential_edges
+    
+    
+    def get_edge_weight(self, v, u):
+        # if not self.has_edge(v, u):
+            # return 0
+        return self.get_edge_data(v, u)['weight']
+    
+    
     def add_edge(self, u_of_edge, v_of_edge, **kwargs):
         if kwargs.get('weight', None) is not None:
             if self.has_edge(u_of_edge, v_of_edge):
@@ -25,8 +42,11 @@ class AggregateDirectedGraph(_DirectedGraph):
             u_of_edge, v_of_edge = v_of_edge, u_of_edge
             kwargs['weight'] = -kwargs['weight']
         if kwargs.get('weight') == 0:
-            self.remove_edge(u_of_edge, v_of_edge)
-            return
+            try:
+                self.remove_edge(u_of_edge, v_of_edge)
+                return
+            except:
+                return
             # self.remove_edge(v_of_edge, u_of_edge)
         
         return super().add_edge(u_of_edge, v_of_edge, **kwargs)
