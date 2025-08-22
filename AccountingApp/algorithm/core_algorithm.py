@@ -1,59 +1,24 @@
 from AccountingApp.models import Person
-
-
-class ResultDictItem:
-    
-    def __init__(self, from_, to, fee):
-        self._from = from_
-        self._to = to
-        self._fee = fee
-        
-        if self._fee < 0:
-            self._fee = -self.__fee
-            self._from, self._to = self._to, self._from
-    
-    @property
-    def key(self):
-        return f'{self._from} --> {self._to}'
-    
-    @property
-    def value(self):
-        return self._fee
+from AccountingApp.algorithm.graph import AggregateDirectedGraph
 
 
 def __calculate_result_of_room(room):
-    persons = list(room.person_set.all())
-    result_dict = __initial_result_dict(persons)
+    graph = AggregateDirectedGraph()
+    
+    graph = __calculate_room_result(room, graph)
+    graph = __impact_transactions(room, graph)
 
-    result_dict = __calculate_room_result(room, result_dict)
-    result_dict = __impact_transactions(room, result_dict)
-
-    result_dict = __reverse_negatives(result_dict)
-
-    return result_dict
+    return graph
 
 
 def calculate_result(room):##
-    result_dict = __calculate_result_of_room(room)
-    result_dict = __replace_person_id_with_name(result_dict)
+    graph = __calculate_result_of_room(room)
+    # result_dict = __replace_person_id_with_name(graph)
 
-    return result_dict
-
-
-def __initial_result_dict(persons):
-    result_dict = dict({})
-    max_index = len(persons) - 1
-    for p1 in persons:
-        p1_index = persons.index(p1)
-        if p1_index < max_index:
-            remaining_persons = persons[p1_index + 1:]
-            for p2 in remaining_persons:
-                result_dict[str(p1.id) + '  ---->  ' + str(p2.id)] = 0
-
-    return result_dict
+    return graph
 
 
-def __calculate_room_result(room, result_dict):
+def __calculate_room_result(room, graph):
     spend_list = __spend_list_generator(room)
 
     for spend in spend_list:
@@ -67,24 +32,23 @@ def __calculate_room_result(room, result_dict):
             partners_sum_of_weight += partner_dict[k]
         for k, v in spender_dict.items():
             spenders_sum_of_weight += spender_dict[k]
-
-        for k, v in result_dict.items():
-            spender_to_partner = spender_dict[int(k.split()[0])] and partner_dict[int(k.split()[2])]
-            partner_to_spender = partner_dict[int(k.split()[0])] and spender_dict[int(k.split()[2])]
+        for k, v in graph.edges():
+            spender_to_partner = spender_dict[k] and partner_dict[v]
+            partner_to_spender = partner_dict[k] and spender_dict[v]
 
             if spender_to_partner:
-                partnership_ratio = partner_dict[int(k.split()[2])] / partners_sum_of_weight
-                spendership_ratio = spender_dict[int(k.split()[0])] / spenders_sum_of_weight
+                partnership_ratio = partner_dict[v] / partners_sum_of_weight
+                spendership_ratio = spender_dict[k] / spenders_sum_of_weight
 
-                result_dict[k] -= amount * partnership_ratio * spendership_ratio
+                graph.add_edge(k, v, -amount * partnership_ratio * spendership_ratio)
 
             if partner_to_spender:
-                partnership_ratio = (partner_dict[int(k.split()[0])] / partners_sum_of_weight)
-                spendership_ratio = (spender_dict[int(k.split()[2])] / spenders_sum_of_weight)
+                partnership_ratio = (partner_dict[k] / partners_sum_of_weight)
+                spendership_ratio = (spender_dict[v] / spenders_sum_of_weight)
 
-                result_dict[k] += amount * partnership_ratio * spendership_ratio
+                graph.add_edge(k, v, amount * partnership_ratio * spendership_ratio)
 
-    return result_dict
+    return graph
 
 
 def __spend_list_generator(room):
@@ -111,39 +75,29 @@ def __spend_list_generator(room):
     return spend_list
 
 
-def __impact_transactions(room, result_dict):
+def __impact_transactions(room, graph):
     transactions = room.transaction_set
     for transaction in transactions:
         payer_id = transaction.payer.id
         receiver_id = transaction.receiver.id
         amount = transaction.amount
-        for k, v in result_dict.items():
-            if payer_id == int(k.split()[0]) and receiver_id == int(k.split()[2]):
-                result_dict[k] -= amount
-            elif payer_id == int(k.split()[2]) and receiver_id == int(k.split()[0]):
-                result_dict[k] += amount
+        for k, v in graph.edges():
+            if payer_id == k and receiver_id == v:
+                graph.add_edge(k, v, -amount)
+            elif payer_id == v and receiver_id == k:
+                graph.add_edge(k, v, amount)
 
-    return result_dict
-
-
-def __reverse_negatives(result_dict):
-    final_dict = {}
-    for k, v in result_dict.items():
-        key_lst = k.split()
-        if v < 0:
-            key_lst = key_lst[::-1]
-        key = key_lst[0] + ' ' + key_lst[1] + ' ' + key_lst[2]
-        final_dict[key] = int(abs(v))
-
-    return final_dict
+    return graph
 
 
-def __replace_person_id_with_name(result_dict):
+def __replace_person_id_with_name(graph):
     result = dict({})
-    for k, v in result_dict.items():
-        person_1 = Person.objects.get(id=int(k.split()[0]))
-        person_2 = Person.objects.get(id=int(k.split()[2]))
+    for k, j in graph.edges():
+        person_1 = Person.objects.get(id=k)
+        person_2 = Person.objects.get(id=j)
+        
         key = person_1.name + " --> " + person_2.name
+        v = graph.get_edge_data(k, j)['weight']
         value = [v, person_1, person_2]
         result[key] = value
 
@@ -158,8 +112,8 @@ def simple_result(final_dict):##
     return result
 
 
-def is_room_cleared(final_dict):##
-    if any(v[0] for v in final_dict.values()):
+def is_room_cleared(graph):##
+    if len(graph.edges()) > 0:
         return False
     
     return True
@@ -180,8 +134,9 @@ def related_result(final_dict, person_id):##
 
 
 def cleared_person(person):##
-    final_dict = __calculate_result_of_room(person.room)
-    for k, v in final_dict.items():
-        if v != 0 and str(person.id) in [x for x in k.split()]:
+    graph = __calculate_result_of_room(person.room)
+    for k, j in graph.edges():
+        v = graph.get_edge_data(k, j)['weight']
+        if v != 0 and person.id in [k, j]:
             return True
     return False

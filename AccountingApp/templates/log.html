@@ -263,11 +263,9 @@
 
                         <ul>
 
-                        {% for k, v in result.items %}
-                            {% if v.0 != 0 %}
-
+                        {% for k, v in result.edges %}
+                        
                             <li style="font-size: 50px">
-
                                 <hr style="font: 14px Georgia,serif;
                                                 padding: 0;
                                                 border: 0;
@@ -277,6 +275,10 @@
                                                 border-bottom: 1px solid rgba(255, 255, 255, 0.3);">
 
                                 <div style="padding-left: 16px;padding-right: 16px">
+                                
+                                    <h1>{{ k }}</h1>
+                                    <h1>{{ v }}</h1>
+
                                     <h2 title="#TODO: Debtor email: { v.1.email }, Creditor email: { v.2.email }, Debtor phone: {}, Creditor phone{}">
                                         {{ k }}: </h2> <h1 style="color: #130022">{{ v.3 }}</h1>
                                 </div>
@@ -284,9 +286,7 @@
 
                             </li>
 
-                            {% endif %}
                         {% endfor %}
-
                     {% endif %}
 
                     </ul>

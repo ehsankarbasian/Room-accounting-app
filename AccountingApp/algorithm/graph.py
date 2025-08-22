@@ -59,7 +59,9 @@ def display_graph(graph):
     sorted_graph = graph.sorted_graph_by_weight
     networkx.draw(graph, pos, with_labels=True, node_color='skyblue', edge_color='gray', node_size=700)
     networkx.draw_networkx_edge_labels(graph, pos, edge_labels=sorted_graph)
-    plt.show()
+    
+    plt.get_current_fig_manager().window.attributes('-fullscreen', True)
+    # plt.show()
     print('End')
 
 
@@ -79,3 +81,6 @@ graph.add_edge(5, 0, weight=-4)
 graph.simplifiy_graph_cycle()
 
 display_graph(graph)
+
+
+# v = graph.get_edge_data(k, j)['weight']

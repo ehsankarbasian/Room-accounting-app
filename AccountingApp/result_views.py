@@ -112,26 +112,16 @@ def report_for_clearing(request, room_id):
         return _result_page(request, "You're not the owner of the room")
 
     # The core algorithm:
-    final_dict = calculate_result(room)
-    cleared = is_room_cleared(final_dict)
+    final_graph = calculate_result(room)
+    cleared = is_room_cleared(final_graph)
 
-    borders = [item.split(' --> ') for item in list(final_dict.keys()) if final_dict[item] != 0]
-    zero_borders = []
-    for b in borders:
-        if final_dict[' --> '.join(b)][0] == 0:
-            zero_borders.append(b)
-    
-    # neighbours = DictOfSets()
-    #TODO: detect way
-    #TODO: detect cycle
-    
-    for k, v in final_dict.items():
-        final_dict[k] = v + [f'{v[0]:,}']
-    
-    simplified_dict = simplify_dict(final_dict)
-    print_sum_of_all_in_cmd(simplified_dict)
-    sorted_final_dict = sort_dict_by_values(simplified_dict, reverse=True)
-    context = {'result': sorted_final_dict, 'mode': 'report_for_clearing', 'room_name': room.name, 'cleared': cleared}
+    for k, v in final_graph.edges():
+        print(k)
+        print(v)
+        print()
+
+    # context = {'result': final_graph, 'mode': 'report_for_clearing', 'room_name': room.name, 'cleared': cleared}
+    context = {'result': final_graph, 'mode': 'report_for_clearing', 'room_name': room.name, 'cleared': False}
     return render(request, 'log.html', context=context)
 
 
