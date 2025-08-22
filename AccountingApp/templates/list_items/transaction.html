@@ -1,0 +1,52 @@
+{% extends "result_list.html" %}
+
+
+{% block transaction_list_item %}
+    <h1 style="color: #122b40;margin-left: 48px" title="Room name: {{ room_name }}">List of
+        transactions</h1>
+    <ul>
+
+    {% for transaction in transactions %}
+
+        <li style="font-size: 50px">
+            <hr style="font: 14px Georgia,serif;
+                padding: 0;
+                margin: 50px 0 5px;
+                overflow: visible;
+                height: 30px;
+                border-style: solid;
+                border-color: black;
+                border-width: 3px 0 0 0;
+                border-radius: 20px;">
+
+            <div style="padding-bottom: 16px; padding-left: 16px;padding-right: 16px"
+                    title="date: {{ transaction.date }}">Amount: {{ transaction.amount }}
+            </div>
+
+
+            <div style="font-size: 25px; margin-left: 8px">
+                <hr style="font: 14px Georgia,serif;
+                    padding: 0;
+                    border: 0;
+                    height: 0;
+                    margin: 0 16px 2px 0;
+                    border-top: 1px solid rgba(0, 0, 0, 0.2);
+                    border-bottom: 1px solid rgba(255, 255, 255, 0.5);">
+                <b><i>payer: </i></b>
+                {{ transaction.payer.name }}
+                <br>
+                <hr style="font: 14px Georgia,serif;
+                    padding: 0;
+                    border: 0;
+                    height: 0;
+                    margin: 4px 16px 2px 0;
+                    border-top: 1px solid rgba(0, 0, 0, 0.2);
+                    border-bottom: 1px solid rgba(255, 255, 255, 0.3);">
+                <b><i>receiver: </i></b>
+                {{ transaction.receiver.name }}
+                <br>
+            </div>
+        </li>
+
+    {% endfor %}
+{% endblock %}

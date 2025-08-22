@@ -124,7 +124,7 @@ def all_buys(request, room_id):
         spends = room.spend_set.all().order_by('-date')
 
         context = {'spends': spends, 'mode': 'spend_log', 'room_name': room.name}
-        return render(request, 'log.html', context=context)
+        return render(request, 'list_items/spend.html', context=context)
 
     return _result_page(request, "You're not the owner of the room")
 
@@ -167,7 +167,7 @@ def all_transactions(request, room_id):
         transactions = Transaction.objects.filter(payer_query | receiver_query).order_by('-date')
 
         context = {'transactions': transactions, 'mode': 'transaction_log', 'room_name': room.name}
-        return render(request, 'log.html', context=context)
+        return render(request, 'list_items/transaction.html', context=context)
 
     return _result_page(request, "You're not the owner of the room")
 
@@ -182,7 +182,7 @@ def room_log(request, room_id):
         log = __room_log_helper(room)
 
         context = {'log': log, 'mode': 'room_log', 'room_name': room.name}
-        return render(request, 'log.html', context=context)
+        return render(request, 'list_items/room_log.html', context=context)
 
     return _result_page(request, "You're not the owner of the room")
 
