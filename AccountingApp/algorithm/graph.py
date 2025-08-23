@@ -1,40 +1,45 @@
-import networkx
 import matplotlib.pyplot as plt
-
-
 from networkx import DiGraph as _DirectedGraph
 
+from AccountingApp.algorithm.room_analyzer import RoomAnalyzer
 
-class AggregateDirectedGraph(_DirectedGraph):
-    # TODO: test and refactor
+
+class ReportGraph(_DirectedGraph):
     
-    
-    def __init__(self, potential_edges=[], incoming_graph_data=None, **attr):
-        self._potential_edges = potential_edges
-        super().__init__(incoming_graph_data, **attr)
-    
-    
-    @property
-    def potential_edges(self):
-        return self._potential_edges
-    
+    def __init__(self, room, incoming_graph_data=None, **attr):
+        self._room = room
+        self.potential_edges = RoomAnalyzer.get_room_potential_edges(room)
+        RoomAnalyzer.calculate_room_spend_result(room, self)
+        RoomAnalyzer.calculate_room_transaction_result(room, self)
     
     def get_edge_weight(self, v, u):
         # if not self.has_edge(v, u):
             # return 0
         return self.get_edge_data(v, u)['weight']
     
-    
     def add_edge(self, u_of_edge, v_of_edge, **kwargs):
         if kwargs.get('weight', None) is not None:
-            if self.has_edge(u_of_edge, v_of_edge):
-                previous_weight = self.get_edge_data(u_of_edge, v_of_edge)['weight']
-                kwargs['weight'] += previous_weight
-            elif self.has_edge(v_of_edge, u_of_edge):
-                previous_weight = self.get_edge_data(v_of_edge, u_of_edge)['weight']
-                kwargs['weight'] -= previous_weight
-                if self.has_edge(v_of_edge, u_of_edge):
-                    self.remove_edge(v_of_edge, u_of_edge)
+            try:
+                if self.has_edge(u_of_edge, v_of_edge):
+                    previous_weight = self.get_edge_data(u_of_edge, v_of_edge)['weight']
+                    kwargs['weight'] += previous_weight
+                elif self.has_edge(v_of_edge, u_of_edge):
+                    previous_weight = self.get_edge_data(v_of_edge, u_of_edge)['weight']
+                    kwargs['weight'] -= previous_weight
+                    if self.has_edge(v_of_edge, u_of_edge):
+                        self.remove_edge(v_of_edge, u_of_edge)
+            except:
+                a = 2
+            
+            
+            # if self.has_edge(u_of_edge, v_of_edge):
+            #     previous_weight = self.get_edge_data(u_of_edge, v_of_edge)['weight']
+            #     kwargs['weight'] += previous_weight
+            # elif self.has_edge(v_of_edge, u_of_edge):
+            #     previous_weight = self.get_edge_data(v_of_edge, u_of_edge)['weight']
+            #     kwargs['weight'] -= previous_weight
+            #     if self.has_edge(v_of_edge, u_of_edge):
+            #         self.remove_edge(v_of_edge, u_of_edge)
         
         if kwargs.get('weight') < 0:
             if self.has_edge(u_of_edge, v_of_edge):
@@ -49,23 +54,7 @@ class AggregateDirectedGraph(_DirectedGraph):
                 return
             # self.remove_edge(v_of_edge, u_of_edge)
         
-        return super().add_edge(u_of_edge, v_of_edge, **kwargs)
-    
-    
-    def simplifiy_graph_cycle(self):
-        cycles = list(networkx.simple_cycles(self))
-        for cycle in cycles:
-            cycle_weights = [self.get_edge_data(cycle[i], cycle[i+1])['weight'] for i in range(len(cycle) - 1)]
-            cycle_weights += [self.get_edge_data(cycle[-1], cycle[0])['weight']]
-            
-            min_weight = min(cycle_weights)
-            for i in range(len(cycle) - 1):
-                self.add_edge(cycle[i], cycle[i+1], weight=-min_weight)
-            self.add_edge(cycle[-1], cycle[0], weight=-min_weight)
-    
-    
-    def simplify_graph_donkey_path(self):
-        pass
+        super().add_edge(u_of_edge, v_of_edge, **kwargs)
     
     
     @property
@@ -85,22 +74,22 @@ def display_graph(graph):
     print('End')
 
 
-graph = AggregateDirectedGraph()
+# graph = ReportGraph()
 # graph.add_nodes_from()
 
-graph.add_edge(4, 2, weight=-5)
-graph.add_edge(0, 4, weight=2)
-graph.add_edge(1, 3, weight=1)
-graph.add_edge(5, 3, weight=1)
-graph.add_edge(5, 1, weight=4)
-graph.add_edge(5, 3, weight=2)
-graph.add_edge(5, 3, weight=-1)
-graph.add_edge(3, 5, weight=7)
-graph.add_edge(5, 0, weight=-4)
+# graph.add_edge(4, 2, weight=-5)
+# graph.add_edge(0, 4, weight=2)
+# graph.add_edge(1, 3, weight=1)
+# graph.add_edge(5, 3, weight=1)
+# graph.add_edge(5, 1, weight=4)
+# graph.add_edge(5, 3, weight=2)
+# graph.add_edge(5, 3, weight=-1)
+# graph.add_edge(3, 5, weight=7)
+# graph.add_edge(5, 0, weight=-4)
 
 # graph.simplifiy_graph_cycle()
 
-display_graph(graph)
+# display_graph(graph)
 
 
 # v = graph.get_edge_data(k, j)['weight']
