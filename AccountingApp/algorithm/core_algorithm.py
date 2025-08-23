@@ -1,18 +1,11 @@
-from AccountingApp.models import Person
 from AccountingApp.algorithm.graph import AggregateDirectedGraph
 
 
-def __calculate_result_of_room(room):
+def calculate_room_result(room):##
     graph = AggregateDirectedGraph(potential_edges=__get_room_potential_edges(room))
-    
-    graph = __calculate_room_result(room, graph)
-    graph = __impact_transactions(room, graph)
+    graph = __calculate_room_spend_result(room, graph)
+    graph = __calculate_room_transaction_result(room, graph)
 
-    return graph
-
-
-def calculate_result(room):##
-    graph = __calculate_result_of_room(room)
     return graph
 
 
@@ -31,7 +24,7 @@ def __get_room_potential_edges(room):
     return potential_edges
 
 
-def __calculate_room_result(room, graph):
+def __calculate_room_spend_result(room, graph):
     spend_list = __spend_list_generator(room)
 
     for spend in spend_list:
@@ -90,7 +83,7 @@ def __spend_list_generator(room):
     return spend_list
 
 
-def __impact_transactions(room, graph):
+def __calculate_room_transaction_result(room, graph):
     transactions = room.transaction_set
     for transaction in transactions:
         payer_id = transaction.payer.id
@@ -110,7 +103,7 @@ def is_room_cleared(graph):
 
 
 def cleared_person(person):##
-    graph = __calculate_result_of_room(person.room)
+    graph = calculate_room_result(person.room)
     for k, j in graph.edges():
         v = graph.get_edge_data(k, j)['weight']
         if v != 0 and person.id in [k, j]:
