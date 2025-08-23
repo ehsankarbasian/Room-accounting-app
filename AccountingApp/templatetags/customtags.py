@@ -1,10 +1,19 @@
 from django import template
 
-from AccountingApp.algorithm.core_algorithm import cleared_person
 from AccountingApp.models import Person
+from AccountingApp.algorithm.report_graph import ReportGraph
 
 
 register = template.Library()
+
+
+def cleared_person(person):
+    graph = ReportGraph(person.room)
+    for k, j in graph.edges():
+        weight = graph.get_edge_weight(k, j)
+        if weight != 0 and person.id in [k, j]:
+            return True
+    return False
 
 
 def set_cleared(person):

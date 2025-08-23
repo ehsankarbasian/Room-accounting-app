@@ -1,6 +1,9 @@
 
 class RoomAnalyzer:
     
+    def is_room_cleared(graph):
+        return len(graph.edges()) == 0
+    
     def get_room_potential_edges(room):
         persons = list(room.person_set.all())
         

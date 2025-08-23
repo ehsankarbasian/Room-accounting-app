@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 from networkx import DiGraph as _DirectedGraph
 
 from AccountingApp.algorithm.room_analyzer import RoomAnalyzer
@@ -51,36 +50,3 @@ class ReportGraph(_DirectedGraph):
     @property
     def edges_sorted(self):
         return sorted(self.edges(), key=lambda edge: self.get_edge_weight(*edge), reverse=True)
-
-
-def display_graph(graph):
-    graph.edges_sorted
-    # pos = networkx.spring_layout(graph)
-    # graph = graph.edges_sorted
-    # networkx.draw(graph, pos, with_labels=True, node_color='skyblue', edge_color='gray', node_size=700)
-    # networkx.draw_networkx_edge_labels(graph, pos, edge_labels=graph)
-    
-    # plt.get_current_fig_manager().window.attributes('-fullscreen', True)
-    # plt.show()
-    print('End')
-
-
-# graph = ReportGraph()
-# graph.add_nodes_from()
-
-# graph.add_edge(4, 2, weight=-5)
-# graph.add_edge(0, 4, weight=2)
-# graph.add_edge(1, 3, weight=1)
-# graph.add_edge(5, 3, weight=1)
-# graph.add_edge(5, 1, weight=4)
-# graph.add_edge(5, 3, weight=2)
-# graph.add_edge(5, 3, weight=-1)
-# graph.add_edge(3, 5, weight=7)
-# graph.add_edge(5, 0, weight=-4)
-
-# graph.simplifiy_graph_cycle()
-
-# display_graph(graph)
-
-
-# v = graph.get_edge_data(k, j)['weight']
