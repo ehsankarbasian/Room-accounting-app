@@ -12,10 +12,13 @@ from django.template.loader import get_template
 from ReportApp.models import Room, Person, Spend, Spenders, Partners, Transaction
 from django.db.models import Q
 
-from ReportApp.views import _result_page
 from ReportApp.email_generator import EmailGenerator
 from utils.email import send_email
 from RoomAccounting.settings import HOST, PORT, ROOM_ACCOUNTING_APP_BASE_URL
+
+
+def _result_page(request, result):
+    return render(request, 'result.html', context={'result': result})
 
 
 def add_room(request):

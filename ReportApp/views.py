@@ -1,18 +1,16 @@
 from django.shortcuts import render
 
 from rest_framework import status
+from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
 
 from ReportApp.models import Room
 from ReportApp.algorithm.report_graph import ReportGraph
 from ReportApp.algorithm.room_analyzer import RoomAnalyzer
 
+from utils.custon_views.views import RawTemplateView
+
 from RoomAccounting.settings import HOST, PORT, ROOM_ACCOUNTING_APP_BASE_URL
-
-
-def _result_page(request, result):
-    return render(request, 'result.html', context={'result': result})
 
 
 def landing_page(request):
@@ -31,26 +29,36 @@ def home(request):
     return render(request, 'home.html', context=context)
 
 
-def report_for_clearing(request, room_id):
-    if request.user.is_anonymous:
-        return _result_page(request, "Please sign in")
+class FinalReportView(RawTemplateView):
+    template_name = "list_items/final_result.html"
+    
+    def get(self, request, room_id):
+        if request.user.is_anonymous:
+            return self._render_result("Please sign in")
 
-    room = Room.objects.get(id=room_id)
-    if room not in request.user.room_set.all():
-        return _result_page(request, "You're not the owner of the room")
+        room = Room.objects.get(id=room_id)
+        if room not in request.user.room_set.all():
+            return self._render_result("You're not the owner of the room")
 
-    result_graph = ReportGraph(room)
-    cleared = RoomAnalyzer.is_room_cleared(result_graph)
+        report_graph = ReportGraph(room)
+        cleared = RoomAnalyzer.is_room_cleared(report_graph)
 
-    context = {'result_graph': result_graph, 'mode': 'report_for_clearing', 'room_name': room.name, 'cleared': cleared}
-    return render(request, 'list_items/final_result.html', context=context)
+        context = {'result_graph': report_graph,
+                   'mode': 'report_for_clearing',
+                   'room_name': room.name,
+                   'cleared': cleared}
+        return self.render_to_response(context)
+    
+    
+    def _render_result(request, result):
+        return render(request, 'result.html', context={'result': result})
 
 
-@api_view(['POST'])
-def report_for_clearing_API(request):
-    room_id = request.data['room_id']
-    room = Room.objects.get(id=room_id)
+class FinalReportAPI(APIView):
+    
+    def post(self, request):
+        room_id = request.data['room_id']
+        room = Room.objects.get(id=room_id)
 
-    final_dict = ReportGraph(room)
-
-    return Response(final_dict, status=status.HTTP_200_OK)
+        report_graph = ReportGraph(room)
+        return Response(report_graph.edges_sorted, status=status.HTTP_200_OK)
