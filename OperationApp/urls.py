@@ -1,18 +1,18 @@
 from django.urls import path
 
-from OperationApp.views import add_room, delete_room, edit_room, add_person, add_buy, add_transaction, all_buys, all_transactions, room_log
+from OperationApp.views import AddRoomView, DeleteRoomView, EditRoomView, AddPersonView, AddSpendView, AddTransactionView, SpendListView, TransactionListView, RoomLogView
 
 
 urlpatterns = [
-    path('addRoom', add_room),
-    path('deleteRoom/<int:room_id>', delete_room),
-    path('editRoom/<int:room_id>', edit_room),
+    path('addRoom', AddRoomView.as_view()),
+    path('deleteRoom/<int:room_id>', DeleteRoomView.as_view()),
+    path('editRoom/<int:room_id>', EditRoomView.as_view()),
 
-    path('addPerson/<int:room_id>', add_person),
-    path('addBuy/<int:room_id>', add_buy),
-    path('addTransaction/<int:room_id>', add_transaction),
+    path('addPerson/<int:room_id>', AddPersonView.as_view()),
+    path('addBuy/<int:room_id>', AddSpendView.as_view()),
+    path('addTransaction/<int:room_id>', AddTransactionView.as_view()),
 
-    path('allBuys/<int:room_id>', all_buys),
-    path('allTransactions/<int:room_id>', all_transactions),
-    path('roomLog/<int:room_id>', room_log),
+    path('allBuys/<int:room_id>', SpendListView.as_view()),
+    path('allTransactions/<int:room_id>', TransactionListView.as_view()),
+    path('roomLog/<int:room_id>', RoomLogView.as_view()),
 ]

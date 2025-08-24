@@ -1,5 +1,4 @@
 from itertools import chain
-from django.shortcuts import render
 
 from utils.email import send_text_email
 
@@ -18,7 +17,7 @@ class EmailGenerator:
 
 
     @staticmethod
-    def __spend_message_creator(cls, spend):
+    def __spend_message_creator(spend):
         creator = spend.room.creator
         message = "the room admin fullname: " + creator.fullname + "\n" \
                 + "room_name: '" + spend.room.name + "'" + "\n" \
