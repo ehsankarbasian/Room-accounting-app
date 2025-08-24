@@ -21,7 +21,9 @@ from ReportApp.views import landing_page
 from .settings import ROOM_ACCOUNTING_APP_BASE_URL
 
 urlpatterns = [
-    # path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls),
     path('', landing_page, name='landing_page'),
     path(ROOM_ACCOUNTING_APP_BASE_URL + "/", include('ReportApp.urls')),
+    path(ROOM_ACCOUNTING_APP_BASE_URL + "/", include('AuthApp.urls')),
+    path(ROOM_ACCOUNTING_APP_BASE_URL + "/", include('OperationApp.urls')),
 ]

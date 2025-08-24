@@ -57,7 +57,7 @@ ALLOWED_HOSTS = ['127.0.0.1']
 AUTH_USER_MODEL = 'ReportApp.User'
 
 INSTALLED_APPS = [
-    # 'django.contrib.admin',
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
