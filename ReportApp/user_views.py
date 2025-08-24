@@ -6,11 +6,11 @@ from django.shortcuts import redirect, render
 from django.views.decorators.http import require_http_methods
 from django.template.loader import get_template
 
-from AccountingApp.models import Room, Person, Spend, Spenders, Partners, Transaction
+from ReportApp.models import Room, Person, Spend, Spenders, Partners, Transaction
 from django.db.models import Q
 
-from AccountingApp.views import _result_page
-from AccountingApp.email_generator import EmailGenerator
+from ReportApp.views import _result_page
+from ReportApp.email_generator import EmailGenerator
 from utils.email import send_email
 from RoomAccounting.settings import HOST, PORT, ROOM_ACCOUNTING_APP_BASE_URL
 

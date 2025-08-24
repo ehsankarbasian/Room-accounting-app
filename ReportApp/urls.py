@@ -1,7 +1,7 @@
 from django.urls import path
-from AccountingApp.views import home, sign_in, sign_up, log_out, forgot_password, reset_password_token_based
-from AccountingApp.user_views import add_room, delete_room, edit_room, add_person, add_buy, add_transaction, all_buys, all_transactions, room_log
-from AccountingApp.result_views import report_for_clearing, report_for_clearing_API
+from ReportApp.views import home, sign_in, sign_up, log_out, forgot_password, reset_password_token_based
+from ReportApp.user_views import add_room, delete_room, edit_room, add_person, add_buy, add_transaction, all_buys, all_transactions, room_log
+from ReportApp.result_views import report_for_clearing, report_for_clearing_API
 
 
 urlpatterns = [

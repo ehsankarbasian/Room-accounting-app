@@ -4,11 +4,11 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
 
-from AccountingApp.models import Room
-from AccountingApp.views import _result_page
+from ReportApp.models import Room
+from ReportApp.views import _result_page
 
-from AccountingApp.algorithm.report_graph import ReportGraph
-from AccountingApp.algorithm.room_analyzer import RoomAnalyzer
+from ReportApp.algorithm.report_graph import ReportGraph
+from ReportApp.algorithm.room_analyzer import RoomAnalyzer
 
 
 def report_for_clearing(request, room_id):

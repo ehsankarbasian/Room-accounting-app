@@ -1,7 +1,7 @@
 from django import template
 
-from AccountingApp.models import Person
-from AccountingApp.algorithm.report_graph import ReportGraph
+from ReportApp.models import Person
+from ReportApp.algorithm.report_graph import ReportGraph
 
 
 register = template.Library()

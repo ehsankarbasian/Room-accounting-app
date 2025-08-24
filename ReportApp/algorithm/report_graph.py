@@ -1,6 +1,6 @@
 from networkx import DiGraph as _DirectedGraph
 
-from AccountingApp.algorithm.room_analyzer import RoomAnalyzer
+from ReportApp.algorithm.room_analyzer import RoomAnalyzer
 
 
 class ReportGraph(_DirectedGraph):

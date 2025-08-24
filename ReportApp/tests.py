@@ -1,6 +1,6 @@
 from django.test import TestCase, Client
 
-from AccountingApp.models import Transaction
+from ReportApp.models import Transaction
 from RoomAccounting.settings import ROOM_ACCOUNTING_APP_BASE_URL
 
 

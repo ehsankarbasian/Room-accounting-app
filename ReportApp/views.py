@@ -8,7 +8,7 @@ from django.shortcuts import render, redirect
 from django.template.loader import get_template
 from django.views.decorators.http import require_http_methods
 
-from AccountingApp.models import Room, User
+from ReportApp.models import Room, User
 from utils.email import send_email
 from RoomAccounting.settings import HOST, PORT, ROOM_ACCOUNTING_APP_BASE_URL
 

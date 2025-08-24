@@ -54,10 +54,10 @@ ALLOWED_HOSTS = ['127.0.0.1']
 
 # Application definition
 
-AUTH_USER_MODEL = 'AccountingApp.User'
+AUTH_USER_MODEL = 'ReportApp.User'
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    # 'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -66,9 +66,9 @@ INSTALLED_APPS = [
     
     'django.contrib.humanize',
     
-    'AccountingApp',
     'AuthApp',
     'OperationApp',
+    'ReportApp',
 ]
 
 MIDDLEWARE = [

@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('AccountingApp', '0001_initial'),
+        ('ReportApp', '0001_initial'),
     ]
 
     operations = [
@@ -19,6 +19,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='user',
             name='token',
-            field=models.OneToOneField(null=True, on_delete=django.db.models.deletion.CASCADE, to='AccountingApp.token'),
+            field=models.OneToOneField(null=True, on_delete=django.db.models.deletion.CASCADE, to='ReportApp.token'),
         ),
     ]

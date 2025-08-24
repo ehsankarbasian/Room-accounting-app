@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer, ValidationError
 
-from AccountingApp.models import Token
+from ReportApp.models import Token
 
 
 class TokenSerializer(ModelSerializer):
