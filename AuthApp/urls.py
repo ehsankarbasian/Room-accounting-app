@@ -1,13 +1,13 @@
 from django.urls import path
 
-from AuthApp.views import sign_in, sign_up, log_out, forgot_password, reset_password_token_based
+from AuthApp.views import SignUpView, SignInView, LogOutView, ForgotPasswordView, ResetPasswordTokenBasedAPI
 
 
 urlpatterns = [
-    path('signin', sign_in),
-    path('signup', sign_up),
-    path('logout', log_out),
+    path('signup', SignUpView.as_view()),
+    path('signin', SignInView.as_view()),
+    path('logout', LogOutView.as_view()),
 
-    path('forgotPassword', forgot_password),
-    path('resetPasswordTokenBased', reset_password_token_based),
+    path('forgotPassword', ForgotPasswordView.as_view()),
+    path('resetPasswordTokenBased', ResetPasswordTokenBasedAPI.as_view()),
 ]

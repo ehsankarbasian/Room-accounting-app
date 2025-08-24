@@ -58,8 +58,9 @@
                 <div aria-orientation="vertical">
 
                     <h1>Welcome <i style="font-size: 32px">{{ username }}</i></h1>
-                    <a href="/accounting_app/logout"><u><b style="font-size: 32px">Logout</b></u></a>
-
+                    <form action="/accounting_app/logout" method="POST">
+                        <button type="submit"><u><b style="font-size: 32px">Logout</b></u></button>
+                    </form>
                 </div>
 
                 <h2 style="color: #ffffff">
