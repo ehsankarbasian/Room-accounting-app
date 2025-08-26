@@ -17,7 +17,7 @@ from django.views.generic.base import View
 
 
 class SignUpView(RawTemplateView):
-    template_name = "ReportApp/result.html"
+    template_name = "result.html"
 
     def post(self, request):
         fullname = request.POST['fullname']
@@ -37,7 +37,7 @@ class SignUpView(RawTemplateView):
 
 
 class SignInView(RawTemplateView):
-    template_name = "ReportApp/result.html"
+    template_name = "result.html"
     
     def post(self, request):
         username = request.POST['username']
@@ -64,7 +64,7 @@ class LogOutView(View):
 
 
 class ForgotPasswordView(RawTemplateView):
-    template_name = "ReportApp/result.html"
+    template_name = "result.html"
     
     def get(self, request):
         email = request.GET['email']
@@ -90,7 +90,7 @@ class ForgotPasswordView(RawTemplateView):
             'email': email,
             'name': fullname,
             'token': token}
-        html_content = get_template('reset_password.html').render(context=context)
+        html_content = get_template('AuthApp/reset_password.html').render(context=context)
         send_email(subject='reset password',
                 message='message',
                 to_list=[email],

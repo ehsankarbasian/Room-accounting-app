@@ -221,4 +221,4 @@ class RoomLogView(RawTemplateView):
 
 
 def _result_page(request, result):
-    return render(request, 'ReportApp/result.html', context={'result': result})
+    return render(request, 'result.html', context={'result': result})
