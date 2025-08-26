@@ -1,6 +1,9 @@
 from django.urls import path
 
 from AuthApp.views import SignUpView, SignInView, LogOutView, ForgotPasswordView, ResetPasswordTokenBasedAPI
+from AuthApp.apps import AuthAppConfig
+
+app_name = AuthAppConfig.name
 
 
 urlpatterns = [

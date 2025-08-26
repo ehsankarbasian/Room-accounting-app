@@ -20,6 +20,11 @@ from django.urls import include
 from ReportApp.views import landing_page
 from .settings import ROOM_ACCOUNTING_APP_BASE_URL
 
+from ReportApp.apps import ReportAppConfig
+
+app_name = ReportAppConfig.name
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', landing_page, name='landing_page'),

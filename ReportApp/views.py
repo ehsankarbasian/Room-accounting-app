@@ -21,12 +21,15 @@ def landing_page(request):
     return render(request, 'index.html', context=context)
 
 
-def home(request):
-    user = request.user
-    rooms = Room.objects.filter(creator=user).order_by("created_at")
-    context = {'HOST': HOST, 'PORT': PORT, 'app_base_url': ROOM_ACCOUNTING_APP_BASE_URL,
-               'username': user.username, 'rooms': rooms}
-    return render(request, 'home.html', context=context)
+class HomeView(RawTemplateView):
+    template_name = "list_items/room_options.html"
+    
+    def get(self, request):
+        user = request.user
+        rooms = Room.objects.filter(creator=user).order_by("created_at")
+        context = {'HOST': HOST, 'PORT': PORT, 'app_base_url': ROOM_ACCOUNTING_APP_BASE_URL,
+                   'username': user.username, 'rooms': rooms}
+        return self.render_to_response(context)
 
 
 class FinalReportView(RawTemplateView):
