@@ -16,6 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.urls import include
+from django.conf import settings
+from django.conf.urls.static import static
 
 from ReportApp.views import LandingPageView
 from .settings import ROOM_ACCOUNTING_APP_BASE_URL
@@ -32,3 +34,6 @@ urlpatterns = [
     path(ROOM_ACCOUNTING_APP_BASE_URL + "/", include('AuthApp.urls')),
     path(ROOM_ACCOUNTING_APP_BASE_URL + "/", include('OperationApp.urls')),
 ]
+
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
