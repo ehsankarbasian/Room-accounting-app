@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from django.urls import include
 
-from ReportApp.views import landing_page
+from ReportApp.views import LandingPageView
 from .settings import ROOM_ACCOUNTING_APP_BASE_URL
 
 from ReportApp.apps import ReportAppConfig
@@ -27,7 +27,7 @@ app_name = ReportAppConfig.name
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', landing_page, name='landing_page'),
+    path('', LandingPageView.as_view(), name='landing_page'),
     path(ROOM_ACCOUNTING_APP_BASE_URL + "/", include('ReportApp.urls')),
     path(ROOM_ACCOUNTING_APP_BASE_URL + "/", include('AuthApp.urls')),
     path(ROOM_ACCOUNTING_APP_BASE_URL + "/", include('OperationApp.urls')),

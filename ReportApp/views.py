@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse
 
 from rest_framework import status
 from rest_framework.views import APIView
@@ -13,12 +14,15 @@ from utils.custon_views.views import RawTemplateView
 from RoomAccounting.settings import HOST, PORT, ROOM_ACCOUNTING_APP_BASE_URL
 
 
-def landing_page(request):
-    if not request.user.is_anonymous:
-        return home(request)
+class LandingPageView(RawTemplateView):
+    template_name = "index.html"
+    
+    def get(self, request):
+        if not request.user.is_anonymous:
+            return redirect(reverse('ReportApp:home'))
 
-    context = {'HOST': HOST, 'PORT': PORT, 'app_base_url': ROOM_ACCOUNTING_APP_BASE_URL}
-    return render(request, 'index.html', context=context)
+        context = {'HOST': HOST, 'PORT': PORT, 'app_base_url': ROOM_ACCOUNTING_APP_BASE_URL}
+        return self.render_to_response(context)
 
 
 class HomeView(RawTemplateView):
