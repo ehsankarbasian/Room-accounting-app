@@ -53,7 +53,7 @@ class SignInView(RawTemplateView):
             # return self.render_to_response(context, status=status.HTTP_401_UNAUTHORIZED)
 
         login(request, user)
-        return redirect('home')
+        return redirect('ReportApp:home')
 
 
 class LogOutView(View):

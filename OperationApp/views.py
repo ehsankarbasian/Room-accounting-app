@@ -24,7 +24,7 @@ class AddRoomView(View):
 
         if request.user.is_authenticated:
             Room.objects.create(name=room_name, creator=request.user)
-            return redirect('home')
+            return redirect('ReportApp:home')
         return _result_page(request, "Please sign in.")
 
 
@@ -39,7 +39,7 @@ class DeleteRoomView(View):
         if room in request.user.room_set.all():
             # TODO: 2 factor auth to delete the room
             # room.delete()
-            return redirect('home')
+            return redirect('ReportApp:home')
         return _result_page(request, "You're not the owner of the room")
 
 
@@ -54,7 +54,7 @@ class EditRoomView(View):
         if room in request.user.room_set.all():
             room.name = request.POST['room_name']
             room.save()
-            return redirect('home')
+            return redirect('ReportApp:home')
         return _result_page(request, "You're not the owner of the room")
 
 
@@ -85,7 +85,7 @@ class AddPersonView(View):
             message = "Hello " + name + ". please click on the button below to verify your email"
             send_email("Verify email", message, [email], html_content)
 
-            return redirect('home')
+            return redirect('ReportApp:home')
 
         return _result_page(request, "You're not the owner of the room")
 
@@ -120,7 +120,7 @@ class AddSpendView(View):
 
             spend = Spend.objects.get(id=spend.id)
             EmailGenerator.send_new_spend_to_person(spend)
-            return redirect('home')
+            return redirect('ReportApp:home')
 
         return _result_page(request, "You're not the owner of the room")
 
@@ -164,7 +164,7 @@ class AddTransactionView(View):
             transaction = Transaction.objects.create(amount=amount, payer=payer, receiver=receiver)
 
             EmailGenerator.send_new_transaction_to_person(transaction)
-            return redirect('home')
+            return redirect('ReportApp:home')
 
         return _result_page(request, "You're not the owner of the room")
 
