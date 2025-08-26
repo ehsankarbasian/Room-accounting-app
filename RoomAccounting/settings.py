@@ -66,9 +66,9 @@ INSTALLED_APPS = [
     
     'django.contrib.humanize',
     
-    'AuthApp',
-    'OperationApp',
-    'ReportApp',
+    'AuthApp.apps.AuthAppConfig',
+    'OperationApp.apps.OperationAppConfig',
+    'ReportApp.apps.ReportAppConfig',
 ]
 
 MIDDLEWARE = [
