@@ -15,7 +15,7 @@ from RoomAccounting.settings import HOST, PORT, ROOM_ACCOUNTING_APP_BASE_URL
 
 
 class LandingPageView(RawTemplateView):
-    template_name = "index.html"
+    template_name = "ReportApp/index.html"
     
     def get(self, request):
         if not request.user.is_anonymous:
@@ -26,7 +26,7 @@ class LandingPageView(RawTemplateView):
 
 
 class HomeView(RawTemplateView):
-    template_name = "list_items/room_options.html"
+    template_name = "ReportApp/list_items/room_options.html"
     
     def get(self, request):
         user = request.user
@@ -37,7 +37,7 @@ class HomeView(RawTemplateView):
 
 
 class FinalReportView(RawTemplateView):
-    template_name = "list_items/final_result.html"
+    template_name = "ReportApp/list_items/final_result.html"
     
     def get(self, request, room_id):
         if request.user.is_anonymous:
@@ -58,7 +58,7 @@ class FinalReportView(RawTemplateView):
     
     
     def _render_result(request, result):
-        return render(request, 'result.html', context={'result': result})
+        return render(request, 'ReportApp/result.html', context={'result': result})
 
 
 class FinalReportAPI(APIView):

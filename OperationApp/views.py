@@ -80,7 +80,7 @@ class AddPersonView(View):
                     'mode': 'verifyPersonEmail',
                     'app_base_url': ROOM_ACCOUNTING_APP_BASE_URL,
                     'verify_email_token': person.verify_email_token}
-            html_content = get_template('email_verification.html').render(context=context)
+            html_content = get_template('ReportApp/email_verification.html').render(context=context)
 
             message = "Hello " + name + ". please click on the button below to verify your email"
             send_email("Verify email", message, [email], html_content)
@@ -127,7 +127,7 @@ class AddSpendView(View):
 
 # TODO: use ListView
 class SpendListView(RawTemplateView):
-    template_name = 'list_items/spend.html'
+    template_name = 'ReportApp/list_items/spend.html'
     
     def get(self, request, room_id):
         if request.user.is_anonymous:
@@ -171,7 +171,7 @@ class AddTransactionView(View):
 
 # TODO: use ListView
 class TransactionListView(RawTemplateView):
-    template_name = 'list_items/transaction.html'
+    template_name = 'ReportApp/list_items/transaction.html'
     
     def get(self, request, room_id):
         if request.user.is_anonymous:
@@ -193,7 +193,7 @@ class TransactionListView(RawTemplateView):
 
 # TODO: use ListView if possible
 class RoomLogView(RawTemplateView):
-    template_name = 'list_items/room_log.html'
+    template_name = 'ReportApp/list_items/room_log.html'
     
     def get(self, request, room_id):
         if request.user.is_anonymous:
@@ -221,4 +221,4 @@ class RoomLogView(RawTemplateView):
 
 
 def _result_page(request, result):
-    return render(request, 'result.html', context={'result': result})
+    return render(request, 'ReportApp/result.html', context={'result': result})
