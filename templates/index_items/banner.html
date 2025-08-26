@@ -31,7 +31,7 @@
 
             <div class="col-md-5 col-md-offset-1">
 
-                <form class="signup-form" action="http://{{HOST}}:{{PORT}}/{{app_base_url}}/signup" method="post">
+                <form class="signup-form" action="{% url 'AuthApp:sign_up' %}" method="POST">
                     {% csrf_token %}
 
                     <h2 class="text-center">Signup Now</h2>

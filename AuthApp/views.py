@@ -97,7 +97,7 @@ class ForgotPasswordView(RawTemplateView):
                 html_content=html_content)
 
 
-class ResetPasswordTokenBasedAPI(APIView):
+class ResetPasswordByTokenAPI(APIView):
     
     def post(self, request):
         token = request.POST['token']

@@ -18,7 +18,7 @@
                     <div aria-orientation="vertical">
 
                         <h1>Welcome <i style="font-size: 32px">{{ username }}</i></h1>
-                        <form action="/accounting_app/logout" method="POST">
+                        <form action="{% url 'AuthApp:logout' %}" method="POST">
                             <button type="submit"><u><b style="font-size: 32px">Logout</b></u></button>
                         </form>
                     </div>
@@ -34,7 +34,7 @@
                 </div>
 
                 <div class="col-md-5 col-md-offset-1">
-                    <form class="signup-form" action="/{{ app_base_url }}/addRoom" method="POST">
+                    <form class="signup-form" action="{% url 'OperationApp:add_room' %}" method="POST">
                         {% csrf_token %}
 
                         <h2 style="color: #ffffff" class="text-center">Add a new room</h2>

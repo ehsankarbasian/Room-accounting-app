@@ -1,16 +1,16 @@
 from django.urls import path
 
-from AuthApp.views import SignUpView, SignInView, LogOutView, ForgotPasswordView, ResetPasswordTokenBasedAPI
+from AuthApp.views import SignUpView, SignInView, LogOutView, ForgotPasswordView, ResetPasswordByTokenAPI
 from AuthApp.apps import AuthAppConfig
 
 app_name = AuthAppConfig.name
 
 
 urlpatterns = [
-    path('signup', SignUpView.as_view()),
-    path('signin', SignInView.as_view()),
-    path('logout', LogOutView.as_view()),
+    path('sign_up', SignUpView.as_view(), name='sign_up'),
+    path('sign_in', SignInView.as_view(), name='sign_in'),
+    path('logout', LogOutView.as_view(), name='logout'),
 
-    path('forgotPassword', ForgotPasswordView.as_view()),
-    path('resetPasswordTokenBased', ResetPasswordTokenBasedAPI.as_view()),
+    path('forgot_password', ForgotPasswordView.as_view(), name='forgot_password'),
+    path('reset_password_by_token', ResetPasswordByTokenAPI.as_view(), name='reset_password_by_token'),
 ]

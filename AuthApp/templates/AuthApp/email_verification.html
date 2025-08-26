@@ -48,7 +48,7 @@
                                             Click the button below to verify your email
 										</p>
 
-										<form action="http://{{HOST}}:{{PORT}}/{{app_base_url}}/{{ mode }}" method="post">
+										<form action="http://{{HOST}}:{{PORT}}/{{app_base_url}}/{{ mode }}" method="POST">  # TODO
 										<input type="hidden" name="token" value="{{verify_email_token}}" size ="40" />
 										<input type="hidden" name="person_id" value="{{person_id}}" size ="40" />
 										<input type="submit" value="Go!"

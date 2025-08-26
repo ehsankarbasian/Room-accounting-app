@@ -22,17 +22,19 @@ from django.conf.urls.static import static
 from ReportApp.views import LandingPageView
 from .settings import ROOM_ACCOUNTING_APP_BASE_URL
 
+from AuthApp.apps import AuthAppConfig
 from ReportApp.apps import ReportAppConfig
-
-app_name = ReportAppConfig.name
+from OperationApp.apps import OperationAppConfig
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    
     path('', LandingPageView.as_view(), name='landing_page'),
-    path(ROOM_ACCOUNTING_APP_BASE_URL + "/", include('ReportApp.urls')),
-    path(ROOM_ACCOUNTING_APP_BASE_URL + "/", include('AuthApp.urls')),
-    path(ROOM_ACCOUNTING_APP_BASE_URL + "/", include('OperationApp.urls')),
+    
+    path(AuthAppConfig.name + "/", include('AuthApp.urls')),
+    path(ReportAppConfig.name + "/", include('ReportApp.urls')),
+    path(OperationAppConfig.name + "/", include('OperationApp.urls')),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
