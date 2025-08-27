@@ -24,8 +24,8 @@
             <div class="modal-body">
 
                 <form id="modal_form" class="signup-form"
-                        action="http://{{ HOST }}:{{ PORT }}/{{ app_base_url }}/sendResultEmail"
-                        method="post">
+                        action="{% url 'ReportApp:send_report_email' %}"
+                        method="POST">
                     {% csrf_token %}
 
                     <div class="form-group" style="font-size: 32px">

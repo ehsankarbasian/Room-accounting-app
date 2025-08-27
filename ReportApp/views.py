@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.views.generic.base import View
 
 from rest_framework import status
 from rest_framework.views import APIView
@@ -69,3 +70,7 @@ class FinalReportAPI(APIView):
 
         report_graph = ReportGraph(room)
         return Response(report_graph.edges_sorted, status=status.HTTP_200_OK)
+
+
+class ReportEmailView(View):
+    pass

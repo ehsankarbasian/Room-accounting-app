@@ -22,8 +22,8 @@
             <div class="modal-body">
 
                 <form id="modal_form" class="signup-form"
-                        action="http://{{ HOST }}:{{ PORT }}/{{ app_base_url }}/addPerson/{{ room.id }}"
-                        method="post">
+                        action="{% url 'OperationApp:add_person' room.id %}"
+                        method="POST">
                     {% csrf_token %}
 
                     <div class="form-group">

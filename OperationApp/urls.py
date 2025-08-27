@@ -15,7 +15,7 @@ urlpatterns = [
     path('add_spend/<int:room_id>', AddSpendView.as_view(), name='add_spend'),
     path('add_transaction/<int:room_id>', AddTransactionView.as_view(), name='add_transaction'),
 
-    path('all_buys/<int:room_id>', SpendListView.as_view(), name='all_buys'),
+    path('get_spends/<int:room_id>', SpendListView.as_view(), name='get_spends'),
     path('all_transactions/<int:room_id>', TransactionListView.as_view(), name='all_transactions'),
-    path('room_report/<int:room_id>', RoomLogView.as_view(), name='room_report'),
+    path('room_log/<int:room_id>', RoomLogView.as_view(), name='room_log'),
 ]

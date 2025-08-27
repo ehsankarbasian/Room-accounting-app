@@ -1,7 +1,7 @@
 {% load static %}
 
 
- <a href="http://{{ HOST }}:{{ PORT }}/{{ app_base_url }}/reportForClearing/{{ room.id }}"
+ <a href="{% url 'ReportApp:room_report' room.id %}"
     title="Show the result of the room" target="_blank">
     <i class="fa fa-code" style="padding: 5px"></i>
 </a>

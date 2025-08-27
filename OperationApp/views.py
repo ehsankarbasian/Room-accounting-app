@@ -80,7 +80,7 @@ class AddPersonView(View):
                     'mode': 'verifyPersonEmail',
                     'app_base_url': ROOM_ACCOUNTING_APP_BASE_URL,
                     'verify_email_token': person.verify_email_token}
-            html_content = get_template('ReportApp/email_verification.html').render(context=context)
+            html_content = get_template('AuthApp/email_verification.html').render(context=context)
 
             message = "Hello " + name + ". please click on the button below to verify your email"
             send_email("Verify email", message, [email], html_content)

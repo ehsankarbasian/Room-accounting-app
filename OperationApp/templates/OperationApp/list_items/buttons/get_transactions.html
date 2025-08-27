@@ -1,7 +1,7 @@
 {% load static %}
 
 
-<a href="http://{{ HOST }}:{{ PORT }}/{{ app_base_url }}/allTransactions/{{ room.id }}"
+<a href="{% url 'OperationApp:all_transactions' room.id %}"
     title="Show all transactions of room" target="_blank">
     <i class="fa fa-money" style="padding: 5px"></i>
 </a>
