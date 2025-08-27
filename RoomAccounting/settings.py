@@ -10,7 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+import os
+from dotenv import load_dotenv
 from pathlib import Path
+
+load_dotenv()
+# How to read data: os.environ.get('KEY')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,13 +25,13 @@ PORT = "8000"
 ROOM_ACCOUNTING_APP_BASE_URL = "accounting_app" # TODO: delete
 
 # Email config:
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'ntm.patronage@gmail.com'
-EMAIL_HOST_PASSWORD = 'NTM1400NTM'
-DEFAULT_FROM_EMAIL = 'ntm.patronage@gmail.com'
-DEFAULT_TO_EMAIL = 'ehsan.karbasian@gmail.com'
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS')
+EMAIL_HOST = os.environ.get('EMAIL_HOST')
+EMAIL_PORT = os.environ.get('EMAIL_PORT')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')
+DEFAULT_TO_EMAIL = os.environ.get('DEFAULT_TO_EMAIL')
 
 # Django admin panel
 ADMIN_PRIORITY = [
@@ -44,7 +49,7 @@ ADMIN_PRIORITY = [
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-qxe(^yk9^b(a_*1n%2axxqk=x-j#q(=na4^1v+x*euf2y-jev*'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
