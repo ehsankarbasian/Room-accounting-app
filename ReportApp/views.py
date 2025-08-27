@@ -12,8 +12,6 @@ from ReportApp.algorithm.room_analyzer import RoomAnalyzer
 
 from utils.custon_views.views import RawTemplateView
 
-from RoomAccounting.settings import HOST, PORT, ROOM_ACCOUNTING_APP_BASE_URL
-
 
 class LandingPageView(RawTemplateView):
     template_name = "index.html"
@@ -22,8 +20,7 @@ class LandingPageView(RawTemplateView):
         if not request.user.is_anonymous:
             return redirect(reverse('ReportApp:home'))
 
-        context = {'HOST': HOST, 'PORT': PORT, 'app_base_url': ROOM_ACCOUNTING_APP_BASE_URL}
-        return self.render_to_response(context)
+        return self.render_to_response()
 
 
 class HomeView(RawTemplateView):
@@ -32,8 +29,7 @@ class HomeView(RawTemplateView):
     def get(self, request):
         user = request.user
         rooms = Room.objects.filter(creator=user).order_by("created_at")
-        context = {'HOST': HOST, 'PORT': PORT, 'app_base_url': ROOM_ACCOUNTING_APP_BASE_URL,
-                   'username': user.username, 'rooms': rooms}
+        context = {'username': user.username, 'rooms': rooms}
         return self.render_to_response(context)
 
 

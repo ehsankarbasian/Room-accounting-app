@@ -20,7 +20,6 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from ReportApp.views import LandingPageView
-from .settings import ROOM_ACCOUNTING_APP_BASE_URL
 
 from AuthApp.apps import AuthAppConfig
 from ReportApp.apps import ReportAppConfig

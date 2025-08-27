@@ -22,7 +22,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 HOST = "127.0.0.1"
 PORT = "8000"
-ROOM_ACCOUNTING_APP_BASE_URL = "accounting_app" # TODO: delete
 
 # Email config:
 EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS')

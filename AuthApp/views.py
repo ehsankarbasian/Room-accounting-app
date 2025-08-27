@@ -10,7 +10,6 @@ from django.template.loader import get_template
 
 from ReportApp.models import User
 from utils.email import send_email
-from RoomAccounting.settings import HOST, PORT, ROOM_ACCOUNTING_APP_BASE_URL
 
 from utils.custon_views.views import RawTemplateView
 from django.views.generic.base import View
@@ -84,9 +83,9 @@ class ForgotPasswordView(RawTemplateView):
     
     def _send_reset_pass_email(email, fullname, token):
         context = {
-            'HOST': HOST,
-            'PORT': PORT,
-            'app_base_url': ROOM_ACCOUNTING_APP_BASE_URL,
+            # 'HOST': HOST,
+            # 'PORT': PORT,
+            # 'app_base_url': ROOM_ACCOUNTING_APP_BASE_URL,
             'email': email,
             'name': fullname,
             'token': token}

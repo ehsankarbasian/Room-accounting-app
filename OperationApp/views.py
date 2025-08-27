@@ -11,7 +11,6 @@ from django.db.models import Q
 from utils.email import send_email
 from utils.custon_views.views import RawTemplateView
 from ReportApp.email_generator import EmailGenerator
-from RoomAccounting.settings import HOST, PORT, ROOM_ACCOUNTING_APP_BASE_URL
 
 
 # TODO: Use ModelViews to CRUD
@@ -73,12 +72,13 @@ class AddPersonView(View):
             person = Person.objects.create(name=name, email=email, phone=phone, room=room,
                                         verify_email_token=token_hex(64), verify_phone_code=randint(100000, 999999))
 
-            context = {'HOST': HOST,
-                    'PORT': PORT,
+            context = {
+                    # 'HOST': HOST,
+                    # 'PORT': PORT,
                     'person_id': person.id,
                     'name': name,
                     'mode': 'verifyPersonEmail',
-                    'app_base_url': ROOM_ACCOUNTING_APP_BASE_URL,
+                    # 'app_base_url': ROOM_ACCOUNTING_APP_BASE_URL,
                     'verify_email_token': person.verify_email_token}
             html_content = get_template('AuthApp/email_verification.html').render(context=context)
 
