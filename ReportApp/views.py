@@ -20,7 +20,7 @@ class LandingPageView(RawTemplateView):
         if not request.user.is_anonymous:
             return redirect(reverse('ReportApp:home'))
 
-        return self.render_to_response()
+        return self.render_to_response(context=None)
 
 
 class HomeView(RawTemplateView):

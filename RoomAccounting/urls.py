@@ -25,6 +25,8 @@ from AuthApp.apps import AuthAppConfig
 from ReportApp.apps import ReportAppConfig
 from OperationApp.apps import OperationAppConfig
 
+import debug_toolbar
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -34,6 +36,8 @@ urlpatterns = [
     path(AuthAppConfig.name + "/", include('AuthApp.urls')),
     path(ReportAppConfig.name + "/", include('ReportApp.urls')),
     path(OperationAppConfig.name + "/", include('OperationApp.urls')),
+    
+    path('__debug__/', include(debug_toolbar.urls)),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
