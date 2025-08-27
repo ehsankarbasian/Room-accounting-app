@@ -1,0 +1,102 @@
+{% extends "ReportApp/home.html" %}
+
+{% load static %}
+{% load customtags %}
+
+
+{% block room_options_list_item %}
+
+    <li style="font-size: 50px; padding-top: 8px; background-color: #ffffff">
+        <div style="margin-top: 4px" class="row">
+            <b style="margin-left: 24px">{{ room.name }}</b>
+            <button type="button" data-toggle="modal" data-target="#PersonSet{{ room.id }}"
+                    style="padding:0;border: none;background: none;
+                                align-content: center;
+                                ">
+                <i class="fa fa-users" style="color: #1b6d85"
+                    title="Show room members"></i>
+                {{ room.person_set.count }}
+            </button>
+        </div>
+
+        <div style="padding-left: 15px; padding-bottom: 5px; margin-top: 12px">
+            <form action="{% url 'OperationApp:delete_room' room.id %}" method="POST">
+                <button type="submit"
+                    style="padding: 0;border: none;background: none;">
+                    <i class="fa fa-trash" style="padding: 5px;color: #1b6d85"
+                    title="Delete room"></i>
+                </button>
+            
+                <button type="button" data-toggle="modal" data-target="#GetRoomName{{ room.id }}"
+                        style="padding: 0;border: none;background: none;">
+                    <i class="fa fa-edit" style="padding: 5px;color: #1b6d85"
+                        title="Edit room name"></i>
+                </button>
+
+                <button type="button" data-toggle="modal" data-target="#AddPerson{{ room.id }}"
+                        style="padding: 0;border: none;background: none;">
+                    <i class="fa fa-user-plus" style="padding: 5px;color: #1b6d85"
+                        title="Add new person to room"></i>
+                </button>
+
+                <button type="button" data-toggle="modal" data-target="#AddBuy{{ room.id }}"
+                        style="padding: 0;border: none;background: none;">
+                    <i class="fa fa-cart-plus" style="padding: 5px;color: #1b6d85"
+                        title="Add a spent to room"></i>
+                </button>
+
+                <a href="{% url 'OperationApp:add_spend' room.id %}"
+                    title="Show all buys of room" target="_blank">
+                    <i class="fa fa-shopping-cart" style="padding: 5px"></i>
+                </a>
+
+                <button type="button" data-toggle="modal" data-target="#AddPayment{{ room.id }}"
+                        style="padding: 0;border: none;background: none;">
+                    <i class="fa fa-credit-card-alt fa-1" style="padding: 5px;color: #1b6d85"
+                        title="Add a payment"></i>
+                </button>
+
+                <a href="http://{{ HOST }}:{{ PORT }}/{{ app_base_url }}/allTransactions/{{ room.id }}"
+                    title="Show all transactions of room" target="_blank">
+                    <i class="fa fa-money" style="padding: 5px"></i>
+                </a>
+
+                <a href="http://{{ HOST }}:{{ PORT }}/{{ app_base_url }}/roomLog/{{ room.id }}"
+                    title="Show all of transactions and buys of room sorted by date" target="_blank">
+                    <i class="fa fa-terminal" style="padding: 5px"></i>
+                </a>
+
+                <a href="http://{{ HOST }}:{{ PORT }}/{{ app_base_url }}/reportForClearing/{{ room.id }}"
+                    title="Show the result of the room" target="_blank">
+                    <i class="fa fa-code" style="padding: 5px"></i>
+                </a>
+
+                <button type="button" data-toggle="modal" data-target="#GetTargetPersons{{ room.id }}"
+                        style="padding: 0;border: none;background: none;"
+                        title="Send email to persons to clear account">
+                        <img src="{% static 'assets/img/send_bill.png' %}" class="logo" alt="logo"
+                                style="height: 64px;width: 64px;padding:5px">
+                </button>
+
+            </form>
+
+
+            <!-- Modals for defined actions -->
+
+            {% include "OperationApp/list_items/modals/edit_room.html" %}
+
+            {% include "OperationApp/list_items/modals/add_person.html" %}
+
+            {% include "OperationApp/list_items/modals/get_persons.html" %}
+
+            {% include "OperationApp/list_items/modals/add_spend.html" %}
+
+            {% include "OperationApp/list_items/modals/add_transaction.html" %}
+
+            {% include "OperationApp/list_items/modals/send_report_email.html" %}
+
+        </div>
+
+    </li>
+
+{% endblock %}

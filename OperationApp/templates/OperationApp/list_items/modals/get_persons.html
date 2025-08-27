@@ -1,0 +1,88 @@
+{% load static %}
+
+
+<div class="modal fade" id="PersonSet{{ room.id }}" tabindex="-1" role="dialog"
+        aria-labelledby="myModalLabel">
+
+    <div class="modal-dialog" role="document">
+
+        <div class="modal-content">
+
+            <div class="modal-header" style="font-size: 32px">
+
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+
+                <h3 class="modal-title text-center" id="myModalLabel">Person list
+                </h3>
+
+                {% for person in room.person_set.all %}
+
+                    <hr style="margin: 12px">{{ person.name }}
+
+                    <div style="position: absolute; right: 2%;display: unset">
+                        <i class="fa fa-mobile" title="{{ person.phone }}" style="color:
+                                {% if person.verified_phone %}
+                                    #2ccb02
+                                {% else %}
+                                    #f3150e
+                                {% endif %}
+                                "></i>
+                        <i class="fa fa-envelope" title="{{ person.email }}" style="color:
+                                {% if person.verified_email %}
+                                    #2ccb02
+                                {% else %}
+                                    #f3150e
+                                {% endif %}
+                                "></i>
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+            <div class="modal-body">
+
+                <h4 class="modal-title text-center" id="myModalLabel">Add a new
+                    person
+                </h4>
+
+                <form id="modal_form" class="signup-form"
+                        action="http://{{ HOST }}:{{ PORT }}/{{ app_base_url }}/addPerson/{{ room.id }}"
+                        method="post">
+                    {% csrf_token %}
+
+                    <div class="form-group">
+
+                        <input type="text" name="person_name" class="form-control"
+                                placeholder="Name" required="required"
+                                style="margin-top: 10px; margin-bottom: 12px">
+
+                        <input type="email" name="email" class="form-control"
+                                placeholder="Email"
+                                required="required" style="margin-bottom: 12px">
+
+                        <input type="tel" name="phone" class="form-control"
+                                placeholder="Phone Number"
+                                required="required" style="margin-bottom: 12px">
+
+                    </div>
+
+                    <div class="form-group text-center">
+
+                        <button type="submit" class="btn btn-blue btn-block">Add the
+                            new person
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

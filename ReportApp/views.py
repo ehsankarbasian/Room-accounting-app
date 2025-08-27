@@ -26,7 +26,7 @@ class LandingPageView(RawTemplateView):
 
 
 class HomeView(RawTemplateView):
-    template_name = "OperationApp/list_items/room_options.html"
+    template_name = "OperationApp/room_options.html"
     
     def get(self, request):
         user = request.user
