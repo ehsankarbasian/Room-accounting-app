@@ -1,0 +1,10 @@
+{% load static %}
+{% load customtags %}
+
+
+<button type="button" data-toggle="modal" data-target="#GetTargetPersons{{ room.id }}"
+        style="padding: 0;border: none;background: none;"
+        title="Send email to persons to clear account">
+        <img src="{% static 'assets/img/send_bill.png' %}" class="logo" alt="logo"
+                style="height: 64px;width: 64px;padding:5px">
+</button>
