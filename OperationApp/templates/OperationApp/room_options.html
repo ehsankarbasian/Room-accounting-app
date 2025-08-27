@@ -13,7 +13,7 @@
         </div>
 
         <div style="padding-left: 15px; padding-bottom: 5px; margin-top: 12px">
-            <form action="{% url 'OperationApp:delete_room' room.id %}" method="POST">
+            <form>
 
                 {% include "OperationApp/list_items/buttons/delete_room.html" %}
                 {% include "OperationApp/list_items/buttons/edit_room.html" %}
@@ -34,15 +34,14 @@
 
 
             <!-- Modals for defined actions -->
-
+            
+            {% include "OperationApp/list_items/modals/delete_room.html" %}
             {% include "OperationApp/list_items/modals/edit_room.html" %}
 
             {% include "OperationApp/list_items/modals/add_person.html" %}
-
             {% include "OperationApp/list_items/modals/get_persons.html" %}
 
             {% include "OperationApp/list_items/modals/add_spend.html" %}
-
             {% include "OperationApp/list_items/modals/add_transaction.html" %}
 
             {% include "OperationApp/list_items/modals/send_report_email.html" %}

@@ -37,7 +37,8 @@ class DeleteRoomView(View):
 
         if room in request.user.room_set.all():
             # TODO: 2 factor auth to delete the room
-            # room.delete()
+            # BUG: Can't delete if has transaction or spend
+            room.delete()
             return redirect('ReportApp:home')
         return _result_page(request, "You're not the owner of the room")
 
