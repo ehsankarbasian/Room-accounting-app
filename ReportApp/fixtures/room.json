@@ -1,6 +1,6 @@
 [
     {
-        "model": "AccountingApp.Room",
+        "model": "ReportApp.Room",
         "pk": 1,
         "fields": {
             "name": "room_1",
@@ -9,7 +9,7 @@
         }
     },
     {
-        "model": "AccountingApp.Room",
+        "model": "ReportApp.Room",
         "pk": 2,
         "fields": {
             "name": "room_2",

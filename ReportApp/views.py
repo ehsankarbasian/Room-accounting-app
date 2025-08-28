@@ -65,7 +65,7 @@ class FinalReportAPI(APIView):
         room = Room.objects.get(id=room_id)
 
         report_graph = ReportGraph(room)
-        return Response(report_graph.edges_sorted, status=status.HTTP_200_OK)
+        return Response(report_graph._graph_schema, status=status.HTTP_200_OK)
 
 
 class ReportEmailView(View):

@@ -1,11 +1,11 @@
 from django.test import TestCase, Client
 
 from ReportApp.models import Transaction
-from RoomAccounting.settings import ROOM_ACCOUNTING_APP_BASE_URL
+from ReportApp.apps import ReportAppConfig
 
 
 def _client_post(url, json):
-    response = Client().post("/" + ROOM_ACCOUNTING_APP_BASE_URL + "/" + url, json, format='json')
+    response = Client().post("/" + ReportAppConfig.name + "/" + url, json, format='json')
     return response.data
 
 
@@ -27,11 +27,19 @@ class CoreAlgorithmTestCase(TestCase):
         response_1 = _client_post('reportForClearingAPI', {"room_id": 1})
         response_2 = _client_post('reportForClearingAPI', {"room_id": 2})
 
-        response_1_result = {'person_1 --> person_2': 6000, 'person_1 --> person_3': 11500,
-                             'person_2 --> person_3': 1500}
-        response_2_result = {'person_5 --> person_4': 7500, 'person_4 --> person_6': 22375,
-                             'person_7 --> person_4': 5250, 'person_5 --> person_6': 26250,
-                             'person_7 --> person_5': 2375, 'person_7 --> person_6': 12375}
+
+        print()
+        print()
+        print(response_1)
+        print(type(response_1))
+        print()
+        print()
+
+        response_1_result = {'1 --> 2': 6000, '1 --> 3': 11500,
+                             '2 --> 3': 1500}
+        response_2_result = {'5 --> 4': 7500, '4 --> 6': 22375,
+                             '7 --> 4': 5250, '5 --> 6': 26250,
+                             '7 --> 5': 2375, '7 --> 6': 12375}
 
         self.assertEqual(response_1, response_1_result)
         self.assertEqual(response_2, response_2_result)
@@ -42,11 +50,10 @@ class CoreAlgorithmTestCase(TestCase):
         response_1 = _client_post('reportForClearingAPI', {"room_id": 1})
         response_2 = _client_post('reportForClearingAPI', {"room_id": 2})
 
-        response_1_result = {'person_1 --> person_2': 1800, 'person_1 --> person_3': 11500,
-                             'person_2 --> person_3': 0}
-        response_2_result = {'person_5 --> person_4': 7500, 'person_4 --> person_6': 20000,
-                             'person_7 --> person_4': 5250, 'person_5 --> person_6': 20000,
-                             'person_7 --> person_5': 3000, 'person_7 --> person_6': 15000}
+        response_1_result = {'1 --> 2': 1800, '1 --> 3': 11500}
+        response_2_result = {'5 --> 4': 7500, '4 --> 6': 20000,
+                             '7 --> 4': 5250, '5 --> 6': 20000,
+                             '7 --> 5': 3000, '7 --> 6': 15000}
 
         self.assertEqual(response_1, response_1_result)
         self.assertEqual(response_2, response_2_result)

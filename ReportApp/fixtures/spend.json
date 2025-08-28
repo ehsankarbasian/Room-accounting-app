@@ -1,6 +1,6 @@
 [
     {
-        "model": "AccountingApp.Spend",
+        "model": "ReportApp.Spend",
         "pk": 1,
         "fields": {
             "room": 1,
@@ -10,7 +10,7 @@
         }
     },
     {
-        "model": "AccountingApp.Spend",
+        "model": "ReportApp.Spend",
         "pk": 2,
         "fields": {
             "room": 1,
@@ -20,7 +20,7 @@
         }
     },
     {
-        "model": "AccountingApp.Spend",
+        "model": "ReportApp.Spend",
         "pk": 3,
         "fields": {
             "room": 1,
@@ -30,7 +30,7 @@
         }
     },
     {
-        "model": "AccountingApp.Spend",
+        "model": "ReportApp.Spend",
         "pk": 4,
         "fields": {
             "room": 1,
@@ -40,7 +40,7 @@
         }
     },
     {
-        "model": "AccountingApp.Spend",
+        "model": "ReportApp.Spend",
         "pk": 5,
         "fields": {
             "room": 2,
@@ -50,7 +50,7 @@
         }
     },
     {
-        "model": "AccountingApp.Spend",
+        "model": "ReportApp.Spend",
         "pk": 6,
         "fields": {
             "room": 2,
@@ -60,7 +60,7 @@
         }
     },
     {
-        "model": "AccountingApp.Spend",
+        "model": "ReportApp.Spend",
         "pk": 7,
         "fields": {
             "room": 2,
@@ -70,7 +70,7 @@
         }
     },
     {
-        "model": "AccountingApp.Spend",
+        "model": "ReportApp.Spend",
         "pk": 8,
         "fields": {
             "room": 2,

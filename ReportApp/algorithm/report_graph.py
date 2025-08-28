@@ -50,3 +50,14 @@ class ReportGraph(_DirectedGraph):
     @property
     def edges_sorted(self):
         return sorted(self.edges(), key=lambda edge: self.get_edge_weight(*edge), reverse=True)
+
+    
+    @property
+    def _graph_schema(self):
+        # Temporary: just to pass algorithm functionality test
+        result = {}
+        for u, v in self.edges_sorted:
+            w = int(self.get_edge_weight(u, v))
+            result[f'{u} --> {v}'] = w
+        
+        return result

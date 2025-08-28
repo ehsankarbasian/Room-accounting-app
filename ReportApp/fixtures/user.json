@@ -1,6 +1,6 @@
 [
     {
-        "model": "AccountingApp.User",
+        "model": "ReportApp.User",
         "pk": 1,
         "fields": {
             "username": "user_1",
