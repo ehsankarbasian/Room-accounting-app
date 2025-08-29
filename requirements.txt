@@ -2,5 +2,6 @@ Django==3.2.8
 djangorestframework==3.12.4
 networkx==3.1
 dotenv==0.9.9
+django_extensions==3.2.3
 
 matplotlib # Just to develop graph algorithms. (Not nrcessary for production)
