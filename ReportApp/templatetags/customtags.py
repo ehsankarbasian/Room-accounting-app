@@ -1,14 +1,14 @@
 from django import template
 
 from ReportApp.models import Person
-from ReportApp.algorithm.report_graph import ReportGraph
+from ReportApp.algorithm import ReportFacade
 
 
 register = template.Library()
 
 
 def cleared_person(person):
-    graph = ReportGraph(person.room)
+    graph = ReportFacade.get_graph(person.room)
     for k, j in graph.edges():
         weight = graph.get_edge_weight(k, j)
         if weight != 0 and person.id in [k, j]:

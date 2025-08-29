@@ -1,9 +1,9 @@
 from networkx import DiGraph as _DirectedGraph
 
-from ReportApp.algorithm.room_analyzer import RoomAnalyzer
+from ReportApp.algorithm.room_analyzer import _RoomAnalyzer
 
 
-class ReportGraph(_DirectedGraph):
+class _ReportGraph(_DirectedGraph):
     
     def __init__(self, room, incoming_graph_data=None, **attr):
         super().__init__(incoming_graph_data, **attr)
@@ -11,9 +11,9 @@ class ReportGraph(_DirectedGraph):
         # '_CachedPropertyResetterAdjAndSucc' object is not subscriptable
         
         self._room = room
-        self.potential_edges = RoomAnalyzer.get_room_potential_edges(room)
-        RoomAnalyzer.calculate_room_spend_result(room, self)
-        RoomAnalyzer.calculate_room_transaction_result(room, self)
+        self.potential_edges = _RoomAnalyzer.get_room_potential_edges(room)
+        _RoomAnalyzer.calculate_room_spend_result(room, self)
+        _RoomAnalyzer.calculate_room_transaction_result(room, self)
     
     def get_edge_weight(self, v, u):
         # if not self.has_edge(v, u):

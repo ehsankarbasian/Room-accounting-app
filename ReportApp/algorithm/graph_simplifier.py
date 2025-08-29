@@ -1,7 +1,7 @@
 import networkx
 
 
-class GraphSimplifier:
+class _GraphSimplifier:
     
     def simplifiy_graph_cycle(graph):
         cycles = list(networkx.simple_cycles(graph))

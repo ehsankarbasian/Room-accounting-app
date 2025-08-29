@@ -1,5 +1,5 @@
 
-class RoomAnalyzer:
+class _RoomAnalyzer:
     
     def is_room_cleared(graph):
         return len(graph.edges()) == 0
@@ -20,7 +20,7 @@ class RoomAnalyzer:
     
     
     def calculate_room_spend_result(room, graph):
-        spend_list = RoomAnalyzer._spend_list_generator(room)
+        spend_list = _RoomAnalyzer._spend_list_generator(room)
 
         for spend in spend_list:
             amount = spend['amount']

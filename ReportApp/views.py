@@ -7,8 +7,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from ReportApp.models import Room
-from ReportApp.algorithm.report_graph import ReportGraph
-from ReportApp.algorithm.room_analyzer import RoomAnalyzer
+from ReportApp.algorithm import ReportFacade
 
 from utils.custon_views.views import RawTemplateView
 
@@ -44,8 +43,8 @@ class FinalReportView(RawTemplateView):
         if room not in request.user.room_set.all():
             return self._render_result("You're not the owner of the room")
 
-        report_graph = ReportGraph(room)
-        cleared = RoomAnalyzer.is_room_cleared(report_graph)
+        report_graph = ReportFacade.get_graph(room)
+        cleared = ReportFacade.is_room_cleared(report_graph)
 
         context = {'result_graph': report_graph,
                    'mode': 'report_for_clearing',
@@ -64,7 +63,7 @@ class FinalReportAPI(APIView):
         room_id = request.data['room_id']
         room = Room.objects.get(id=room_id)
 
-        report_graph = ReportGraph(room)
+        report_graph = ReportFacade.get_graph(room)
         return Response(report_graph._graph_schema, status=status.HTTP_200_OK)
 
 
