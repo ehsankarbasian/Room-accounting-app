@@ -1,6 +1,6 @@
-from report_graph import _ReportGraph
-from room_analyzer import _RoomAnalyzer
-from graph_simplifier import _GraphSimplifier
+from .report_graph import _ReportGraph
+from .room_analyzer import _RoomAnalyzer
+from .graph_simplifier import _GraphSimplifier
 
 
 class ReportFacade:
