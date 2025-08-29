@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from ReportApp.models import Room
 from ReportApp.algorithm import ReportFacade
 
-from utils.custon_views.views import RawTemplateView
+from utils.custom_views.views import RawTemplateView
 
 
 class LandingPageView(RawTemplateView):

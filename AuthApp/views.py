@@ -11,7 +11,7 @@ from django.template.loader import get_template
 from ReportApp.models import User
 from utils.email import send_email
 
-from utils.custon_views.views import RawTemplateView
+from utils.custom_views.views import RawTemplateView
 from django.views.generic.base import View
 
 
