@@ -11,8 +11,12 @@ from ReportApp.algorithm import ReportFacade
 
 from utils.custom_views.views import RawTemplateView
 
+from AuthApp.persmissions.mixins import PermissionMixin
+from AuthApp.persmissions.permissions import IsAuthenticated, AllowAny
 
-class LandingPageView(RawTemplateView):
+
+class LandingPageView(PermissionMixin, RawTemplateView):
+    permission_classes = (AllowAny, )
     template_name = "index.html"
     
     def get(self, request):
@@ -22,7 +26,8 @@ class LandingPageView(RawTemplateView):
         return self.render_to_response(context=None)
 
 
-class HomeView(RawTemplateView):
+class HomeView(PermissionMixin, RawTemplateView):
+    permission_classes = (IsAuthenticated, )
     template_name = "OperationApp/room_options.html"
     
     def get(self, request):
@@ -32,15 +37,13 @@ class HomeView(RawTemplateView):
         return self.render_to_response(context)
 
 
-class FinalReportView(RawTemplateView):
+class FinalReportView(PermissionMixin, RawTemplateView):
+    permission_classes = (IsAuthenticated, )
     template_name = "ReportApp/list_items/final_result.html"
     
     def get(self, request, room_id):
-        if request.user.is_anonymous:
-            return self._render_result("Please sign in")
-
         room = Room.objects.get(id=room_id)
-        if room not in request.user.room_set.all():
+        if not room.is_owner(request.user):
             return self._render_result("You're not the owner of the room")
 
         report_graph = ReportFacade.get_graph(room)
@@ -57,9 +60,11 @@ class FinalReportView(RawTemplateView):
         return render(request, 'result.html', context={'result': result})
 
 
-class FinalReportAPI(APIView):
+class FinalReportAPI(PermissionMixin, APIView):
+    # permission_classes = (IsAuthenticated, )
     
     def post(self, request):
+        # BUG: User can se onother user report
         room_id = request.data['room_id']
         room = Room.objects.get(id=room_id)
 
@@ -67,5 +72,5 @@ class FinalReportAPI(APIView):
         return Response(report_graph._graph_schema, status=status.HTTP_200_OK)
 
 
-class ReportEmailView(View):
+class ReportEmailView(PermissionMixin, View):
     pass
