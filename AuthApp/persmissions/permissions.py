@@ -12,3 +12,14 @@ class IsAuthenticated(AbstractPermissionMessage):
     @classproperty
     def permission_denied_message(self):
         return 'Please sign in'
+
+
+class IsAnonymous(AbstractPermissionMessage):
+    
+    @classmethod
+    def has_permission(self, request, view):
+        return request.user.is_anonymous
+    
+    @classproperty
+    def permission_denied_message(self):
+        return 'Please log out'

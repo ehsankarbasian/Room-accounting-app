@@ -14,8 +14,12 @@ from utils.email import send_email
 from utils.custom_views.views import RawTemplateView
 from django.views.generic.base import View
 
+from AuthApp.persmissions.mixins import PermissionMixin
+from AuthApp.persmissions.permissions import IsAuthenticated, IsAnonymous
 
-class SignUpView(RawTemplateView):
+
+class SignUpView(PermissionMixin, RawTemplateView):
+    permission_classes = (IsAnonymous, )
     template_name = "result.html"
 
     def post(self, request):
@@ -35,7 +39,8 @@ class SignUpView(RawTemplateView):
         return self.render_to_response(context)
 
 
-class SignInView(RawTemplateView):
+class SignInView(PermissionMixin, RawTemplateView):
+    permission_classes = (IsAnonymous, )
     template_name = "result.html"
     
     def post(self, request):
@@ -55,14 +60,16 @@ class SignInView(RawTemplateView):
         return redirect('ReportApp:home')
 
 
-class LogOutView(View):
+class LogOutView(PermissionMixin, View):
+    permission_classes = (IsAuthenticated, )
     
     def post(self, request):
         logout(request)
         return redirect('landing_page')
 
 
-class ForgotPasswordView(RawTemplateView):
+class ForgotPasswordView(PermissionMixin, RawTemplateView):
+    permission_classes = (IsAnonymous, )
     template_name = "result.html"
     
     def get(self, request):
@@ -96,7 +103,8 @@ class ForgotPasswordView(RawTemplateView):
                 html_content=html_content)
 
 
-class ResetPasswordByTokenAPI(APIView):
+class ResetPasswordByTokenAPI(PermissionMixin, APIView):
+    permission_classes = (IsAnonymous, )
     
     def post(self, request):
         token = request.POST['token']
