@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 
 from django.core.exceptions import PermissionDenied as _DefaultPermissionDenied
+from django.utils.functional import classproperty
 
 
 class _AbstractBasePermission(ABC):
@@ -17,7 +18,7 @@ class AbstractPermissionException(_AbstractBasePermission):
 
 class AbstractPermissionMessage(_AbstractBasePermission):
     
-    @property
+    @classproperty
     @abstractmethod
     def permission_denied_message(self):
         pass

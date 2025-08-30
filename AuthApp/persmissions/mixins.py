@@ -12,7 +12,7 @@ class PermissionMixin:
             
             if not permission.has_permission(request, self):
                 if AbstractPermissionMessage in permission.__mro__:
-                    message = permission().permission_denied_message
+                    message = permission.permission_denied_message
                     return _handle_permission_message(message)
                 elif AbstractPermissionException in permission.__mro__:
                     raise permission.permission_denied_exception
