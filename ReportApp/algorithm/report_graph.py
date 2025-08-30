@@ -53,6 +53,11 @@ class _ReportGraph(_DirectedGraph):
 
     
     @property
+    def is_empty(self):
+        return len(self.edges()) == 0
+    
+    
+    @property
     def _graph_schema(self):
         # Temporary: just to pass algorithm functionality test
         result = {}

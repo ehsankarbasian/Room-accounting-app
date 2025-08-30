@@ -1,23 +1,15 @@
+from itertools import combinations
+
 
 class _RoomAnalyzer:
     
     def is_room_cleared(graph):
-        return len(graph.edges()) == 0
+        return graph.is_empty
     
     def get_room_potential_edges(room):
-        persons = list(room.person_set.all())
-        
-        potential_edges = []
-        max_index = len(persons) - 1
-        for p1 in persons:
-            p1_index = persons.index(p1)
-            if p1_index < max_index:
-                remaining_persons = persons[p1_index + 1:]
-                for p2 in remaining_persons:
-                    potential_edges.append((p1.id, p2.id))
-
-        return potential_edges
-    
+        person_id_list = room.person_set.values_list('id', flat=True)
+        subsets = list(combinations(person_id_list, 2))
+        return subsets
     
     def calculate_room_spend_result(room, graph):
         spend_list = _RoomAnalyzer._spend_list_generator(room)
@@ -53,21 +45,20 @@ class _RoomAnalyzer:
     
     
     def _spend_list_generator(room):
+        # PERFORMANCE: Use prefetch data to avoid N+1 problem
         spend_list = []
         for spend in room.spend_set.all():
-            amount = spend.amount
-
-            partner_dict = spend.partner_dict()
+            partner_dict = spend.partner_dict
             partners_sum_of_weight = 0
             for k, v in partner_dict.items():
                 partners_sum_of_weight += partner_dict[k]
 
-            spender_dict = spend.spender_dict()
+            spender_dict = spend.spender_dict
             spenders_sum_of_weight = 0
             for k in spender_dict:
                 spenders_sum_of_weight += spender_dict[k]
 
-            the_spent = {'amount': amount,
+            the_spent = {'amount': spend.amount,
                         'partner_dict': partner_dict,
                         'spender_dict': spender_dict}
 
@@ -77,6 +68,7 @@ class _RoomAnalyzer:
     
     
     def calculate_room_transaction_result(room, graph):
+        # PERFORMANCE: Use prefetch data to avoid N+1 problem
         transactions = room.transaction_set
         for transaction in transactions:
             payer_id = transaction.payer.id

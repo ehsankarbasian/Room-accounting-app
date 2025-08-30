@@ -84,22 +84,22 @@ class Spend(models.Model):
             related_persons = related_persons.exclude(id=person.id)
         return related_persons
 
+    @property
     def partner_dict(self):
         result = dict({})
-        room = self.room
 
-        for person in room.person_set.all():
+        for person in self.room.person_set.all():
             result[person.id] = 0
         for partner in self.partners_set.all():
             result[partner.partner_person.id] = partner.weight
 
         return result
 
+    @property
     def spender_dict(self):
         result = dict({})
-        room = self.room
 
-        for person in room.person_set.all():
+        for person in self.room.person_set.all():
             result[person.id] = 0
         for spender in self.spenders_set.all():
             result[spender.spender_person.id] = spender.weight
