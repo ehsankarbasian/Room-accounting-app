@@ -1,0 +1,86 @@
+{% load static %}
+{% load customtags %}
+
+
+<div class="modal fade" id="GetTargetPersons{{ room.id }}" tabindex="-1" role="dialog"
+        aria-labelledby="myModalLabel">
+
+    <div class="modal-dialog" role="document">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+
+                <h2 class="modal-title text-center" id="myModalLabel">
+                    Select target persons
+                </h2>
+
+            </div>
+
+            <div class="modal-body">
+
+                <form id="modal_form" class="signup-form"
+                        action="{% url 'ReportApp:send_report_email' %}"
+                        method="POST">
+                    {% csrf_token %}
+
+                    <div class="form-group" style="font-size: 32px">
+
+                        {% for person in room.person_set.all %}
+
+                            <input type="checkbox" name="person{{ person.id }}"
+                                    value="person{{ person.id }}"
+                                    style="height: 24px;width: 24px;background-color: #eee">
+                            {{ person.name }}
+
+                            <div style="position: absolute; right: 2%;display: unset">
+                                <p hidden="hidden">{% call_function 'set_cleared' person %}</p>
+                                <i class="fa fa-list-ul"
+                                    title="If it's red means that the person account is cleared"
+                                    style="color:
+                                            {% if person.cleared %}
+                                                #2ccb02
+                                            {% else %}
+                                                #f3150e
+                                            {% endif %}
+                                            "></i>
+                                <i class="fa fa-envelope" title="{{ person.email }}"
+                                    style="color:
+                                            {% if person.verified_email %}
+                                                #2ccb02
+                                            {% else %}
+                                                #f3150e
+                                            {% endif %}
+                                            "></i>
+                            </div>
+
+                            <hr style="margin-bottom: 8px;margin-top: 16px">
+
+                        {% endfor %}
+
+                        <input type="number" name="room_id"
+                                hidden="hidden" value="{{ room.id }}">
+
+                    </div>
+
+                    <div class="form-group text-center">
+
+                        <br>
+                        <button type="submit" class="btn btn-blue btn-block">Send emails
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

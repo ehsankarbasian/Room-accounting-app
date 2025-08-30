@@ -1,0 +1,25 @@
+{% extends "preloader_base.html" %}
+
+{% load static %}
+
+
+{% block title %}
+    Room Accounting
+{% endblock %}
+
+
+{% block content %}
+
+    {% include "index_items/navigation.html" %}
+
+    {% include "index_items/banner.html" %}
+
+    {% include "index_items/about_us.html" %}
+    
+    {% include "index_items/footer.html" %}
+
+    <!-- Modals -->
+    {% include "AuthApp/list_items/sign_in_modal.html" %}
+    {% include "AuthApp/list_items/forget_password_modal.html" %}
+
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load customtags %}
+
+
+{% block content %}
+
+    <!--//** Banner**//-->
+    <section id="homepage" style="background: url(../static/assets/img/banner.jpg);">
+
+        <div class="container">
+
+            <div class="row">
+
+                <div class="col-md-6 caption">
+
+                    <div aria-orientation="vertical">
+
+                        <h1>Welcome <i style="font-size: 32px">{{ username }}</i></h1>
+                        <form action="{% url 'AuthApp:logout' %}" method="POST">
+                            <button type="submit"><u><b style="font-size: 32px">Logout</b></u></button>
+                        </form>
+                    </div>
+
+                    <h2 style="color: #ffffff">
+
+                        You can
+                        <span class="animated-text"></span>
+                        <span class="typed-cursor"></span>
+
+                    </h2>
+
+                </div>
+
+                <div class="col-md-5 col-md-offset-1">
+                    <form class="signup-form" action="{% url 'OperationApp:add_room' %}" method="POST">
+                        {% csrf_token %}
+
+                        <h2 style="color: #ffffff" class="text-center">Add a new room</h2>
+
+                        <hr>
+
+                        <div class="form-group">
+
+                            <input type="text" name="room_name" class="form-control" placeholder="Room Name"
+                                required="required">
+
+                        </div>
+
+                        <div class="form-group text-center">
+
+                            <button type="submit" class="btn btn-blue btn-block">Create room</button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+            <div class="row">
+                <ul type="none" style="padding-left: 0; color: #000000; margin: 16px">
+                    {% for room in rooms %}
+                    
+                        <hr>
+                        {% block room_options_list_item %}
+                        {% endblock %}
+
+                    {% endfor %}
+
+                </ul>
+                <br>
+
+            </div>
+
+        </div>
+
+    </section>
+
+{% endblock %}

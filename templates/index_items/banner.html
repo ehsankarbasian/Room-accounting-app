@@ -1,0 +1,74 @@
+{% load static %}
+
+
+<section id="home">
+
+    <div class="container">
+
+        <div class="row">
+
+            <!-- Introduction -->
+
+            <div class="col-md-6 caption">
+
+                <h1>Welcome !</h1>
+
+                <h2>
+
+                        You can
+
+                        <span class="animated-text"></span>
+
+                        <span class="typed-cursor"></span>
+
+                    </h2>
+
+                <p>SignIn or SignUp to continue</p>
+
+            </div>
+
+            <!-- Sign Up -->
+
+            <div class="col-md-5 col-md-offset-1">
+
+                <form class="signup-form" action="{% url 'AuthApp:sign_up' %}" method="POST">
+                    {% csrf_token %}
+
+                    <h2 class="text-center">Signup Now</h2>
+                    <hr>
+
+                    <div class="form-group">
+                        <input type="text" name="username" class="form-control" placeholder="User Name" required="required">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="password" name="password" class="form-control" placeholder="Password" required="required">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="email" name="email" class="form-control" placeholder="Email Address" required="required">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="tel" name="phone_number" class="form-control" placeholder="Phone Number" required="required">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" name="fullname" class="form-control" placeholder="Full Name" required="required">
+                    </div>
+
+                    <div class="form-group text-center">
+
+                        <button type="submit" class="btn btn-blue btn-block">Sign Up</button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>

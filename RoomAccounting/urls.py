@@ -16,12 +16,29 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.urls import include
+from django.conf import settings
+from django.conf.urls.static import static
 
-from AccountingApp.views import landing_page
-from .settings import ROOM_ACCOUNTING_APP_BASE_URL
+from ReportApp.views import LandingPageView
+
+from AuthApp.apps import AuthAppConfig
+from ReportApp.apps import ReportAppConfig
+from OperationApp.apps import OperationAppConfig
+
+import debug_toolbar
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', landing_page, name='landing_page'),
-    path(ROOM_ACCOUNTING_APP_BASE_URL + "/", include('AccountingApp.urls')),
+    
+    path('', LandingPageView.as_view(), name='landing_page'),
+    
+    path(AuthAppConfig.name + "/", include('AuthApp.urls')),
+    path(ReportAppConfig.name + "/", include('ReportApp.urls')),
+    path(OperationAppConfig.name + "/", include('OperationApp.urls')),
+    
+    path('__debug__/', include(debug_toolbar.urls)),
 ]
+
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

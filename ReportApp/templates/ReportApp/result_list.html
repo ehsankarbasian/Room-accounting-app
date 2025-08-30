@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load customtags %}
+
+
+{% block title %}
+    {{ mode }}
+{% endblock %}
+
+
+{% block content %}
+
+    <section id="homepage" style="background: url(../static/assets/img/banner.jpg);">
+
+        <div class="container">
+
+            <div class="row">
+
+                <!-- Items -->
+
+                <div style="padding: 8px">
+
+                    <div id="room_item" style="background-color: #8b93ff; padding: 8px; color: #210707">
+
+                        {% if mode  == 'spend_log' %}
+                            {% block spend_list_item %}
+                            {% endblock %}
+                        {% endif %}
+
+                        
+                        {% if mode == 'transaction_log' %}
+                            {% block transaction_list_item %}
+                            {% endblock %}
+                        {% endif %}
+
+
+                        {% if mode == 'room_log' %}
+                            {% block room_log_list_item %}
+                            {% endblock %}
+                        {% endif %}
+
+
+                        {% if mode  == 'report_for_clearing' %}
+                            {% block final_result_list_item %}
+                            {% endblock %}
+                        {% endif %}
+
+                        </ul>
+                        <br>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+{% endblock %}

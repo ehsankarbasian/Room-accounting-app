@@ -1,0 +1,50 @@
+{% load static %}
+
+
+<div class="modal fade" id="DeleteRoom{{ room.id }}" tabindex="-1" role="dialog"
+                aria-labelledby="myModalLabel">
+
+    <div class="modal-dialog" role="document">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+
+                <h4 class="modal-title text-center" id="myModalLabel">
+                    Delete room <b><u>{{ room.name }}</b></u>
+                    <br>
+                    All records and persons will be removed.
+                    <br>
+                    Are you sure ?
+                </h4>
+
+            </div>
+
+            <div class="modal-body">
+
+                <form id="modal_form" class="signup-form"
+                    action="{% url 'OperationApp:delete_room' room.id %}"
+                    method="POST">
+                    {% csrf_token %}
+
+                    <div class="form-group text-center">
+
+                        <button type="submit" class="btn btn-blue btn-block">
+                            YES (Delete the room)
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
