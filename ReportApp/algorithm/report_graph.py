@@ -59,7 +59,7 @@ class _ReportGraph(_DirectedGraph):
     
     @property
     def _graph_schema(self):
-        # Temporary: just to pass algorithm functionality test
+        # TEMP: just to pass algorithm functionality test
         result = {}
         for u, v in self.edges_sorted:
             w = int(self.get_edge_weight(u, v))

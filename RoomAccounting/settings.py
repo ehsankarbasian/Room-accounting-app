@@ -20,9 +20,6 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-HOST = "127.0.0.1"
-PORT = "8000"
-
 # Email config:
 EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS')
 EMAIL_HOST = os.environ.get('EMAIL_HOST')

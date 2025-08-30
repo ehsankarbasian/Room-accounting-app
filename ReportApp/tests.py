@@ -27,14 +27,6 @@ class CoreAlgorithmTestCase(TestCase):
         response_1 = _client_post('reportForClearingAPI', {"room_id": 1})
         response_2 = _client_post('reportForClearingAPI', {"room_id": 2})
 
-
-        print()
-        print()
-        print(response_1)
-        print(type(response_1))
-        print()
-        print()
-
         response_1_result = {'1 --> 2': 6000, '1 --> 3': 11500,
                              '2 --> 3': 1500}
         response_2_result = {'5 --> 4': 7500, '4 --> 6': 22375,

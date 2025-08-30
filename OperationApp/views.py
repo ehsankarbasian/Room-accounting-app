@@ -37,7 +37,6 @@ class DeleteRoomView(View):
 
         if room in request.user.room_set.all():
             # TODO: 2 factor auth to delete the room
-            # BUG: Can't delete if has transaction or spend
             room.delete()
             return redirect('ReportApp:home')
         return _result_page(request, "You're not the owner of the room")
@@ -73,14 +72,10 @@ class AddPersonView(View):
             person = Person.objects.create(name=name, email=email, phone=phone, room=room,
                                         verify_email_token=token_hex(64), verify_phone_code=randint(100000, 999999))
 
-            context = {
-                    # 'HOST': HOST,
-                    # 'PORT': PORT,
-                    'person_id': person.id,
-                    'name': name,
-                    'mode': 'verifyPersonEmail',
-                    # 'app_base_url': ROOM_ACCOUNTING_APP_BASE_URL,
-                    'verify_email_token': person.verify_email_token}
+            context = {'person_id': person.id,
+                       'name': name,
+                       'mode': 'verifyPersonEmail',
+                       'verify_email_token': person.verify_email_token}
             html_content = get_template('AuthApp/email_verification.html').render(context=context)
 
             message = "Hello " + name + ". please click on the button below to verify your email"
