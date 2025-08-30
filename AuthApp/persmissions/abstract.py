@@ -1,15 +1,21 @@
 from abc import ABC, abstractmethod
 
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied as _DefaultPermissionDenied
 
 
-class AbstractPermission(ABC):
-    permission_denied_exception = PermissionDenied
+class _AbstractBasePermission(ABC):
     
     @classmethod
     @abstractmethod
-    def has_permission(self, request, view):
+    def has_permission(request, view):
         pass
+
+
+class AbstractPermissionException(_AbstractBasePermission):
+    permission_denied_exception = _DefaultPermissionDenied
+
+
+class AbstractPermissionMessage(_AbstractBasePermission):
     
     @property
     @abstractmethod
