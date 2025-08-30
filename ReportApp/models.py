@@ -58,6 +58,9 @@ class Room(models.Model):
         payer_query = Q(payer__in=persons)
         receiver_query = Q(receiver__in=persons)
         return Transaction.objects.filter(payer_query | receiver_query).order_by('-date')
+    
+    def is_owner(self, user):
+        return self.creator.id == user.id
 
     def __str__(self):
         return self.name + " (creator: " + self.creator.username + ")"

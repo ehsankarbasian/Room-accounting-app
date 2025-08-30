@@ -1,0 +1,14 @@
+from django.utils.functional import classproperty
+
+from AuthApp.persmissions.abstract import AbstractPermissionMessage, AbstractPermissionException
+
+
+class IsAuthenticated(AbstractPermissionMessage):
+    
+    @classmethod
+    def has_permission(self, request, view):
+        return request.user.is_authenticated
+    
+    @classproperty
+    def permission_denied_message(self):
+        return 'Please sign in'
