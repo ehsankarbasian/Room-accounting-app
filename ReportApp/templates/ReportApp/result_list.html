@@ -26,6 +26,8 @@
                         {% if mode  == 'spend_log' %}
                             {% block spend_list_item %}
                             {% endblock %}
+                            {% copy_name spends as page_obj %}
+                            {% include "ReportApp/list_items/pagination.html" %}
                         {% endif %}
 
                         

@@ -43,3 +43,8 @@ def call_function(method_name, *args):
 def callmethod(obj, method_name, *args, **kwargs):
     method = getattr(obj, method_name)
     return method(*args, **kwargs)
+
+
+@register.simple_tag
+def copy_name(obj):
+    return obj
