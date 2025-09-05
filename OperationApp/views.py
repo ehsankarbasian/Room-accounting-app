@@ -6,10 +6,14 @@ from django.shortcuts import redirect, render
 from django.template.loader import get_template
 from django.views.generic.base import View
 
-from ReportApp.models import Room, Person, Spend, Spenders, Partners, Transaction
 from django.db.models import Q
-from RoomAccounting.email_client import send_html_email
+from ReportApp.models import Room, Person, Spend, Spenders, Partners, Transaction
+
+from django.core.paginator import Paginator
+
 from utils.custom_views.views import RawTemplateView
+
+from RoomAccounting.email_client import send_html_email
 from OperationApp.email_generator import EmailGenerator
 
 from AuthApp.persmissions.mixins import PermissionMixin
@@ -120,6 +124,7 @@ class AddSpendView(PermissionMixin, View):
 class SpendListView(PermissionMixin, RawTemplateView):
     permission_classes = (IsAuthenticated, )
     template_name = 'ReportApp/list_items/spend.html'
+    page_size = 10 # TODO
     
     def get(self, request, room_id):
         room = Room.objects.get(id=room_id)
@@ -127,7 +132,12 @@ class SpendListView(PermissionMixin, RawTemplateView):
             return _result_page(request, "You're not the owner of the room")
         
         spends = room.spend_set.all().order_by('-date')
-        context = {'spends': spends, 'mode': 'spend_log', 'room_name': room.name}
+        # paginator = Paginator(spends, self.page_size)
+        page_number = request.GET.get('page', 1)
+        paginator = Paginator(spends, 3)
+        page_obj = paginator.get_page(page_number)
+        
+        context = {'spends': page_obj, 'mode': 'spend_log', 'room_name': room.name}
         return self.render_to_response(context)
 
 
@@ -171,6 +181,8 @@ class TransactionListView(PermissionMixin, RawTemplateView):
         receiver_query = Q(receiver__in=persons)
         transactions = Transaction.objects.filter(payer_query | receiver_query).order_by('-date')
 
+        Paginator
+        
         context = {'transactions': transactions, 'mode': 'transaction_log', 'room_name': room.name}
         return self.render_to_response(context)
 
@@ -187,6 +199,7 @@ class RoomLogView(PermissionMixin, RawTemplateView):
             return _result_page(request, "You're not the owner of the room")
         
         log = self._room_log_helper(room)
+        Paginator
 
         context = {'log': log, 'mode': 'room_log', 'room_name': room.name}
         return self.render_to_response(context)
