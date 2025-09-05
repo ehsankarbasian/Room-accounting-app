@@ -181,9 +181,12 @@ class TransactionListView(PermissionMixin, RawTemplateView):
         receiver_query = Q(receiver__in=persons)
         transactions = Transaction.objects.filter(payer_query | receiver_query).order_by('-date')
 
-        Paginator
+        # paginator = Paginator(transactions, self.page_size)
+        page_number = request.GET.get('page', 1)
+        paginator = Paginator(transactions, 3)
+        page_obj = paginator.get_page(page_number)
         
-        context = {'transactions': transactions, 'mode': 'transaction_log', 'room_name': room.name}
+        context = {'transactions': page_obj, 'mode': 'transaction_log', 'room_name': room.name}
         return self.render_to_response(context)
 
 
