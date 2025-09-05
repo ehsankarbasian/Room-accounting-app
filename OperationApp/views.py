@@ -184,9 +184,10 @@ class TransactionListView(PermissionMixin, PaginationMixin, RawTemplateView):
 
 
 # TODO: use ListView if possible
-class RoomLogView(PermissionMixin, RawTemplateView):
+class RoomLogView(PermissionMixin, PaginationMixin, RawTemplateView):
     template_name = 'ReportApp/list_items/room_log.html'
     permission_classes = (IsAuthenticated, )
+    page_size = 8
     
     def get(self, request, room_id):
         room = Room.objects.get(id=room_id)
@@ -195,6 +196,7 @@ class RoomLogView(PermissionMixin, RawTemplateView):
             return _result_page(request, "You're not the owner of the room")
         
         log = self._room_log_helper(room)
+        log = self.get_paginated_items(request, log)
 
         context = {'log': log, 'mode': 'room_log', 'room_name': room.name}
         return self.render_to_response(context)

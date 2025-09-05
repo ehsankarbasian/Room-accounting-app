@@ -43,6 +43,7 @@
                             {% block room_log_list_item %}
                             {% endblock %}
                             {% copy_name log as page_obj %}
+                            {% include "ReportApp/list_items/pagination.html" %}
                         {% endif %}
 
 
