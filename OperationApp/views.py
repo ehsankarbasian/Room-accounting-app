@@ -8,7 +8,7 @@ from django.views.generic.base import View
 
 from ReportApp.models import Room, Person, Spend, Spenders, Partners, Transaction
 from django.db.models import Q
-from RoomAccounting.email_client import send_email
+from RoomAccounting.email_client import send_html_email
 from utils.custom_views.views import RawTemplateView
 from ReportApp.email_generator import EmailGenerator
 
@@ -78,7 +78,7 @@ class AddPersonView(PermissionMixin, View):
         html_content = get_template('AuthApp/email_verification.html').render(context=context)
 
         message = "Hello " + name + ". please click on the button below to verify your email"
-        send_email("Verify email", message, [email], html_content)
+        send_html_email("Verify email", message, [email], html_content)
 
         return redirect('ReportApp:home')
 

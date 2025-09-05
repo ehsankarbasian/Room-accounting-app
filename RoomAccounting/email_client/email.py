@@ -1,19 +1,23 @@
 
-def send_email(subject, message, to_list, html_content):
-    pass
-    #message = EmailMultiAlternatives(subject,
-    #                                 message,
-    #                                 EMAIL_HOST_USER,
-    #                                 to_list)
-    #message.attach_alternative(html_content, "text/html")
-    #message.send()
+from django.core.mail import send_mail as _send_mail
+from django.core.mail import EmailMultiAlternatives as _Email
+
+from RoomAccounting.settings import DEFAULT_FROM_EMAIL
+
+
+def send_html_email(subject, message, to_list, html_content):
+    email_obj = _Email(
+        subject=subject,
+        body=message,
+        from_email=DEFAULT_FROM_EMAIL,
+        to=to_list)
+    email_obj.attach_alternative(html_content, "text/html")
+    email_obj.send()
 
 
 def send_text_email(subject, message, to_list):
-    pass
-    #for address in to_list:
-    #    message = EmailMultiAlternatives(subject,
-    #                                     message,
-    #                                     EMAIL_HOST_USER,
-    #                                     [address])
-    #    message.send()
+    _send_mail(
+        subject=subject,
+        message=message,
+        from_email=DEFAULT_FROM_EMAIL,
+        recipient_list=to_list)

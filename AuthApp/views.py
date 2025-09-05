@@ -9,7 +9,7 @@ from django.shortcuts import redirect, render
 from django.template.loader import get_template
 
 from ReportApp.models import User
-from RoomAccounting.email_client import send_email
+from RoomAccounting.email_client import send_html_email
 
 from utils.custom_views.views import RawTemplateView
 from django.views.generic.base import View
@@ -97,7 +97,7 @@ class ForgotPasswordView(PermissionMixin, RawTemplateView):
             'name': fullname,
             'token': token}
         html_content = get_template('AuthApp/reset_password.html').render(context=context)
-        send_email(subject='reset password',
+        send_html_email(subject='reset password',
                 message='message',
                 to_list=[email],
                 html_content=html_content)
