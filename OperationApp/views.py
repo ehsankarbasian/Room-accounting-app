@@ -10,7 +10,7 @@ from ReportApp.models import Room, Person, Spend, Spenders, Partners, Transactio
 from django.db.models import Q
 from RoomAccounting.email_client import send_html_email
 from utils.custom_views.views import RawTemplateView
-from ReportApp.email_generator import EmailGenerator
+from OperationApp.email_generator import EmailGenerator
 
 from AuthApp.persmissions.mixins import PermissionMixin
 from AuthApp.persmissions.permissions import IsAuthenticated
