@@ -42,5 +42,5 @@ def send_text_sms(message, to, line_number=line_number):
     sms_ir.send_sms(number=to, message=message, linenumber=line_number)
 
 
-# How to use
-send_text_sms(to=9376265623, message='__MESSAGE__')
+if __name__ == "__main__":
+    send_text_sms(to=9376265623, message='__MESSAGE__')

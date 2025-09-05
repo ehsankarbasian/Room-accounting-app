@@ -8,7 +8,7 @@ from django.views.generic.base import View
 
 from ReportApp.models import Room, Person, Spend, Spenders, Partners, Transaction
 from django.db.models import Q
-from utils.email import send_email
+from RoomAccounting.email_client import send_email
 from utils.custom_views.views import RawTemplateView
 from ReportApp.email_generator import EmailGenerator
 
