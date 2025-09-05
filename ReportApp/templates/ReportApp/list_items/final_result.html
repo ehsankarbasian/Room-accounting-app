@@ -15,23 +15,27 @@
     <ul>
 
     {% for k, v in result_graph.edges_sorted %}
-        <li style="font-size: 50px">
-            <hr style="font: 14px Georgia,serif;
-                padding: 0;
-                border: 0;
-                height: 0;
-                margin: 0 0 0 0;
-                border-top: 1px solid rgba(0, 0, 0, 0.2);
-                border-bottom: 1px solid rgba(255, 255, 255, 0.3);">
+        {% callmethod result_graph "get_edge_weight" k v as w %}
 
-            <div style="padding-left: 16px;padding-right: 16px">
-            
-                <h2 title="#TODO: Debtor email: { v.1.email }, Creditor email: { v.2.email }, Debtor phone: {}, Creditor phone{}">
-                    {% callmethod result_graph "get_edge_weight" k v as w %}
-                    {% get_person_name_by_id k %} --> {% get_person_name_by_id v %}: </h2> <h1 style="color: #130022">{{ w|floatformat:0|intcomma }}</h1>
-            </div>
-            <br>
-        </li>
+        {% if w >= 1 %}
+            <li style="font-size: 50px">
+                <hr style="font: 14px Georgia,serif;
+                    padding: 0;
+                    border: 0;
+                    height: 0;
+                    margin: 0 0 0 0;
+                    border-top: 1px solid rgba(0, 0, 0, 0.2);
+                    border-bottom: 1px solid rgba(255, 255, 255, 0.3);">
+                
+                <div style="padding-left: 16px;padding-right: 16px">
+                    <h2 title="#TODO: Debtor email: { v.1.email }, Creditor email: { v.2.email }, Debtor phone: {}, Creditor phone{}">
+                        {% get_person_name_by_id k %} --> {% get_person_name_by_id v %}: </h2> <h1 style="color: #130022">{{ w|floatformat:0|intcomma }}</h1>
+                </div>
+                <br>
+            </li>
+
+        {% endif %}
+
     {% endfor %}
     
 {% endblock %}
