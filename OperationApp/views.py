@@ -9,9 +9,8 @@ from django.views.generic.base import View
 from django.db.models import Q
 from ReportApp.models import Room, Person, Spend, Spenders, Partners, Transaction
 
-from django.core.paginator import Paginator
-
 from utils.custom_views.views import RawTemplateView
+from utils.custom_views.mixins import PaginationMixin
 
 from RoomAccounting.email_client import send_html_email
 from OperationApp.email_generator import EmailGenerator
@@ -121,10 +120,10 @@ class AddSpendView(PermissionMixin, View):
 
 
 # TODO: use ListView
-class SpendListView(PermissionMixin, RawTemplateView):
+class SpendListView(PermissionMixin, PaginationMixin, RawTemplateView):
     permission_classes = (IsAuthenticated, )
     template_name = 'ReportApp/list_items/spend.html'
-    page_size = 10 # TODO
+    page_size = 6
     
     def get(self, request, room_id):
         room = Room.objects.get(id=room_id)
@@ -132,12 +131,9 @@ class SpendListView(PermissionMixin, RawTemplateView):
             return _result_page(request, "You're not the owner of the room")
         
         spends = room.spend_set.all().order_by('-date')
-        # paginator = Paginator(spends, self.page_size)
-        page_number = request.GET.get('page', 1)
-        paginator = Paginator(spends, 3)
-        page_obj = paginator.get_page(page_number)
         
-        context = {'spends': page_obj, 'mode': 'spend_log', 'room_name': room.name}
+        page_object = self.get_paginated_items(request, spends)
+        context = {'spends': page_object, 'mode': 'spend_log', 'room_name': room.name}
         return self.render_to_response(context)
 
 
@@ -166,9 +162,10 @@ class AddTransactionView(PermissionMixin, View):
 
 
 # TODO: use ListView
-class TransactionListView(PermissionMixin, RawTemplateView):
+class TransactionListView(PermissionMixin, PaginationMixin, RawTemplateView):
     template_name = 'ReportApp/list_items/transaction.html'
     permission_classes = (IsAuthenticated, )
+    page_size = 8
     
     def get(self, request, room_id):
         room = Room.objects.get(id=room_id)
@@ -181,12 +178,8 @@ class TransactionListView(PermissionMixin, RawTemplateView):
         receiver_query = Q(receiver__in=persons)
         transactions = Transaction.objects.filter(payer_query | receiver_query).order_by('-date')
 
-        # paginator = Paginator(transactions, self.page_size)
-        page_number = request.GET.get('page', 1)
-        paginator = Paginator(transactions, 3)
-        page_obj = paginator.get_page(page_number)
-        
-        context = {'transactions': page_obj, 'mode': 'transaction_log', 'room_name': room.name}
+        page_object = self.get_paginated_items(request, transactions)
+        context = {'transactions': page_object, 'mode': 'transaction_log', 'room_name': room.name}
         return self.render_to_response(context)
 
 
@@ -202,7 +195,6 @@ class RoomLogView(PermissionMixin, RawTemplateView):
             return _result_page(request, "You're not the owner of the room")
         
         log = self._room_log_helper(room)
-        Paginator
 
         context = {'log': log, 'mode': 'room_log', 'room_name': room.name}
         return self.render_to_response(context)
