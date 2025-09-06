@@ -133,7 +133,7 @@ class SpendListView(PermissionMixin, PaginationMixin, RawTemplateView):
         spends = room.spend_set.all().order_by('-date')
         
         page_object = self.get_paginated_items(request, spends)
-        context = {'spends': page_object, 'mode': 'spend_log', 'room_name': room.name}
+        context = {'spends': page_object, 'room_name': room.name}
         return self.render_to_response(context)
 
 
@@ -179,7 +179,7 @@ class TransactionListView(PermissionMixin, PaginationMixin, RawTemplateView):
         transactions = Transaction.objects.filter(payer_query | receiver_query).order_by('-date')
 
         page_object = self.get_paginated_items(request, transactions)
-        context = {'transactions': page_object, 'mode': 'transaction_log', 'room_name': room.name}
+        context = {'transactions': page_object, 'room_name': room.name}
         return self.render_to_response(context)
 
 
@@ -198,7 +198,7 @@ class RoomLogView(PermissionMixin, PaginationMixin, RawTemplateView):
         log = self._room_log_helper(room)
         log = self.get_paginated_items(request, log)
 
-        context = {'log': log, 'mode': 'room_log', 'room_name': room.name}
+        context = {'log': log, 'room_name': room.name}
         return self.render_to_response(context)
 
 

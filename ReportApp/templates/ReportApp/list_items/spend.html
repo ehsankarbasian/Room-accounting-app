@@ -1,5 +1,12 @@
 {% extends "ReportApp/result_list.html" %}
 
+{% load customtags %}
+
+
+{% block title %}
+    Spend list
+{% endblock %}
+
 
 {% block spend_list_item %}
     <h1 style="color: #122b40;margin-left: 48px" title="Room name: {{ room_name }}">List of
@@ -55,5 +62,8 @@
 
         </li>
     {% endfor %}
+
+    {% copy_name spends as page_obj %}
+    {% include "ReportApp/list_items/pagination.html" %}
 
 {% endblock %}

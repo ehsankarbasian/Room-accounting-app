@@ -4,9 +4,7 @@
 {% load customtags %}
 
 
-{% block title %}
-    {{ mode }}
-{% endblock %}
+{% block title %} {% endblock %}
 
 
 {% block content %}
@@ -22,35 +20,18 @@
                 <div style="padding: 8px">
 
                     <div id="room_item" style="background-color: #8b93ff; padding: 8px; color: #210707">
-
-                        {% if mode  == 'spend_log' %}
-                            {% block spend_list_item %}
-                            {% endblock %}
-                            {% copy_name spends as page_obj %}
-                            {% include "ReportApp/list_items/pagination.html" %}
-                        {% endif %}
-
                         
-                        {% if mode == 'transaction_log' %}
-                            {% block transaction_list_item %}
-                            {% endblock %}
-                            {% copy_name transactions as page_obj %}
-                            {% include "ReportApp/list_items/pagination.html" %}
-                        {% endif %}
+                        {% block spend_list_item %}
+                        {% endblock %}
+                        
+                        {% block transaction_list_item %}
+                        {% endblock %}
 
+                        {% block room_log_list_item %}
+                        {% endblock %}
 
-                        {% if mode == 'room_log' %}
-                            {% block room_log_list_item %}
-                            {% endblock %}
-                            {% copy_name log as page_obj %}
-                            {% include "ReportApp/list_items/pagination.html" %}
-                        {% endif %}
-
-
-                        {% if mode  == 'report_for_clearing' %}
-                            {% block final_result_list_item %}
-                            {% endblock %}
-                        {% endif %}
+                        {% block final_result_list_item %}
+                        {% endblock %}
 
                         </ul>
                         <br>

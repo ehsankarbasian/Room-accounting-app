@@ -1,5 +1,12 @@
 {% extends "ReportApp/result_list.html" %}
 
+{% load customtags %}
+
+
+{% block title %}
+    Room log
+{% endblock %}
+
 
 {% block room_log_list_item %}
     <h1 style="color: #122b40;margin-left: 48px" title="room log">
@@ -78,6 +85,10 @@
             </li>
 
         {% endif %}
+
     {% endfor %}
+
+    {% copy_name log as page_obj %}
+    {% include "ReportApp/list_items/pagination.html" %}
 
 {% endblock %}
