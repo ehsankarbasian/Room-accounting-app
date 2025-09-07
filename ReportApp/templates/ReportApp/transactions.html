@@ -1,0 +1,26 @@
+{% extends "ReportApp/base_result_list.html" %}
+
+{% load customtags %}
+
+
+{% block title %}
+    Transaction list
+{% endblock %}
+
+
+{% block transaction_list_item %}
+    <h1 style="color: #122b40;margin-left: 48px" title="Room name: {{ room_name }}">List of
+        transactions</h1>
+    <ul>
+
+    {% for item in transactions %}
+
+        {% block transaction_item %}
+        {% endblock %}
+
+    {% endfor %}
+
+    {% copy_name transactions as page_obj %}
+    {% include "ReportApp/list_items/pagination.html" %}
+
+{% endblock %}
