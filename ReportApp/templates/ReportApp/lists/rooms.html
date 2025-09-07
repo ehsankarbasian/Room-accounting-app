@@ -1,0 +1,21 @@
+{% extends "ReportApp/home.html" %}
+
+{% load static %}
+{% load customtags %}
+
+
+{% block room_list %}
+
+    <div class="row">
+        <ul type="none" style="padding-left: 0; color: #000000; margin: 16px">
+            {% for room in rooms %}
+                <hr>
+                {% include "ReportApp/entity_items/room.html" %}
+            {% endfor %}
+
+        </ul>
+        <br>
+
+    </div>
+
+{% endblock %}

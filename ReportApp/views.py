@@ -32,7 +32,7 @@ class LandingPageView(PermissionMixin, RawTemplateView):
 
 class HomeView(PermissionMixin, RawTemplateView):
     permission_classes = (IsAuthenticated, )
-    template_name = "OperationApp/room_options.html"
+    template_name = "ReportApp/lists/rooms.html"
     
     def get(self, request):
         user = request.user
