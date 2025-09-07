@@ -2,10 +2,7 @@
 
 
 <button type="button" data-toggle="modal" data-target="#PersonSet{{ room.id }}"
-        style="padding:0;border: none;background: none;
-                    align-content: center;
-                    ">
-    <i class="fa fa-users" style="color: #1b6d85"
-        title="Show room members"></i>
-    {{ room.person_set.count }}
+        style="padding:0;border: none;background: none; align-content: center; margin-left: 30px">
+    <i class="fas fa-users" style="color: #3ba8c9ff"
+        title="Show room members ({{ room.person_set.count }} persons)"></i>
 </button>

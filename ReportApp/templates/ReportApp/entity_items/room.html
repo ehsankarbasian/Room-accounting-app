@@ -1,26 +1,25 @@
 
 <li style="font-size: 50px; padding-top: 8px; background-color: #ffffff">
     <div style="margin-top: 4px" class="row">
-        <b style="margin-left: 24px">{{ room.name }}</b>
         {% include "OperationApp/list_items/buttons/get_persons.html" %}
+        <b style="margin-left: 4px">{{ room.name }}</b>
     </div>
 
-    <div style="padding-left: 15px; padding-bottom: 5px; margin-top: 12px">
+    <div style="padding-left: 15px; padding-bottom: 15px; margin-top: 12px">
         <form>
 
             {% include "OperationApp/list_items/buttons/delete_room.html" %}
             {% include "OperationApp/list_items/buttons/edit_room.html" %}
-            
             {% include "OperationApp/list_items/buttons/add_person.html" %}
 
+            {% include "OperationApp/list_items/buttons/get_log.html" %}
+            {% include "OperationApp/list_items/buttons/get_report.html" %}
+            <br>
             {% include "OperationApp/list_items/buttons/add_spend.html" %}
             {% include "OperationApp/list_items/buttons/get_spends.html" %}
 
             {% include "OperationApp/list_items/buttons/add_transaction.html" %}
             {% include "OperationApp/list_items/buttons/get_transactions.html" %}
-
-            {% include "OperationApp/list_items/buttons/get_log.html" %}
-            {% include "OperationApp/list_items/buttons/get_report.html" %}
             {% include "OperationApp/list_items/buttons/send_report_email.html" %}
 
         </form>
