@@ -1,0 +1,27 @@
+{% extends "ReportApp/base_result_list.html" %}
+
+{% load customtags %}
+
+
+{% block title %}
+    Spend list
+{% endblock %}
+
+
+{% block spend_list_item %}
+    <h1 style="color: #122b40;margin-left: 48px" title="Room name: {{ room_name }}">List of
+        spends</h1>
+
+    <ul>
+
+    {% for item in spends %}
+        
+        {% block spend_item %}
+        {% endblock %}
+    
+    {% endfor %}
+
+    {% copy_name spends as page_obj %}
+    {% include "ReportApp/list_items/pagination.html" %}
+
+{% endblock %}
