@@ -44,7 +44,7 @@ class HomeView(PermissionMixin, RawTemplateView):
 # TODO: use ListView
 class SpendListView(PermissionMixin, PaginationMixin, RawTemplateView):
     permission_classes = (IsAuthenticated, )
-    template_name = 'ReportApp/list_items/spend.html'
+    template_name = 'ReportApp/spends.html'
     page_size = 6
     
     def get(self, request, room_id):
@@ -61,7 +61,7 @@ class SpendListView(PermissionMixin, PaginationMixin, RawTemplateView):
 
 # TODO: use ListView
 class TransactionListView(PermissionMixin, PaginationMixin, RawTemplateView):
-    template_name = 'ReportApp/list_items/transaction.html'
+    template_name = 'ReportApp/transactions.html'
     permission_classes = (IsAuthenticated, )
     page_size = 8
     
