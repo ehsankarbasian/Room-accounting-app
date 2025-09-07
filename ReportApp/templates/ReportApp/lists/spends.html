@@ -8,19 +8,17 @@
 {% endblock %}
 
 
-{% block spend_list_item %}
+{% block result_list %}
     <h1 style="color: #122b40;margin-left: 48px" title="Room name: {{ room_name }}">
         List of spends
     </h1>
     <ul>
 
     {% for item in spends %}
-        
-        {% show_spend_item item %}
-    
+        {% include "ReportApp/entity_items/spend.html" %}
     {% endfor %}
 
     {% copy_name spends as page_obj %}
-    {% include "ReportApp/list_items/pagination.html" %}
+    {% include "ReportApp/helpers/pagination.html" %}
 
 {% endblock %}

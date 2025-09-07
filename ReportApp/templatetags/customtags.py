@@ -48,13 +48,3 @@ def callmethod(obj, method_name, *args, **kwargs):
 @register.simple_tag
 def copy_name(obj):
     return obj
-
-
-@register.inclusion_tag('ReportApp/list_items/spend.html')
-def show_spend_item(spend_item):
-    return {'item': spend_item}
-
-
-@register.inclusion_tag('ReportApp/list_items/transaction.html')
-def show_transaction_item(transaction_item):
-    return {'item': transaction_item}
