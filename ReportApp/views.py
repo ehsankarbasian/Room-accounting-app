@@ -83,7 +83,7 @@ class TransactionListView(PermissionMixin, PaginationMixin, RawTemplateView):
 
 # TODO: use ListView if possible
 class RoomLogView(PermissionMixin, PaginationMixin, RawTemplateView):
-    template_name = 'ReportApp/list_items/room_log.html'
+    template_name = 'ReportApp/room_log.html'
     permission_classes = (IsAuthenticated, )
     page_size = 8
     
@@ -112,7 +112,7 @@ class RoomLogView(PermissionMixin, PaginationMixin, RawTemplateView):
 
 class FinalReportView(PermissionMixin, RawTemplateView):
     permission_classes = (IsAuthenticated, )
-    template_name = "ReportApp/list_items/final_result.html"
+    template_name = "ReportApp/final_result.html"
     
     def get(self, request, room_id):
         room = Room.objects.get(id=room_id)
