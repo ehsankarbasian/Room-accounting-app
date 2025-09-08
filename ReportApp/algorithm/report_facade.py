@@ -11,4 +11,6 @@ class ReportFacade:
     
     @staticmethod
     def get_graph(room):
-        return _ReportGraph(room)
+        graph = _ReportGraph(room)
+        simple_graph = _GraphSimplifier.simplifiy_graph_cycle(graph)
+        return simple_graph

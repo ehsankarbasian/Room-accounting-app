@@ -137,7 +137,7 @@ class FinalReportAPI(PermissionMixin, APIView):
     # permission_classes = (IsAuthenticated, )
     
     def post(self, request):
-        # BUG: User can se onother user report
+        # BUG: User can see another user report
         room_id = request.data['room_id']
         room = Room.objects.get(id=room_id)
 

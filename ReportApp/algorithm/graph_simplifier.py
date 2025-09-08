@@ -13,6 +13,8 @@ class _GraphSimplifier:
             for i in range(len(cycle) - 1):
                 graph.add_edge(cycle[i], cycle[i+1], weight=-min_weight)
             graph.add_edge(cycle[-1], cycle[0], weight=-min_weight)
+        
+        return graph
     
     
     def simplify_graph_donkey_path(graph):
