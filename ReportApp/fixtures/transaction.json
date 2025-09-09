@@ -13,7 +13,7 @@
         "model": "ReportApp.Transaction",
         "pk": 2,
         "fields": {
-            "payer": 1,
+            "payer": 17,
             "receiver": 12,
             "date": "2020-10-8 00:00:00+00:00",
             "amount": 8500

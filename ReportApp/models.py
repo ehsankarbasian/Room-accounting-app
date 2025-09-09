@@ -1,9 +1,6 @@
-from secrets import token_hex
-from random import randint
-
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.db.models import Q
+from django.db.models import Q, Prefetch
 from RoomAccounting.settings import ADMIN_PRIORITY
 
 
@@ -63,11 +60,39 @@ class Room(models.Model):
         return self.name + " (creator: " + self.creator.username + ")"
 
 
+class SpendQuerySet(models.QuerySet):
+    
+    def prefetch_with_spenders_and_partners(self):
+        return self.prefetch_related(
+                Prefetch(
+                    "spenders_set",
+                    queryset=Spenders.objects.select_related("spender_person"),
+                    to_attr="prefetched_spenders"
+                ),
+                Prefetch(
+                    "partners_set",
+                    queryset=Partners.objects.select_related("partner_person"),
+                    to_attr="prefetched_partners"
+                )
+            )
+
+
+class SpendManager(models.Manager):
+    
+    def get_queryset(self):
+        return SpendQuerySet(self.model, using=self._db)
+
+    def prefetch_with_spenders_and_partners(self):
+        return self.get_queryset().prefetch_with_spenders_and_partners()
+
+
 class Spend(models.Model):
     amount = models.IntegerField(default=0)
     description = models.CharField(max_length=256, blank=True)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now=True)
+    
+    objects = SpendManager()
 
     class Meta:
         verbose_name_plural = verbose_name_plural('Spends')
@@ -187,11 +212,37 @@ class Person(models.Model):
         return self.name + " (room: " + self.room.name + ")"
 
 
+class TransactionQuerySet(models.QuerySet):
+    
+    def filter_by_room(self, room: Room):
+        persons = room.person_set.all()
+        payer_query = Q(payer__in=persons)
+        receiver_query = Q(receiver__in=persons)
+        return self.filter(payer_query | receiver_query)
+    
+    def select_related_payer_and_receiver(self):
+        return self.select_related("payer", "receiver")
+
+
+class TransactionManager(models.Manager):
+    
+    def get_queryset(self):
+        return TransactionQuerySet(self.model, using=self._db)
+
+    def filter_by_room(self, room: Room):
+        return self.get_queryset().filter_by_room(room)
+    
+    def select_related_payer_and_receiver(self):
+        return self.get_queryset().select_related_payer_and_receiver()
+
+
 class Transaction(models.Model):
     payer = models.ForeignKey("Person", related_name="payer", on_delete=models.CASCADE)
     receiver = models.ForeignKey("Person", related_name="receiver", on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now=True)
     amount = models.IntegerField(default=0)
+    
+    objects = TransactionManager()
     
     class Meta:
         verbose_name_plural = verbose_name_plural('Transactions')
