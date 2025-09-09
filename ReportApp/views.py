@@ -48,10 +48,7 @@ class SpendListView(PermissionMixin, PaginationMixin, RawTemplateView):
     page_size = 6
     
     def get(self, request, room_id):
-        room = get_object_or_404(Room, id=room_id)
-        
-        if not room.is_owner(request.user):
-            return _result_page(request, "You're not the owner of the room")
+        room = get_object_or_404(Room, id=room_id, creator__id=request.user.id)
         
         spends = room.spend_set.all().order_by('-date')
         
@@ -67,10 +64,7 @@ class TransactionListView(PermissionMixin, PaginationMixin, RawTemplateView):
     page_size = 8
     
     def get(self, request, room_id):
-        room = get_object_or_404(Room, id=room_id)
-
-        if not room.is_owner(request.user):
-            return _result_page(request, "You're not the owner of the room")
+        room = get_object_or_404(Room, id=room_id, creator__id=request.user.id)
         
         persons = room.person_set.all()
         payer_query = Q(payer__in=persons)
@@ -93,10 +87,7 @@ class RoomLogView(PermissionMixin, PaginationMixin, RawTemplateView):
     page_size = 8
     
     def get(self, request, room_id):
-        room = get_object_or_404(Room, id=room_id)
-
-        if not room.is_owner(request.user):
-            return _result_page(request, "You're not the owner of the room")
+        room = get_object_or_404(Room, id=room_id, creator__id=request.user.id)
         
         log = self._room_log_helper(room)
         log = self.get_paginated_items(request, log)
@@ -120,10 +111,7 @@ class FinalReportView(PermissionMixin, RawTemplateView):
     template_name = "ReportApp/lists/report.html"
     
     def get(self, request, room_id):
-        room = get_object_or_404(Room, id=room_id)
-        
-        if not room.is_owner(request.user):
-            return self._render_result("You're not the owner of the room")
+        room = get_object_or_404(Room, id=room_id, creator__id=request.user.id)
 
         report_graph = ReportFacade.get_graph(room)
         cleared = ReportFacade.is_room_cleared(report_graph)
@@ -145,7 +133,7 @@ class FinalReportAPI(PermissionMixin, APIView):
     def post(self, request):
         # BUG: User can see another user report
         room_id = request.data['room_id']
-        room = get_object_or_404(Room, id=room_id)
+        room = get_object_or_404(Room, id=room_id, creator__id=request.user.id)
 
         report_graph = ReportFacade.get_graph(room)
         return Response(report_graph._graph_schema, status=status.HTTP_200_OK)
@@ -153,7 +141,3 @@ class FinalReportAPI(PermissionMixin, APIView):
 
 class ReportEmailView(PermissionMixin, View):
     pass
-
-
-def _result_page(request, result):
-    return render(request, 'result.html', context={'result': result})
