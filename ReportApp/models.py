@@ -34,8 +34,8 @@ class Token(models.Model):
     verify_email_token = models.CharField(max_length=64, null=True)
     verify_email_code = models.IntegerField(null=True)
 
-    reset_pass_token = models.CharField(max_length=64, default=token_hex(64))
-    reset_pass_code = models.IntegerField(default=randint(100000, 999999))
+    reset_pass_token = models.CharField(max_length=64, null=True)
+    reset_pass_code = models.IntegerField(null=True)
 
     class Meta:
         verbose_name_plural = verbose_name_plural('Tokens')
