@@ -4,7 +4,6 @@ django_extensions==4.1
 
 smsir-python
 requests
-networkx
 dotenv
 
 django-debug-toolbar # develop mode

@@ -1,4 +1,4 @@
-from ReportApp.algorithm.my_graph import _Graph
+from ReportApp.algorithm.report_graph import _Graph
 
 
 class _GraphSimplifier:
