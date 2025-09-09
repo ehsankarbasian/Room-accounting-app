@@ -15,7 +15,7 @@
             border-top: 1px solid rgba(0, 0, 0, 0.2);
             border-bottom: 1px solid rgba(255, 255, 255, 0.5);">
         <b><i>spenders:</i></b><br>
-        {% for spender in item.spenders_set.all %}
+        {% for spender in item.prefetched_spenders %}
             {{ spender.spender_person.name }} (w=<b>{{ spender.weight }}</b>)<br>
         {% endfor %}
         <hr style="font: 14px Georgia,serif;
@@ -26,7 +26,7 @@
             border-top: 1px solid rgba(0, 0, 0, 0.2);
             border-bottom: 1px solid rgba(255, 255, 255, 0.3);">
         <b><i>partners:</i></b><br>
-        {% for partner in item.partners_set.all %}
+        {% for partner in item.prefetched_partners %}
             {{ partner.partner_person.name }} (w=<b>{{ partner.weight }}</b>)<br>
         {% endfor %}
     </div>

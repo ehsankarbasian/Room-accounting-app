@@ -8,8 +8,8 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from django.db.models import Q
-from ReportApp.models import Room, Transaction
+from django.db.models import Q, Prefetch
+from ReportApp.models import Room, Transaction, Spend, Spenders, Partners
 from ReportApp.algorithm import ReportFacade
 
 from utils.custom_views.views import RawTemplateView
@@ -51,6 +51,22 @@ class SpendListView(PermissionMixin, PaginationMixin, RawTemplateView):
         room = get_object_or_404(Room, id=room_id, creator__id=request.user.id)
         
         spends = room.spend_set.all().order_by('-date')
+        
+        spends = (
+            Spend.objects.filter(room=room)
+            .prefetch_related(
+                Prefetch(
+                    "spenders_set",
+                    queryset=Spenders.objects.select_related("spender_person"),
+                    to_attr="prefetched_spenders"
+                ),
+                Prefetch(
+                    "partners_set",
+                    queryset=Partners.objects.select_related("partner_person"),
+                    to_attr="prefetched_partners"
+                )
+            ).order_by('-date')
+        )
         
         page_object = self.get_paginated_items(request, spends)
         context = {'spends': page_object, 'room_name': room.name}

@@ -192,7 +192,7 @@ class Transaction(models.Model):
     receiver = models.ForeignKey("Person", related_name="receiver", on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now=True)
     amount = models.IntegerField(default=0)
-
+    
     class Meta:
         verbose_name_plural = verbose_name_plural('Transactions')
 
