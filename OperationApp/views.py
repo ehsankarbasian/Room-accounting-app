@@ -1,7 +1,7 @@
 from secrets import token_hex
 from random import randint
 
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.template.loader import get_template
 from django.views.generic.base import View
 
@@ -30,10 +30,7 @@ class DeleteRoomView(PermissionMixin, View):
     permission_classes = (IsAuthenticated, )
     
     def post(self, request, room_id):
-        room = Room.objects.get(id=room_id)
-
-        if not room.is_owner(request.user):
-            return _result_page(request, "You're not the owner of the room")
+        room = get_object_or_404(Room, id=room_id, creator__id=request.user.id)
         
         # TODO: 2 factor auth to delete the room
         room.delete()
@@ -44,10 +41,7 @@ class EditRoomView(PermissionMixin, View):
     permission_classes = (IsAuthenticated, )
     
     def post(self, request, room_id):
-        room = Room.objects.get(id=room_id)
-
-        if not room.is_owner(request.user):
-            return _result_page(request, "You're not the owner of the room")
+        room = get_object_or_404(Room, id=room_id, creator__id=request.user.id)
         
         room.name = request.POST['room_name']
         room.save()
@@ -58,10 +52,7 @@ class AddPersonView(PermissionMixin, View):
     permission_classes = (IsAuthenticated, )
     
     def post(self, request, room_id):
-        room = Room.objects.get(id=room_id)
-
-        if not room.is_owner(request.user):
-            return _result_page(request, "You're not the owner of the room")
+        room = get_object_or_404(Room, id=room_id, creator__id=request.user.id)
         
         name = request.POST['person_name']
         email = request.POST['email']
@@ -85,10 +76,7 @@ class AddSpendView(PermissionMixin, View):
     permission_classes = (IsAuthenticated, )
     
     def post(self, request, room_id):
-        room = Room.objects.get(id=room_id)
-
-        if not room.is_owner(request.user):
-            return _result_page(request, "You're not the owner of the room")
+        room = get_object_or_404(Room, id=room_id, creator__id=request.user.id)
         
         amount = request.POST['amount']
         description = request.POST['description']
@@ -118,10 +106,7 @@ class AddTransactionView(PermissionMixin, View):
     permission_classes = (IsAuthenticated, )
     
     def post(self, request, room_id):
-        room = Room.objects.get(id=room_id)
-
-        if not room.is_owner(request.user):
-            return _result_page(request, "You're not the owner of the room")
+        room = get_object_or_404(Room, id=room_id, creator__id=request.user.id)
         
         amount = request.POST['amount']
         payer_id = request.POST['Payer']
