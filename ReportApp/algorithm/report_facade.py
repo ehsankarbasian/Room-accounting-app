@@ -13,6 +13,6 @@ class ReportFacade:
     def get_graph(room):
         graph = _ReportGraph(room)
         # TODO: Stretegy if dynamic is too slow for big inputs
-        simple_graph = _GraphSimplifier().simplify_dynamic(graph)
-        # simple_graph = _GraphSimplifier().simplify_greedy(graph)
+        simple_graph = _GraphSimplifier.simplify_dynamic(graph)
+        # simple_graph = _GraphSimplifier.simplify_greedy(graph)
         return simple_graph

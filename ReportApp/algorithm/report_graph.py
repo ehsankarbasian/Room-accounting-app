@@ -25,8 +25,20 @@ class _Graph:
         _RoomAnalyzer.calculate_room_transaction_result(room, self)
     
     @property
-    def node_degrees(self):
-        return self._node_degrees
+    def non_zero_node_degrees(self):
+        result = self._node_degrees.copy()
+        for key, value in self._node_degrees.items():
+            if value == 0:
+                del result[key]
+        return result
+    
+    @property
+    def nodes(self):
+        return self._node_degrees.keys()
+    
+    @property
+    def degrees(self):
+        return self._node_degrees.values()
     
     def add_edge(self, k, v, weight=1):
         self._node_degrees[k] -= weight

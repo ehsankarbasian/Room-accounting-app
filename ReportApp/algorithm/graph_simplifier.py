@@ -3,34 +3,27 @@ from functools import lru_cache
 from ReportApp.algorithm.report_graph import _Graph
 
 
-class _MockGraph:
-    
-    def __init__(self, nodes, degrees):
-        self.node_degrees = dict(zip(nodes, degrees))
-
-
 class _GraphSimplifier:
     
-    def simplify_greedy(self, graph: _Graph):
-        return self._build_edges_greedy(graph)
+    @staticmethod
+    def simplify_greedy(graph: _Graph):
+        nodes = graph.nodes
+        degrees = graph.degrees
+        return _GraphSimplifier._build_edges_greedy(nodes, degrees)
     
     
-    def simplify_dynamic(self, graph: _Graph):
-        balances = graph.node_degrees
-        
-        # مرتب کنیم طبق اندیس
-        n = max(balances.keys())+1
-        arr = [balances.get(i,0) for i in range(n)]
-        
-        min_e, edges = self._min_transactions_with_edges(arr)
-        return edges
+    @staticmethod
+    def simplify_dynamic(graph: _Graph):
+        balances = graph.non_zero_node_degrees
+        return _GraphSimplifier._build_edges_dynamic(balances)
     
     
-    def _build_edges_greedy(self, graph: _Graph):
+    @staticmethod
+    def _build_edges_greedy(nodes, degrees):
         
         debtor_nodes = []
         creditor_nodes = []
-        for node, degree in graph.node_degrees.items():
+        for node, degree in zip(nodes, degrees):
             if degree < 0:
                 debtor_nodes.append([node, degree])
             elif degree > 0:
@@ -58,47 +51,48 @@ class _GraphSimplifier:
         return edges
     
     
-    def _build_edges_greedy_in_dp(self, sub_ids, sub_vals):
-        graph = _MockGraph(sub_ids, sub_vals)
-        return self._build_edges_greedy(graph)
+    @staticmethod
+    def _build_edges_dynamic(balances: dict):
+        node_count = len(balances)
+        if node_count == 0:
+            return []
         
-    
-    
-    def _min_transactions_with_edges(self, balances):
-        nums = [b for b in balances if b != 0]
-        ids  = [i for i,b in enumerate(balances) if b != 0]
-        n = len(nums)
-        if n == 0:
-            return 0, []
+        degrees = list(balances.values())
+        nodes = list(balances.keys())
 
-        # پیش‌محاسبه مجموع هر subset
-        subset_sum = [0] * (1 << n)
-        for mask in range(1, 1 << n):
-            last = (mask & -mask).bit_length() - 1
-            prev = mask ^ (1 << last)
-            subset_sum[mask] = subset_sum[prev] + nums[last]
+        # PreCalculate subset sums
+        subset_count = 1 << node_count # 2**node_count
+        subset_sums = [0] * subset_count
+        for subset_mask in range(1, subset_count):
+            last = (subset_mask & -subset_mask).bit_length() - 1
+            prev = subset_mask ^ (1 << last)
+            subset_sums[subset_mask] = subset_sums[prev] + degrees[last]
     
 
         @lru_cache(None)
-        def dp(mask):
-            if mask == 0:
-                return (0, [])
-            best = (-1, [])
-            sub = mask
-            while sub:
-                if subset_sum[sub] == 0:
-                    rest_mask = mask ^ sub
-                    val_rest, edges_rest = dp(rest_mask)
-                    # این subset رو با |S|-1 یال حل می‌کنیم
-                    sub_ids = [ids[i] for i in range(n) if (sub>>i)&1]
-                    sub_vals = [nums[i] for i in range(n) if (sub>>i)&1]
-                    edges_sub = self._build_edges_greedy_in_dp(sub_ids, sub_vals)
-                    val_total = 1 + val_rest  # یه گروه صفر بیشتر
-                    if val_total > best[0]:
-                        best = (val_total, edges_rest + edges_sub)
-                sub = (sub-1) & mask
-            return best
+        def get_best_edges(candid_mask):
+            if candid_mask == 0:
+                return 0, []
+            
+            best_match = (-1, [])
+            subset_to_analyze = candid_mask
+            
+            while subset_to_analyze:
+                if subset_sums[subset_to_analyze] == 0:
+                    rest_mask = candid_mask ^ subset_to_analyze
+                    rest_edge_count, rest_edges = get_best_edges(rest_mask)
+                    
+                    subset_nodes = [nodes[i] for i in range(node_count) if (subset_to_analyze>>i)&1]
+                    subset_degrees = [degrees[i] for i in range(node_count) if (subset_to_analyze>>i)&1]
+                    subset_edges = _GraphSimplifier._build_edges_greedy(subset_nodes, subset_degrees)
+                    total_edge_count = 1 + rest_edge_count
+                    if total_edge_count > best_match[0]:
+                        best_match = (total_edge_count, rest_edges + subset_edges)
+                
+                subset_to_analyze = (subset_to_analyze-1) & candid_mask
+            
+            return best_match
 
-        max_groups, edges = dp((1<<n)-1)
-        min_edges = n - max_groups
-        return min_edges, edges
+        initial_candid_mask = subset_count - 1
+        _, edges = get_best_edges(initial_candid_mask)
+        return edges
