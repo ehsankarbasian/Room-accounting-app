@@ -10,6 +10,9 @@ class _ReportGraph(_DirectedGraph):
         # If delete the line above, Error will happen:
         # '_CachedPropertyResetterAdjAndSucc' object is not subscriptable
         
+        if room is None:
+            return
+        
         self._room = room
         self.potential_edges = _RoomAnalyzer.get_room_potential_edges(room)
         _RoomAnalyzer.calculate_room_spend_result(room, self)
