@@ -1,15 +1,8 @@
-from itertools import combinations
-
 
 class _RoomAnalyzer:
     
     def is_room_cleared(graph):
-        return graph.is_empty
-    
-    def get_room_potential_edges(room):
-        person_id_list = room.person_set.values_list('id', flat=True)
-        subsets = list(combinations(person_id_list, 2))
-        return subsets
+        return len(graph) == 0
     
     def calculate_room_spend_result(room, graph):
         spend_list = _RoomAnalyzer._spend_list_generator(room)

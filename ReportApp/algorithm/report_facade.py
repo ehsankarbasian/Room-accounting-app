@@ -1,4 +1,4 @@
-from .report_graph import _ReportGraph
+from .my_graph import _Graph as _ReportGraph
 from .room_analyzer import _RoomAnalyzer
 from .graph_simplifier import _GraphSimplifier
 
