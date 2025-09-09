@@ -24,6 +24,10 @@ class _Graph:
         _RoomAnalyzer.calculate_room_spend_result(room, self)
         _RoomAnalyzer.calculate_room_transaction_result(room, self)
     
+    @property
+    def node_degrees(self):
+        return self._node_degrees
+    
     def add_edge(self, k, v, weight=1):
         self._node_degrees[k] -= weight
         self._node_degrees[v] += weight
