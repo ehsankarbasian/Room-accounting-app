@@ -105,16 +105,39 @@ class RoomLogView(PermissionMixin, PaginationMixin, RawTemplateView):
     def get(self, request, room_id):
         room = get_object_or_404(Room, id=room_id, creator__id=request.user.id)
         
-        log = self._room_log_helper(room)
+        log = self._get_all_log(room)
         log = self.get_paginated_items(request, log)
 
         context = {'log': log, 'room_name': room.name}
         return self.render_to_response(context)
     
     
-    def _room_log_helper(self, room):
-        transactions = room.transaction_set
-        spends = room.spend_set.all().order_by('-date')
+    def _get_all_log(self, room: Room):
+        
+        persons = room.person_set.all()
+        payer_query = Q(payer__in=persons)
+        receiver_query = Q(receiver__in=persons)
+        transactions = (
+            Transaction.objects.filter(payer_query | receiver_query)
+            .select_related("payer", "receiver")
+            .order_by('-date')
+        )
+        
+        spends = (
+            Spend.objects.filter(room=room)
+            .prefetch_related(
+                Prefetch(
+                    "spenders_set",
+                    queryset=Spenders.objects.select_related("spender_person"),
+                    to_attr="prefetched_spenders"
+                ),
+                Prefetch(
+                    "partners_set",
+                    queryset=Partners.objects.select_related("partner_person"),
+                    to_attr="prefetched_partners"
+                )
+            ).order_by('-date')
+        )
 
         log = sorted(chain(transactions, spends),
                     key=lambda item: item.date,
