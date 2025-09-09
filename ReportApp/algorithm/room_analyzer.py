@@ -1,10 +1,15 @@
+from ReportApp.models import Room
+
 
 class _RoomAnalyzer:
     
+    @staticmethod
     def is_room_cleared(graph):
         return len(graph) == 0
     
-    def calculate_room_spend_result(room, graph):
+    
+    @staticmethod
+    def calculate_room_spend_result(room: Room, graph):
         spend_list = _RoomAnalyzer._spend_list_generator(room)
 
         for spend in spend_list:
@@ -37,7 +42,8 @@ class _RoomAnalyzer:
                     graph.add_edge(k, v, weight=weight)
     
     
-    def _spend_list_generator(room):
+    @staticmethod
+    def _spend_list_generator(room: Room):
         # PERFORMANCE: Use prefetch data to avoid N+1 problem
         spend_list = []
         for spend in room.spend_set.all():
@@ -60,7 +66,8 @@ class _RoomAnalyzer:
         return spend_list
     
     
-    def calculate_room_transaction_result(room, graph):
+    @staticmethod
+    def calculate_room_transaction_result(room: Room, graph):
         # PERFORMANCE: Use prefetch data to avoid N+1 problem
         transactions = room.transaction_set
         for transaction in transactions:

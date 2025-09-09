@@ -1,6 +1,6 @@
 from itertools import chain
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views.generic.base import View
 
@@ -48,7 +48,8 @@ class SpendListView(PermissionMixin, PaginationMixin, RawTemplateView):
     page_size = 6
     
     def get(self, request, room_id):
-        room = Room.objects.get(id=room_id)
+        room = get_object_or_404(Room, id=room_id)
+        
         if not room.is_owner(request.user):
             return _result_page(request, "You're not the owner of the room")
         
@@ -66,16 +67,20 @@ class TransactionListView(PermissionMixin, PaginationMixin, RawTemplateView):
     page_size = 8
     
     def get(self, request, room_id):
-        room = Room.objects.get(id=room_id)
+        room = get_object_or_404(Room, id=room_id)
 
         if not room.is_owner(request.user):
             return _result_page(request, "You're not the owner of the room")
-    
+        
         persons = room.person_set.all()
         payer_query = Q(payer__in=persons)
         receiver_query = Q(receiver__in=persons)
-        transactions = Transaction.objects.filter(payer_query | receiver_query).order_by('-date')
-
+        transactions = (
+            Transaction.objects.filter(payer_query | receiver_query)
+            .select_related("payer", "receiver")
+            .order_by('-date')
+        )
+        
         page_object = self.get_paginated_items(request, transactions)
         context = {'transactions': page_object, 'room_name': room.name}
         return self.render_to_response(context)
@@ -88,7 +93,7 @@ class RoomLogView(PermissionMixin, PaginationMixin, RawTemplateView):
     page_size = 8
     
     def get(self, request, room_id):
-        room = Room.objects.get(id=room_id)
+        room = get_object_or_404(Room, id=room_id)
 
         if not room.is_owner(request.user):
             return _result_page(request, "You're not the owner of the room")
@@ -115,7 +120,8 @@ class FinalReportView(PermissionMixin, RawTemplateView):
     template_name = "ReportApp/lists/report.html"
     
     def get(self, request, room_id):
-        room = Room.objects.get(id=room_id)
+        room = get_object_or_404(Room, id=room_id)
+        
         if not room.is_owner(request.user):
             return self._render_result("You're not the owner of the room")
 
@@ -139,7 +145,7 @@ class FinalReportAPI(PermissionMixin, APIView):
     def post(self, request):
         # BUG: User can see another user report
         room_id = request.data['room_id']
-        room = Room.objects.get(id=room_id)
+        room = get_object_or_404(Room, id=room_id)
 
         report_graph = ReportFacade.get_graph(room)
         return Response(report_graph._graph_schema, status=status.HTTP_200_OK)
