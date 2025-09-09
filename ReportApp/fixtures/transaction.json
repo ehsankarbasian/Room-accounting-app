@@ -1,0 +1,198 @@
+[
+    {
+        "model": "ReportApp.Transaction",
+        "pk": 1,
+        "fields": {
+            "payer": 1,
+            "receiver": 3,
+            "date": "2020-10-8 00:00:00+00:00",
+            "amount": 9000
+        }
+    },
+    {
+        "model": "ReportApp.Transaction",
+        "pk": 2,
+        "fields": {
+            "payer": 1,
+            "receiver": 12,
+            "date": "2020-10-8 00:00:00+00:00",
+            "amount": 8500
+        }
+    },
+    {
+        "model": "ReportApp.Transaction",
+        "pk": 3,
+        "fields": {
+            "payer": 3,
+            "receiver": 2,
+            "date": "2020-10-8 00:00:00+00:00",
+            "amount": 1000
+        }
+    },
+    {
+        "model": "ReportApp.Transaction",
+        "pk": 4,
+        "fields": {
+            "payer": 4,
+            "receiver": 6,
+            "date": "2020-10-8 00:00:00+00:00",
+            "amount": 9000
+        }
+    },{
+        "model": "ReportApp.Transaction",
+        "pk": 5,
+        "fields": {
+            "payer": 5,
+            "receiver": 6,
+            "date": "2020-10-8 00:00:00+00:00",
+            "amount": 3500
+        }
+    },
+    {
+        "model": "ReportApp.Transaction",
+        "pk": 6,
+        "fields": {
+            "payer": 7,
+            "receiver": 4,
+            "date": "2020-10-8 00:00:00+00:00",
+            "amount": 3200
+        }
+    },
+    {
+        "model": "ReportApp.Transaction",
+        "pk": 7,
+        "fields": {
+            "payer": 6,
+            "receiver": 7,
+            "date": "2020-10-8 00:00:00+00:00",
+            "amount": 1500
+        }
+    },
+    {
+        "model": "ReportApp.Transaction",
+        "pk": 8,
+        "fields": {
+            "payer": 4,
+            "receiver": 7,
+            "date": "2020-10-8 00:00:00+00:00",
+            "amount": 4000
+        }
+    },{
+        "model": "ReportApp.Transaction",
+        "pk": 9,
+        "fields": {
+            "payer": 5,
+            "receiver": 6,
+            "date": "2020-10-8 00:00:00+00:00",
+            "amount": 15000
+        }
+    },
+    {
+        "model": "ReportApp.Transaction",
+        "pk": 10,
+        "fields": {
+            "payer": 8,
+            "receiver": 13,
+            "date": "2020-10-8 00:00:00+00:00",
+            "amount": 9000
+        }
+    },
+    {
+        "model": "ReportApp.Transaction",
+        "pk": 11,
+        "fields": {
+            "payer": 12,
+            "receiver": 11,
+            "date": "2020-10-8 00:00:00+00:00",
+            "amount": 12000
+        }
+    },
+    {
+        "model": "ReportApp.Transaction",
+        "pk": 12,
+        "fields": {
+            "payer": 15,
+            "receiver": 18,
+            "date": "2020-10-8 00:00:00+00:00",
+            "amount": 4500
+        }
+    },{
+        "model": "ReportApp.Transaction",
+        "pk": 13,
+        "fields": {
+            "payer": 17,
+            "receiver": 16,
+            "date": "2020-10-8 00:00:00+00:00",
+            "amount": 71000
+        }
+    },
+    {
+        "model": "ReportApp.Transaction",
+        "pk": 14,
+        "fields": {
+            "payer": 9,
+            "receiver": 10,
+            "date": "2020-10-8 00:00:00+00:00",
+            "amount": 32000
+        }
+    },
+    {
+        "model": "ReportApp.Transaction",
+        "pk": 15,
+        "fields": {
+            "payer": 10,
+            "receiver": 12,
+            "date": "2020-10-8 00:00:00+00:00",
+            "amount": 16000
+        }
+    },
+    {
+        "model": "ReportApp.Transaction",
+        "pk": 16,
+        "fields": {
+            "payer": 17,
+            "receiver": 14,
+            "date": "2020-10-8 00:00:00+00:00",
+            "amount": 13500
+        }
+    },{
+        "model": "ReportApp.Transaction",
+        "pk": 17,
+        "fields": {
+            "payer": 16,
+            "receiver": 8,
+            "date": "2020-10-8 00:00:00+00:00",
+            "amount": 200
+        }
+    },
+    {
+        "model": "ReportApp.Transaction",
+        "pk": 18,
+        "fields": {
+            "payer": 18,
+            "receiver": 13,
+            "date": "2020-10-8 00:00:00+00:00",
+            "amount": 350
+        }
+    },
+    {
+        "model": "ReportApp.Transaction",
+        "pk": 19,
+        "fields": {
+            "payer": 17,
+            "receiver": 18,
+            "date": "2020-10-8 00:00:00+00:00",
+            "amount": 18600
+        }
+    },
+    {
+        "model": "ReportApp.Transaction",
+        "pk": 20,
+        "fields": {
+            "payer": 14,
+            "receiver": 16,
+            "date": "2020-10-8 00:00:00+00:00",
+            "amount": 17800
+        }
+    }
+]

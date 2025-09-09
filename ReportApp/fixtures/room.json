@@ -3,7 +3,7 @@
         "model": "ReportApp.Room",
         "pk": 1,
         "fields": {
-            "name": "room_1",
+            "name": "Room_1",
             "creator": 1,
             "created_at": "1996-06-13 00:00:00+00:00"
         }
@@ -12,9 +12,36 @@
         "model": "ReportApp.Room",
         "pk": 2,
         "fields": {
-            "name": "room_2",
+            "name": "Room_2",
             "creator": 1,
             "created_at": "1950-02-05 00:00:00+00:00"
+        }
+    },
+    {
+        "model": "ReportApp.Room",
+        "pk": 3,
+        "fields": {
+            "name": "Room_3",
+            "creator": 1,
+            "created_at": "1960-02-05 00:00:00+00:00"
+        }
+    },
+    {
+        "model": "ReportApp.Room",
+        "pk": 4,
+        "fields": {
+            "name": "Room_other_1",
+            "creator": 2,
+            "created_at": "1960-02-05 00:00:00+00:00"
+        }
+    },
+    {
+        "model": "ReportApp.Room",
+        "pk": 5,
+        "fields": {
+            "name": "Room_other_2",
+            "creator": 2,
+            "created_at": "1960-02-05 00:00:00+00:00"
         }
     }
 ]
