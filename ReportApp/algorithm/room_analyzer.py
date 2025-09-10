@@ -1,4 +1,4 @@
-from ReportApp.models import Room, Transaction
+from ReportApp.models import Room, Transaction, Spend
 
 
 class _RoomAnalyzer:
@@ -44,9 +44,13 @@ class _RoomAnalyzer:
     
     @staticmethod
     def _spend_list_generator(room: Room):
-        # PERFORMANCE: Use prefetch data to avoid N+1 problem
+        spends = (
+            Spend.objects.prefetch_with_spenders_and_partners()
+            .filter(room=room)
+        )
         spend_list = []
-        for spend in room.spend_set.all():
+        
+        for spend in spends:
             partner_dict = spend.partner_dict
             partners_sum_of_weight = 0
             for k, v in partner_dict.items():

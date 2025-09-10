@@ -11,6 +11,15 @@ def verbose_name_plural(model_name):
     return 'ERROR: TABLE NAME NOT FOUND IN settings'
 
 
+class DefaultZeroDict(dict):
+    
+    def __getitem__(self, key):
+        if key not in list(self.keys()):
+            return 0
+        
+        return super().__getitem__(key)
+
+
 class User(AbstractUser):
     email = models.EmailField(unique=True)
     phone_number = models.CharField(unique=True, max_length=20, blank=True, null=True)
@@ -107,26 +116,23 @@ class Spend(models.Model):
         related_persons = self.room.person_set.all()
         for person in not_related_persons:
             related_persons = related_persons.exclude(id=person.id)
+            
         return related_persons
 
     @property
     def partner_dict(self):
-        result = dict({})
+        result = DefaultZeroDict()
 
-        for person in self.room.person_set.all():
-            result[person.id] = 0
-        for partner in self.partners_set.all():
+        for partner in self.prefetched_partners:
             result[partner.partner_person.id] = partner.weight
 
         return result
 
     @property
     def spender_dict(self):
-        result = dict({})
+        result = DefaultZeroDict()
 
-        for person in self.room.person_set.all():
-            result[person.id] = 0
-        for spender in self.spenders_set.all():
+        for spender in self.prefetched_spenders:
             result[spender.spender_person.id] = spender.weight
 
         return result
