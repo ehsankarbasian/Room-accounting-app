@@ -1,4 +1,4 @@
-from ReportApp.models import Room
+from ReportApp.models import Room, Transaction
 
 
 class _RoomAnalyzer:
@@ -68,8 +68,10 @@ class _RoomAnalyzer:
     
     @staticmethod
     def calculate_room_transaction_result(room: Room, graph):
-        # PERFORMANCE: Use prefetch data to avoid N+1 problem
-        transactions = room.transaction_set
+        transactions = (
+            Transaction.objects.filter_by_room(room)
+            .select_related_payer_and_receiver()
+        )
         for transaction in transactions:
             payer_id = transaction.payer.id
             receiver_id = transaction.receiver.id
