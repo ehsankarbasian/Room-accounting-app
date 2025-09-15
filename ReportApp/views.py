@@ -8,8 +8,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from django.db.models import Q, Prefetch
-from ReportApp.models import Room, Transaction, Spend, Spenders, Partners
+from ReportApp.models import Room, Transaction, Spend
 from ReportApp.algorithm import ReportFacade
 
 from utils.custom_views.views import RawTemplateView
@@ -36,7 +35,13 @@ class HomeView(PermissionMixin, RawTemplateView):
     
     def get(self, request):
         user = request.user
-        rooms = Room.objects.filter(creator=user).order_by("created_at")
+        
+        rooms = (
+            Room.objects.filter(creator=user)
+            .prefetch_related("person_set")
+            .order_by("created_at")
+        )
+
         context = {'username': user.username, 'rooms': rooms}
         return self.render_to_response(context)
 
