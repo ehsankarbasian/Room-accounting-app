@@ -127,14 +127,19 @@ class FinalReportView(PermissionMixin, RawTemplateView):
     template_name = "ReportApp/lists/report.html"
     
     def get(self, request, room_id):
-        room = get_object_or_404(Room, id=room_id, creator__id=request.user.id)
-
+        room = (
+            get_object_or_404(Room.objects.prefetch_related("person_set"),
+                              id=room_id, 
+                              creator__id=request.user.id)
+        )
+        persons = {person.id: person for person in room.person_set.all()}
+        
         report_graph = ReportFacade.get_graph(room)
         cleared = ReportFacade.is_room_cleared(report_graph)
 
         context = {'result_graph': report_graph,
-                   'mode': 'report_for_clearing',
                    'room_name': room.name,
+                   'persons': persons,
                    'cleared': cleared}
         return self.render_to_response(context)
     

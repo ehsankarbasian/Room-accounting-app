@@ -32,7 +32,7 @@
                 
                 <div style="padding-left: 16px;padding-right: 16px">
                     <h2 title="#TODO: Debtor email: { v.1.email }, Creditor email: { v.2.email }, Debtor phone: {}, Creditor phone{}">
-                        {% get_person_name_by_id edge.0 %} --> {% get_person_name_by_id edge.1 %}: </h2> <h1 style="color: #130022">{{ edge.2|floatformat:0|intcomma }}</h1>
+                        {% get_person_name_by_id persons edge.0 %} --> {% get_person_name_by_id persons edge.1 %}: </h2> <h1 style="color: #130022">{{ edge.2|floatformat:0|intcomma }}</h1>
                 </div>
                 <br>
             </li>
