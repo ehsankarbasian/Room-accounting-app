@@ -1,4 +1,6 @@
-from django.shortcuts import render, redirect
+from itertools import chain
+
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views.generic.base import View
 
@@ -6,10 +8,11 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from ReportApp.models import Room
+from ReportApp.models import Room, Transaction, Spend
 from ReportApp.algorithm import ReportFacade
 
 from utils.custom_views.views import RawTemplateView
+from utils.custom_views.mixins import PaginationMixin
 
 from AuthApp.persmissions.mixins import PermissionMixin
 from AuthApp.persmissions.permissions import IsAuthenticated, AllowAny
@@ -28,30 +31,115 @@ class LandingPageView(PermissionMixin, RawTemplateView):
 
 class HomeView(PermissionMixin, RawTemplateView):
     permission_classes = (IsAuthenticated, )
-    template_name = "OperationApp/room_options.html"
+    template_name = "ReportApp/lists/rooms.html"
     
     def get(self, request):
         user = request.user
-        rooms = Room.objects.filter(creator=user).order_by("created_at")
+        
+        rooms = (
+            Room.objects.filter(creator=user)
+            .prefetch_related("person_set")
+            .order_by("created_at")
+        )
+
         context = {'username': user.username, 'rooms': rooms}
         return self.render_to_response(context)
 
 
-class FinalReportView(PermissionMixin, RawTemplateView):
+# TODO: use ListView
+class SpendListView(PermissionMixin, PaginationMixin, RawTemplateView):
     permission_classes = (IsAuthenticated, )
-    template_name = "ReportApp/list_items/final_result.html"
+    template_name = 'ReportApp/lists/spends.html'
+    page_size = 6
     
     def get(self, request, room_id):
-        room = Room.objects.get(id=room_id)
-        if not room.is_owner(request.user):
-            return self._render_result("You're not the owner of the room")
+        room = get_object_or_404(Room, id=room_id, creator__id=request.user.id)
+        
+        spends = (
+            Spend.objects.prefetch_with_spenders_and_partners()
+            .filter(room=room)
+            .order_by('-date')
+        )
+        
+        page_object = self.get_paginated_items(request, spends)
+        context = {'spends': page_object, 'room_name': room.name}
+        return self.render_to_response(context)
 
+
+# TODO: use ListView
+class TransactionListView(PermissionMixin, PaginationMixin, RawTemplateView):
+    template_name = 'ReportApp/lists/transactions.html'
+    permission_classes = (IsAuthenticated, )
+    page_size = 8
+    
+    def get(self, request, room_id):
+        room = get_object_or_404(Room, id=room_id, creator__id=request.user.id)
+        
+        transactions = (
+            Transaction.objects.filter_by_room(room)
+            .select_related_payer_and_receiver()
+            .order_by('-date')
+        )
+        
+        page_object = self.get_paginated_items(request, transactions)
+        context = {'transactions': page_object, 'room_name': room.name}
+        return self.render_to_response(context)
+
+
+# TODO: use ListView if possible
+class RoomLogView(PermissionMixin, PaginationMixin, RawTemplateView):
+    template_name = 'ReportApp/lists/room_log.html'
+    permission_classes = (IsAuthenticated, )
+    page_size = 8
+    
+    def get(self, request, room_id):
+        room = get_object_or_404(Room, id=room_id, creator__id=request.user.id)
+        
+        log = self._get_all_log(room)
+        log = self.get_paginated_items(request, log)
+
+        context = {'log': log, 'room_name': room.name}
+        return self.render_to_response(context)
+    
+    
+    def _get_all_log(self, room: Room):
+        
+        transactions = (
+            Transaction.objects.filter_by_room(room)
+            .select_related_payer_and_receiver()
+            .order_by('-date')
+        )
+        
+        spends = (
+            Spend.objects.prefetch_with_spenders_and_partners()
+            .filter(room=room)
+            .order_by('-date')
+        )
+
+        log = sorted(chain(transactions, spends),
+                    key=lambda item: item.date,
+                    reverse=True)
+        return log
+
+
+class FinalReportView(PermissionMixin, RawTemplateView):
+    permission_classes = (IsAuthenticated, )
+    template_name = "ReportApp/lists/report.html"
+    
+    def get(self, request, room_id):
+        room = (
+            get_object_or_404(Room.objects.prefetch_related("person_set"),
+                              id=room_id, 
+                              creator__id=request.user.id)
+        )
+        persons = {person.id: person for person in room.person_set.all()}
+        
         report_graph = ReportFacade.get_graph(room)
         cleared = ReportFacade.is_room_cleared(report_graph)
 
         context = {'result_graph': report_graph,
-                   'mode': 'report_for_clearing',
                    'room_name': room.name,
+                   'persons': persons,
                    'cleared': cleared}
         return self.render_to_response(context)
     
@@ -64,9 +152,9 @@ class FinalReportAPI(PermissionMixin, APIView):
     # permission_classes = (IsAuthenticated, )
     
     def post(self, request):
-        # BUG: User can se onother user report
+        # BUG: User can see another user report
         room_id = request.data['room_id']
-        room = Room.objects.get(id=room_id)
+        room = get_object_or_404(Room, id=room_id, creator__id=request.user.id)
 
         report_graph = ReportFacade.get_graph(room)
         return Response(report_graph._graph_schema, status=status.HTTP_200_OK)

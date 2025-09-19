@@ -7,5 +7,14 @@
             "password": "12345",
             "email": "email"
         }
+    },
+    {
+        "model": "ReportApp.User",
+        "pk": 2,
+        "fields": {
+            "username": "user_2",
+            "password": "12346",
+            "email": "email_2"
+        }
     }
 ]

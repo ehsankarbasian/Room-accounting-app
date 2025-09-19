@@ -1,4 +1,4 @@
-from .report_graph import _ReportGraph
+from .report_graph import _Graph as _ReportGraph
 from .room_analyzer import _RoomAnalyzer
 from .graph_simplifier import _GraphSimplifier
 
@@ -11,4 +11,8 @@ class ReportFacade:
     
     @staticmethod
     def get_graph(room):
-        return _ReportGraph(room)
+        graph = _ReportGraph(room)
+        # TODO: Stretegy if dynamic is too slow for big inputs
+        simple_graph = _GraphSimplifier.simplify_dynamic(graph)
+        # simple_graph = _GraphSimplifier.simplify_greedy(graph)
+        return simple_graph

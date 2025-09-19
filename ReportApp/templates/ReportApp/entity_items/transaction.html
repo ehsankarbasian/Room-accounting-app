@@ -1,0 +1,31 @@
+
+<li style="font-size: 50px; background-color: chartreuse; padding: 8px; margin-bottom: 8px">
+
+    <div style="padding-left: 16px;padding-right: 16px; margin-top: 10px"
+            title="date: {{ item.date }}">{{ item.amount }}</div>
+    <br>
+
+    <div style="font-size: 25px; margin-left: 8px">
+        <hr style="font: 14px Georgia,serif;
+            padding: 0;
+            border: 0;
+            height: 0;
+            margin: 0 16px 2px 0;
+            border-top: 1px solid rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);">
+        <b><i>payer: </i></b>
+        {{ item.payer.name }}
+        <br>
+        <hr style="font: 14px Georgia,serif;
+            padding: 0;
+            border: 0;
+            height: 0;
+            margin: 4px 16px 2px 0;
+            border-top: 1px solid rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);">
+        <b><i>receiver: </i></b>
+        {{ item.receiver.name }}
+        <br>
+    </div>
+
+</li>

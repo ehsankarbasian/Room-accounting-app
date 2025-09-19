@@ -1,0 +1,44 @@
+{% extends "ReportApp/base_result_list.html" %}
+
+{% load customtags %}
+{% load humanize %}
+
+
+{% block title %}
+    Final result
+{% endblock %}
+
+
+{% block result_list %}
+    <h1 style="color: #122b40;margin-left: 48px">Result of room <u>{{ room_name }}</u></h1>
+
+    {% if cleared %}
+        <hr>
+        <h1 style="color: #122b40;margin-left: 48px">The room is cleared</h1>
+    {% endif %}
+
+    <ul>
+
+    {% for edge in result_graph %}
+        {% if edge.2 >= 1 %}
+            <li style="font-size: 50px">
+                <hr style="font: 14px Georgia,serif;
+                    padding: 0;
+                    border: 0;
+                    height: 0;
+                    margin: 0 0 0 0;
+                    border-top: 1px solid rgba(0, 0, 0, 0.2);
+                    border-bottom: 1px solid rgba(255, 255, 255, 0.3);">
+                
+                <div style="padding-left: 16px;padding-right: 16px">
+                    <h2 title="#TODO: Debtor email: { v.1.email }, Creditor email: { v.2.email }, Debtor phone: {}, Creditor phone{}">
+                        {% get_person_name_by_id persons edge.0 %} --> {% get_person_name_by_id persons edge.1 %}: </h2> <h1 style="color: #130022">{{ edge.2|floatformat:0|intcomma }}</h1>
+                </div>
+                <br>
+            </li>
+
+        {% endif %}
+
+    {% endfor %}
+    
+{% endblock %}

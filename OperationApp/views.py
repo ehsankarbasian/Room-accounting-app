@@ -1,16 +1,14 @@
 from secrets import token_hex
-from itertools import chain
 from random import randint
 
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.template.loader import get_template
 from django.views.generic.base import View
 
 from ReportApp.models import Room, Person, Spend, Spenders, Partners, Transaction
-from django.db.models import Q
-from utils.email import send_email
-from utils.custom_views.views import RawTemplateView
-from ReportApp.email_generator import EmailGenerator
+
+from RoomAccounting.email_client import send_html_email
+from OperationApp.email_generator import EmailGenerator
 
 from AuthApp.persmissions.mixins import PermissionMixin
 from AuthApp.persmissions.permissions import IsAuthenticated
@@ -32,10 +30,7 @@ class DeleteRoomView(PermissionMixin, View):
     permission_classes = (IsAuthenticated, )
     
     def post(self, request, room_id):
-        room = Room.objects.get(id=room_id)
-
-        if not room.is_owner(request.user):
-            return _result_page(request, "You're not the owner of the room")
+        room = get_object_or_404(Room, id=room_id, creator__id=request.user.id)
         
         # TODO: 2 factor auth to delete the room
         room.delete()
@@ -46,10 +41,7 @@ class EditRoomView(PermissionMixin, View):
     permission_classes = (IsAuthenticated, )
     
     def post(self, request, room_id):
-        room = Room.objects.get(id=room_id)
-
-        if not room.is_owner(request.user):
-            return _result_page(request, "You're not the owner of the room")
+        room = get_object_or_404(Room, id=room_id, creator__id=request.user.id)
         
         room.name = request.POST['room_name']
         room.save()
@@ -60,10 +52,7 @@ class AddPersonView(PermissionMixin, View):
     permission_classes = (IsAuthenticated, )
     
     def post(self, request, room_id):
-        room = Room.objects.get(id=room_id)
-
-        if not room.is_owner(request.user):
-            return _result_page(request, "You're not the owner of the room")
+        room = get_object_or_404(Room, id=room_id, creator__id=request.user.id)
         
         name = request.POST['person_name']
         email = request.POST['email']
@@ -78,7 +67,7 @@ class AddPersonView(PermissionMixin, View):
         html_content = get_template('AuthApp/email_verification.html').render(context=context)
 
         message = "Hello " + name + ". please click on the button below to verify your email"
-        send_email("Verify email", message, [email], html_content)
+        send_html_email("Verify email", message, [email], html_content)
 
         return redirect('ReportApp:home')
 
@@ -87,10 +76,7 @@ class AddSpendView(PermissionMixin, View):
     permission_classes = (IsAuthenticated, )
     
     def post(self, request, room_id):
-        room = Room.objects.get(id=room_id)
-
-        if not room.is_owner(request.user):
-            return _result_page(request, "You're not the owner of the room")
+        room = get_object_or_404(Room, id=room_id, creator__id=request.user.id)
         
         amount = request.POST['amount']
         description = request.POST['description']
@@ -116,29 +102,11 @@ class AddSpendView(PermissionMixin, View):
         return redirect('ReportApp:home')
 
 
-# TODO: use ListView
-class SpendListView(PermissionMixin, RawTemplateView):
-    permission_classes = (IsAuthenticated, )
-    template_name = 'ReportApp/list_items/spend.html'
-    
-    def get(self, request, room_id):
-        room = Room.objects.get(id=room_id)
-        if not room.is_owner(request.user):
-            return _result_page(request, "You're not the owner of the room")
-        
-        spends = room.spend_set.all().order_by('-date')
-        context = {'spends': spends, 'mode': 'spend_log', 'room_name': room.name}
-        return self.render_to_response(context)
-
-
 class AddTransactionView(PermissionMixin, View):
     permission_classes = (IsAuthenticated, )
     
     def post(self, request, room_id):
-        room = Room.objects.get(id=room_id)
-
-        if not room.is_owner(request.user):
-            return _result_page(request, "You're not the owner of the room")
+        room = get_object_or_404(Room, id=room_id, creator__id=request.user.id)
         
         amount = request.POST['amount']
         payer_id = request.POST['Payer']
@@ -153,53 +121,6 @@ class AddTransactionView(PermissionMixin, View):
 
         EmailGenerator.send_new_transaction_to_person(transaction)
         return redirect('ReportApp:home')
-
-
-# TODO: use ListView
-class TransactionListView(PermissionMixin, RawTemplateView):
-    template_name = 'ReportApp/list_items/transaction.html'
-    permission_classes = (IsAuthenticated, )
-    
-    def get(self, request, room_id):
-        room = Room.objects.get(id=room_id)
-
-        if not room.is_owner(request.user):
-            return _result_page(request, "You're not the owner of the room")
-    
-        persons = room.person_set.all()
-        payer_query = Q(payer__in=persons)
-        receiver_query = Q(receiver__in=persons)
-        transactions = Transaction.objects.filter(payer_query | receiver_query).order_by('-date')
-
-        context = {'transactions': transactions, 'mode': 'transaction_log', 'room_name': room.name}
-        return self.render_to_response(context)
-
-
-# TODO: use ListView if possible
-class RoomLogView(PermissionMixin, RawTemplateView):
-    template_name = 'ReportApp/list_items/room_log.html'
-    permission_classes = (IsAuthenticated, )
-    
-    def get(self, request, room_id):
-        room = Room.objects.get(id=room_id)
-
-        if not room.is_owner(request.user):
-            return _result_page(request, "You're not the owner of the room")
-        
-        log = self._room_log_helper(room)
-
-        context = {'log': log, 'mode': 'room_log', 'room_name': room.name}
-        return self.render_to_response(context)
-
-
-    def _room_log_helper(self, room):
-        transactions = room.transaction_set
-        spends = room.spend_set.all().order_by('-date')
-
-        log = sorted(chain(transactions, spends),
-                    key=lambda item: item.date,
-                    reverse=True)
-        return log
 
 
 def _result_page(request, result):

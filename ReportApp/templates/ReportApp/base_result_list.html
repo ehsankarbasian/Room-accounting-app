@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load customtags %}
+
+
+{% block title %} {% endblock %}
+
+
+{% block content %}
+
+    <section id="homepage" style="background: url(../static/assets/img/banner.jpg);">
+
+        <div class="container">
+
+            <div class="row">
+
+                <!-- Items -->
+
+                <div style="padding: 8px">
+
+                    <div id="room_item" style="background-color: #a8dcfdff; padding: 8px; color: #210707">
+                        
+                        {% block result_list %}
+                        {% endblock %}
+
+                        </ul>
+                        <br>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+{% endblock %}

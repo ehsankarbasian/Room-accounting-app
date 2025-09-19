@@ -1,6 +1,5 @@
 from django import template
 
-from ReportApp.models import Person
 from ReportApp.algorithm import ReportFacade
 
 
@@ -22,8 +21,8 @@ def set_cleared(person):
 
 
 @register.simple_tag
-def get_person_name_by_id(id_):
-    return Person.objects.get(id=id_).name
+def get_person_name_by_id(persons, id_):
+    return persons[id_].name
 
 
 class CustomTag:
@@ -43,3 +42,8 @@ def call_function(method_name, *args):
 def callmethod(obj, method_name, *args, **kwargs):
     method = getattr(obj, method_name)
     return method(*args, **kwargs)
+
+
+@register.simple_tag
+def copy_name(obj):
+    return obj

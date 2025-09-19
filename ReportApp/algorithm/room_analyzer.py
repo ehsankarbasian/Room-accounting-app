@@ -1,17 +1,15 @@
-from itertools import combinations
+from ReportApp.models import Room, Transaction, Spend
 
 
 class _RoomAnalyzer:
     
+    @staticmethod
     def is_room_cleared(graph):
-        return graph.is_empty
+        return len(graph) == 0
     
-    def get_room_potential_edges(room):
-        person_id_list = room.person_set.values_list('id', flat=True)
-        subsets = list(combinations(person_id_list, 2))
-        return subsets
     
-    def calculate_room_spend_result(room, graph):
+    @staticmethod
+    def calculate_room_spend_result(room: Room, graph):
         spend_list = _RoomAnalyzer._spend_list_generator(room)
 
         for spend in spend_list:
@@ -44,10 +42,15 @@ class _RoomAnalyzer:
                     graph.add_edge(k, v, weight=weight)
     
     
-    def _spend_list_generator(room):
-        # PERFORMANCE: Use prefetch data to avoid N+1 problem
+    @staticmethod
+    def _spend_list_generator(room: Room):
+        spends = (
+            Spend.objects.prefetch_with_spenders_and_partners()
+            .filter(room=room)
+        )
         spend_list = []
-        for spend in room.spend_set.all():
+        
+        for spend in spends:
             partner_dict = spend.partner_dict
             partners_sum_of_weight = 0
             for k, v in partner_dict.items():
@@ -67,9 +70,12 @@ class _RoomAnalyzer:
         return spend_list
     
     
-    def calculate_room_transaction_result(room, graph):
-        # PERFORMANCE: Use prefetch data to avoid N+1 problem
-        transactions = room.transaction_set
+    @staticmethod
+    def calculate_room_transaction_result(room: Room, graph):
+        transactions = (
+            Transaction.objects.filter_by_room(room)
+            .select_related_payer_and_receiver()
+        )
         for transaction in transactions:
             payer_id = transaction.payer.id
             receiver_id = transaction.receiver.id

@@ -1,0 +1,29 @@
+{% extends "ReportApp/base_result_list.html" %}
+
+{% load customtags %}
+
+
+{% block title %}
+    Room log
+{% endblock %}
+
+
+{% block result_list %}
+    <h1 style="color: #122b40;margin-left: 48px" title="room log">
+        Room name: {{ room_name }}</h1>
+    <ul>
+
+    {% for item in log %}
+
+        {% if item.is_transaction %}
+            {% include "ReportApp/entity_items/transaction.html" %}
+        {% else %}
+            {% include "ReportApp/entity_items/spend.html" %}
+        {% endif %}
+
+    {% endfor %}
+
+    {% copy_name log as page_obj %}
+    {% include "ReportApp/helpers/pagination.html" %}
+
+{% endblock %}
