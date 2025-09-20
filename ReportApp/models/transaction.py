@@ -3,12 +3,15 @@ from django.db.models import Q
 
 from ReportApp.models._base import verbose_name_plural
 
-from ReportApp.models import Room
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from ReportApp.models import Room
 
 
 class TransactionQuerySet(models.QuerySet):
     
-    def filter_by_room(self, room: Room):
+    def filter_by_room(self, room: "Room"):
         persons = room.person_set.all()
         payer_query = Q(payer__in=persons)
         receiver_query = Q(receiver__in=persons)
@@ -23,7 +26,7 @@ class TransactionManager(models.Manager):
     def get_queryset(self):
         return TransactionQuerySet(self.model, using=self._db)
 
-    def filter_by_room(self, room: Room):
+    def filter_by_room(self, room: "Room"):
         return self.get_queryset().filter_by_room(room)
     
     def select_related_payer_and_receiver(self):
