@@ -8,7 +8,7 @@ from django.contrib.auth import login, logout
 from django.shortcuts import redirect, render
 from django.template.loader import get_template
 
-from ReportApp.models import User
+from ReportApp.models import user
 from RoomAccounting.email_client import send_html_email
 
 from utils.custom_views.views import RawTemplateView
@@ -29,7 +29,7 @@ class SignUpView(PermissionMixin, RawTemplateView):
         username = request.POST['username']
         password = request.POST['password']
 
-        User.objects.create_user(username=username,
+        user.objects.create_user(username=username,
                                 password=password,
                                 email=email,
                                 phone_number=phone_number,
@@ -75,7 +75,7 @@ class ForgotPasswordView(PermissionMixin, RawTemplateView):
     def get(self, request):
         email = request.GET['email']
 
-        user = User.objects.filter(email=email)
+        user = user.objects.filter(email=email)
         if user.count() == 0:
             context = {'result': "User not found"}
             return self.render_to_response(context, status=status.HTTP_404_NOT_FOUND)
@@ -112,7 +112,7 @@ class ResetPasswordByTokenAPI(PermissionMixin, APIView):
         password_1 = request.POST['password_1']
         password_2 = request.POST['password_2']
 
-        user = User.objects.filter(email=email)
+        user = user.objects.filter(email=email)
         if user.count() == 0:
             return self._render_result("User not found")
 
