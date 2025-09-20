@@ -73,6 +73,7 @@ INSTALLED_APPS = [
     'AuthApp.apps.AuthAppConfig',
     'OperationApp.apps.OperationAppConfig',
     'ReportApp.apps.ReportAppConfig',
+    'NotificationApp.apps.NotificationAppConfig',
 ]
 
 MIDDLEWARE = [
