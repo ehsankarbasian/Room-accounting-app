@@ -23,7 +23,7 @@ class AddRoomView(PermissionMixin, View):
     def post(self, request):
         room_name = request.POST['room_name']
         Room.objects.create(name=room_name, creator=request.user)
-        return redirect('apps.ReportApp:home')
+        return redirect('ReportApp:home')
 
 
 class DeleteRoomView(PermissionMixin, View):
@@ -34,7 +34,7 @@ class DeleteRoomView(PermissionMixin, View):
         
         # TODO: 2 factor auth to delete the room
         room.delete()
-        return redirect('apps.ReportApp:home')
+        return redirect('ReportApp:home')
 
 
 class EditRoomView(PermissionMixin, View):
@@ -45,7 +45,7 @@ class EditRoomView(PermissionMixin, View):
         
         room.name = request.POST['room_name']
         room.save()
-        return redirect('apps.ReportApp:home')
+        return redirect('ReportApp:home')
 
 
 class AddPersonView(PermissionMixin, View):
@@ -69,7 +69,7 @@ class AddPersonView(PermissionMixin, View):
         message = "Hello " + name + ". please click on the button below to verify your email"
         send_html_email("Verify email", message, [email], html_content)
 
-        return redirect('apps.ReportApp:home')
+        return redirect('ReportApp:home')
 
 
 class AddSpendView(PermissionMixin, View):
@@ -99,7 +99,7 @@ class AddSpendView(PermissionMixin, View):
 
         spend = Spend.objects.get(id=spend.id)
         EmailGenerator.send_new_spend_to_person(spend)
-        return redirect('apps.ReportApp:home')
+        return redirect('ReportApp:home')
 
 
 class AddTransactionView(PermissionMixin, View):
@@ -120,7 +120,7 @@ class AddTransactionView(PermissionMixin, View):
         transaction = Transaction.objects.create(amount=amount, payer=payer, receiver=receiver)
 
         EmailGenerator.send_new_transaction_to_person(transaction)
-        return redirect('apps.ReportApp:home')
+        return redirect('ReportApp:home')
 
 
 def _result_page(request, result):
