@@ -26,8 +26,6 @@ from apps.AuthApp.apps import AuthAppConfig
 from apps.ReportApp.apps import ReportAppConfig
 from apps.OperationApp.apps import OperationAppConfig
 
-import debug_toolbar
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -37,9 +35,13 @@ urlpatterns = [
     path(AuthAppConfig.name + "/", include('apps.AuthApp.urls')),
     path(ReportAppConfig.name + "/", include('apps.ReportApp.urls')),
     path(OperationAppConfig.name + "/", include('apps.OperationApp.urls')),
-    
-    path('__debug__/', include(debug_toolbar.urls)),
 ]
+
+
+# if settings.DEBUG:
+#     import debug_toolbar
+#     urlpatterns += [path('__debug__/', include(debug_toolbar.urls)),]
+
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
