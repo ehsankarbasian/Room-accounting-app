@@ -6,5 +6,6 @@ smsir-python
 requests
 dotenv
 
-django-debug-toolbar # develop mode
-matplotlib # Just to develop graph algorithms. (Not nrcessary for production)
+
+# Develop mode:
+# django-debug-toolbar
