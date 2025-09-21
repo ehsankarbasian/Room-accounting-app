@@ -1,6 +1,6 @@
 from django.utils.functional import classproperty
 
-from AuthApp.persmissions.abstract import AbstractPermissionMessage, AbstractPermissionException
+from apps.AuthApp.persmissions.abstract import AbstractPermissionMessage, AbstractPermissionException
 
 
 class AllowAny(AbstractPermissionMessage):

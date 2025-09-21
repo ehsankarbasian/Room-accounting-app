@@ -1,4 +1,4 @@
-from ReportApp.models import Room, Transaction, Spend
+from apps.ReportApp.models import Room, Transaction, Spend
 
 
 class _RoomAnalyzer:

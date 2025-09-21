@@ -8,14 +8,14 @@ from django.contrib.auth import login, logout
 from django.shortcuts import redirect, render
 from django.template.loader import get_template
 
-from ReportApp.models import user
+from apps.ReportApp.models import user
 from core.email_client import send_html_email
 
 from utils.custom_views.views import RawTemplateView
 from django.views.generic.base import View
 
-from AuthApp.persmissions.mixins import PermissionMixin
-from AuthApp.persmissions.permissions import IsAuthenticated, IsAnonymous
+from apps.AuthApp.persmissions.mixins import PermissionMixin
+from apps.AuthApp.persmissions.permissions import IsAuthenticated, IsAnonymous
 
 
 class SignUpView(PermissionMixin, RawTemplateView):
@@ -57,7 +57,7 @@ class SignInView(PermissionMixin, RawTemplateView):
             # return self.render_to_response(context, status=status.HTTP_401_UNAUTHORIZED)
 
         login(request, user)
-        return redirect('ReportApp:home')
+        return redirect('apps.ReportApp:home')
 
 
 class LogOutView(PermissionMixin, View):

@@ -1,9 +1,10 @@
 from django.urls import path
 
-from OperationApp.views import AddRoomView, DeleteRoomView, EditRoomView, AddPersonView, AddSpendView, AddTransactionView
-from OperationApp.apps import OperationAppConfig
+from apps.OperationApp.views import AddRoomView, DeleteRoomView, EditRoomView, AddPersonView, AddSpendView, AddTransactionView
+from apps.OperationApp.apps import OperationAppConfig
 
-app_name = OperationAppConfig.name
+# Auto-generate app_name from AppConfig.name to handle optional 'apps.' prefix
+app_name = OperationAppConfig.name.split('.')[-1]
 
 
 urlpatterns = [

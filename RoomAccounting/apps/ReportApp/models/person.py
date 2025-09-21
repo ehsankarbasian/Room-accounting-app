@@ -1,9 +1,9 @@
 from django.db import models
 from django.db.models import Q
 
-from ReportApp.models._base import verbose_name_plural
+from apps.ReportApp.models._base import verbose_name_plural
 
-from ReportApp.models import Transaction, Spend
+from apps.ReportApp.models import Transaction, Spend
 
 
 class Person(models.Model):

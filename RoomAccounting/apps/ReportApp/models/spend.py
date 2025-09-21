@@ -1,9 +1,9 @@
 from django.db import models
 from django.db.models import Prefetch
 
-from ReportApp.models._base import verbose_name_plural, DefaultZeroDict
+from apps.ReportApp.models._base import verbose_name_plural, DefaultZeroDict
 
-from ReportApp.models import Spenders, Partners
+from apps.ReportApp.models import Spenders, Partners
 
 
 class SpendQuerySet(models.QuerySet):

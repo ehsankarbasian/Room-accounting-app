@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
-from ReportApp.models._base import verbose_name_plural
+from apps.ReportApp.models._base import verbose_name_plural
 
 
 class User(AbstractUser):

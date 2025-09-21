@@ -13,17 +13,18 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import path
 from django.urls import include
 from django.conf import settings
 from django.conf.urls.static import static
 
-from ReportApp.views import LandingPageView
+from apps.ReportApp.views import LandingPageView
 
-from AuthApp.apps import AuthAppConfig
-from ReportApp.apps import ReportAppConfig
-from OperationApp.apps import OperationAppConfig
+from apps.AuthApp.apps import AuthAppConfig
+from apps.ReportApp.apps import ReportAppConfig
+from apps.OperationApp.apps import OperationAppConfig
 
 import debug_toolbar
 
@@ -33,9 +34,9 @@ urlpatterns = [
     
     path('', LandingPageView.as_view(), name='landing_page'),
     
-    path(AuthAppConfig.name + "/", include('AuthApp.urls')),
-    path(ReportAppConfig.name + "/", include('ReportApp.urls')),
-    path(OperationAppConfig.name + "/", include('OperationApp.urls')),
+    path(AuthAppConfig.name + "/", include('apps.AuthApp.urls')),
+    path(ReportAppConfig.name + "/", include('apps.ReportApp.urls')),
+    path(OperationAppConfig.name + "/", include('apps.OperationApp.urls')),
     
     path('__debug__/', include(debug_toolbar.urls)),
 ]

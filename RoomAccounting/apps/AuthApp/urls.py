@@ -1,9 +1,10 @@
 from django.urls import path
 
-from AuthApp.views import SignUpView, SignInView, LogOutView, ForgotPasswordView, ResetPasswordByTokenAPI
-from AuthApp.apps import AuthAppConfig
+from apps.AuthApp.views import SignUpView, SignInView, LogOutView, ForgotPasswordView, ResetPasswordByTokenAPI
+from apps.AuthApp.apps import AuthAppConfig
 
-app_name = AuthAppConfig.name
+# Auto-generate app_name from AppConfig.name to handle optional 'apps.' prefix
+app_name = AuthAppConfig.name.split('.')[-1]
 
 
 urlpatterns = [

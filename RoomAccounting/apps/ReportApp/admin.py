@@ -1,5 +1,5 @@
 from django.contrib import admin
-from ReportApp.models import Room, Person, Spend, Spenders, Partners, User, Token, Transaction
+from apps.ReportApp.models import Room, Person, Spend, Spenders, Partners, User, Token, Transaction
 
 
 class RoomInLine(admin.TabularInline):

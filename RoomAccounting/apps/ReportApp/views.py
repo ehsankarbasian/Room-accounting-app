@@ -8,14 +8,14 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from ReportApp.models import Room, Transaction, Spend
-from ReportApp.algorithm import ReportFacade
+from apps.ReportApp.models import Room, Transaction, Spend
+from apps.ReportApp.algorithm import ReportFacade
 
 from utils.custom_views.views import RawTemplateView
 from utils.custom_views.mixins import PaginationMixin
 
-from AuthApp.persmissions.mixins import PermissionMixin
-from AuthApp.persmissions.permissions import IsAuthenticated, AllowAny
+from apps.AuthApp.persmissions.mixins import PermissionMixin
+from apps.AuthApp.persmissions.permissions import IsAuthenticated, AllowAny
 
 
 class LandingPageView(PermissionMixin, RawTemplateView):
@@ -24,7 +24,7 @@ class LandingPageView(PermissionMixin, RawTemplateView):
     
     def get(self, request):
         if not request.user.is_anonymous:
-            return redirect(reverse('ReportApp:home'))
+            return redirect(reverse('apps.ReportApp:home'))
 
         return self.render_to_response(context=None)
 

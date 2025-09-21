@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 
-from AuthApp.persmissions.abstract import _AbstractBasePermission, AbstractPermissionMessage, AbstractPermissionException
+from apps.AuthApp.persmissions.abstract import _AbstractBasePermission, AbstractPermissionMessage, AbstractPermissionException
 
 
 class PermissionMixin:

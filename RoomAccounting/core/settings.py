@@ -70,10 +70,10 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'django.contrib.humanize',
     
-    'AuthApp.apps.AuthAppConfig',
-    'OperationApp.apps.OperationAppConfig',
-    'ReportApp.apps.ReportAppConfig',
-    'NotificationApp.apps.NotificationAppConfig',
+    'apps.AuthApp.apps.AuthAppConfig',
+    'apps.OperationApp.apps.OperationAppConfig',
+    'apps.ReportApp.apps.ReportAppConfig',
+    'apps.NotificationApp.apps.NotificationAppConfig',
 ]
 
 MIDDLEWARE = [

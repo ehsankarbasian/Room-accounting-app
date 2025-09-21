@@ -1,10 +1,11 @@
 from django.urls import path
 
-from ReportApp.views import HomeView, FinalReportAPI, ReportEmailView
-from ReportApp.views import FinalReportView, SpendListView, TransactionListView, RoomLogView
-from ReportApp.apps import ReportAppConfig
+from apps.ReportApp.views import HomeView, FinalReportAPI, ReportEmailView
+from apps.ReportApp.views import FinalReportView, SpendListView, TransactionListView, RoomLogView
+from apps.ReportApp.apps import ReportAppConfig
 
-app_name = ReportAppConfig.name
+# Auto-generate app_name from AppConfig.name to handle optional 'apps.' prefix
+app_name = ReportAppConfig.name.split('.')[-1]
 
 
 urlpatterns = [

@@ -5,13 +5,13 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.template.loader import get_template
 from django.views.generic.base import View
 
-from ReportApp.models import Room, Person, Spend, Spenders, Partners, Transaction
+from apps.ReportApp.models import Room, Person, Spend, Spenders, Partners, Transaction
 
 from core.email_client import send_html_email
-from OperationApp.email_generator import EmailGenerator
+from apps.OperationApp.email_generator import EmailGenerator
 
-from AuthApp.persmissions.mixins import PermissionMixin
-from AuthApp.persmissions.permissions import IsAuthenticated
+from apps.AuthApp.persmissions.mixins import PermissionMixin
+from apps.AuthApp.persmissions.permissions import IsAuthenticated
 
 
 # TODO: Use ModelViews to CRUD
@@ -23,7 +23,7 @@ class AddRoomView(PermissionMixin, View):
     def post(self, request):
         room_name = request.POST['room_name']
         Room.objects.create(name=room_name, creator=request.user)
-        return redirect('ReportApp:home')
+        return redirect('apps.ReportApp:home')
 
 
 class DeleteRoomView(PermissionMixin, View):
@@ -34,7 +34,7 @@ class DeleteRoomView(PermissionMixin, View):
         
         # TODO: 2 factor auth to delete the room
         room.delete()
-        return redirect('ReportApp:home')
+        return redirect('apps.ReportApp:home')
 
 
 class EditRoomView(PermissionMixin, View):
@@ -45,7 +45,7 @@ class EditRoomView(PermissionMixin, View):
         
         room.name = request.POST['room_name']
         room.save()
-        return redirect('ReportApp:home')
+        return redirect('apps.ReportApp:home')
 
 
 class AddPersonView(PermissionMixin, View):
@@ -69,7 +69,7 @@ class AddPersonView(PermissionMixin, View):
         message = "Hello " + name + ". please click on the button below to verify your email"
         send_html_email("Verify email", message, [email], html_content)
 
-        return redirect('ReportApp:home')
+        return redirect('apps.ReportApp:home')
 
 
 class AddSpendView(PermissionMixin, View):
@@ -99,7 +99,7 @@ class AddSpendView(PermissionMixin, View):
 
         spend = Spend.objects.get(id=spend.id)
         EmailGenerator.send_new_spend_to_person(spend)
-        return redirect('ReportApp:home')
+        return redirect('apps.ReportApp:home')
 
 
 class AddTransactionView(PermissionMixin, View):
@@ -120,7 +120,7 @@ class AddTransactionView(PermissionMixin, View):
         transaction = Transaction.objects.create(amount=amount, payer=payer, receiver=receiver)
 
         EmailGenerator.send_new_transaction_to_person(transaction)
-        return redirect('ReportApp:home')
+        return redirect('apps.ReportApp:home')
 
 
 def _result_page(request, result):
