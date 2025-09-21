@@ -1,6 +1,6 @@
 from itertools import chain
 
-from RoomAccounting.email_client import send_text_email
+from core.email_client import send_text_email
 
 
 class EmailGenerator:

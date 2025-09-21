@@ -9,7 +9,7 @@ from django.shortcuts import redirect, render
 from django.template.loader import get_template
 
 from ReportApp.models import user
-from RoomAccounting.email_client import send_html_email
+from core.email_client import send_html_email
 
 from utils.custom_views.views import RawTemplateView
 from django.views.generic.base import View

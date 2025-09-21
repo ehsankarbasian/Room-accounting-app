@@ -7,7 +7,7 @@ from django.views.generic.base import View
 
 from ReportApp.models import Room, Person, Spend, Spenders, Partners, Transaction
 
-from RoomAccounting.email_client import send_html_email
+from core.email_client import send_html_email
 from OperationApp.email_generator import EmailGenerator
 
 from AuthApp.persmissions.mixins import PermissionMixin

@@ -1,4 +1,4 @@
-from RoomAccounting.settings import ADMIN_PRIORITY
+from core.settings import ADMIN_PRIORITY
 
 
 def verbose_name_plural(model_name):

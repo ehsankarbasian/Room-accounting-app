@@ -2,7 +2,7 @@
 from django.core.mail import send_mail as _send_mail
 from django.core.mail import EmailMultiAlternatives as _Email
 
-from RoomAccounting.settings import DEFAULT_FROM_EMAIL
+from core.settings import DEFAULT_FROM_EMAIL
 
 
 def send_html_email(subject, message, to_list, html_content):
