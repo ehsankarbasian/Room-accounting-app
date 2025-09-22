@@ -10,7 +10,7 @@ class NotificationMethod(models.Model):
     class MethodType(models.TextChoices):
         EMAIL = "email", _("Email")
         SMS = "sms", _("SMS")
-        TELEGRAM = "telegram", _("Telegram")
+        # TELEGRAM = "telegram", _("Telegram")
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -35,6 +35,11 @@ class NotificationMethod(models.Model):
         default=False,
         verbose_name=_("Is Verified"),
         help_text=_("True when user has confirmed this channel"),
+    )
+    
+    is_primary = models.BooleanField(
+        default=False,
+        verbose_name=_("Is Primary"),
     )
 
     created_at = models.DateTimeField(auto_now_add=True)
