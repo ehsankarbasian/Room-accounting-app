@@ -1,4 +1,4 @@
-from .otp import OtpPayload
+from .concrete.otp import OtpPayload
 
 
 PAYLOAD_MAP = {

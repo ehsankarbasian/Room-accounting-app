@@ -1,4 +1,4 @@
-from .interface import MessageSenderInterface
+from ..interface import MessageSenderInterface
 from apps.NotificationApp.message_strategy.payloads import PAYLOAD_MAP
 
 

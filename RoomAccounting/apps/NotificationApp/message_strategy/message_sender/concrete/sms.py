@@ -1,4 +1,4 @@
-from .interface import MessageSenderInterface
+from ..interface import MessageSenderInterface
 
 
 class SmsSender(MessageSenderInterface):

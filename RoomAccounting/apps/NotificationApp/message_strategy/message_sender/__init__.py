@@ -1,5 +1,5 @@
-from .email import EmailSender
-from .sms import SmsSender
+from .concrete.email import EmailSender
+from .concrete.sms import SmsSender
 
 
 SENDER_MAP = {
