@@ -1,6 +1,6 @@
 from functools import lru_cache
 
-from apps.ReportApp.algorithm.report_graph import _Graph
+from apps.ReportApp.graph_core.report_graph import _Graph
 
 
 class _GraphSimplifier:

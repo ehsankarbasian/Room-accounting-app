@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from apps.ReportApp.models import Room, Transaction, Spend
-from apps.ReportApp.algorithm import ReportFacade
+from apps.ReportApp.graph_core import ReportFacade
 
 from utils.custom_views.views import RawTemplateView
 from utils.custom_views.mixins import PaginationMixin

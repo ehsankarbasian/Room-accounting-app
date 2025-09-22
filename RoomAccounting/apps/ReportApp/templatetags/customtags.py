@@ -1,6 +1,6 @@
 from django import template
 
-from apps.ReportApp.algorithm import ReportFacade
+from apps.ReportApp.graph_core import ReportFacade
 
 
 register = template.Library()

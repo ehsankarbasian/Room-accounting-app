@@ -1,7 +1,7 @@
 from itertools import combinations as get_subsets
 
 from apps.ReportApp.models import Room
-from apps.ReportApp.algorithm.room_analyzer import _RoomAnalyzer
+from apps.ReportApp.graph_core.room_analyzer import _RoomAnalyzer
 
 
 class _Graph:
