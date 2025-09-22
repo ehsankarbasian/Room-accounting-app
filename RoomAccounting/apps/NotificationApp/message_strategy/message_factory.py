@@ -1,17 +1,11 @@
-from .message_sender.email import EmailSender
-from .message_sender.sms import SmsSender
+from .config import SENDER_MAP
+
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING or True:
     from apps.ReportApp.models import User
     from apps.NotificationApp.models import NotificationMethod
     from .message_sender.interface import MessageSenderInterface
-
-
-SENDER_MAP = {
-    "email": EmailSender,
-    "sms": SmsSender,
-}
 
 
 class MessageFactory:

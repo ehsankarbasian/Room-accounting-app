@@ -1,4 +1,5 @@
 from .interface import MessageSenderInterface
+from apps.NotificationApp.message_strategy.config import PAYLOAD_MAP
 
 
 class EmailSender(MessageSenderInterface):
@@ -7,7 +8,8 @@ class EmailSender(MessageSenderInterface):
         self.build_payload(message_type, context)
     
     def build_payload(self, message_type, context):
-        text = f'Your _payload is {context}'
+        payload = PAYLOAD_MAP[message_type]
+        text = payload.build(context)
         self._payload = text
         print(f'payload setted: {text}')
     

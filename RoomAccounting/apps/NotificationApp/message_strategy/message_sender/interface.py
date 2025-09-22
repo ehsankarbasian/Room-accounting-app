@@ -14,7 +14,6 @@ class MessageSenderInterface(ABC):
     @property
     @abstractmethod
     def payload(self):
-        # return self.build_payload(message_type=message_type, context=context)
         pass
     
     @abstractmethod
