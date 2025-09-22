@@ -1,4 +1,4 @@
-from .config import SENDER_MAP
+from .message_sender import SENDER_MAP
 
 
 from typing import TYPE_CHECKING
