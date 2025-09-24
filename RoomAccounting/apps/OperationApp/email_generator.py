@@ -1,6 +1,6 @@
 from itertools import chain
 
-from core.email_client import send_text_email
+from apps.NotificationApp.core import NotificationFacade
 
 
 class EmailGenerator:
