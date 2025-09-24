@@ -1,2 +1,2 @@
-from .otp.payload import OtpPayload
-from .reset_password.payload import ResetPasswordPayload
+from .otp.draft import OtpDraft
+from .reset_password.draft import ResetPasswordDraft

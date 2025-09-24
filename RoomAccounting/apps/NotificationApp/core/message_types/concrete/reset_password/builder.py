@@ -1,5 +1,5 @@
 from ...interface.builder_interface import MessageBuilderInterface
-from .payload import ResetPasswordPayload
+from .draft import ResetPasswordDraft
 
 
 from django.template.loader import get_template
@@ -8,7 +8,7 @@ from django.template.loader import get_template
 class ResetPasswordBuilder(MessageBuilderInterface):
     
     def build_message(self, context: dict):
-        payload = ResetPasswordPayload.build(context)
+        payload = ResetPasswordDraft.build(context)
         
         email = context['identifier']
         context = {

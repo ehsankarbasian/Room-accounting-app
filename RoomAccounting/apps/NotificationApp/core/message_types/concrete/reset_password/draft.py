@@ -1,7 +1,7 @@
-from ...interface.payload_interface import PayloadInterface
+from ...interface.draft_interface import DraftInterface
 
 
-class ResetPasswordPayload(PayloadInterface):
+class ResetPasswordDraft(DraftInterface):
     
     @staticmethod
     def build(context):

@@ -1,13 +1,13 @@
-from .concrete import OtpPayload
-from .concrete import ResetPasswordPayload
+from .concrete import OtpDraft
+from .concrete import ResetPasswordDraft
 
 from .concrete.otp.builder import OTPBuilder
 from .concrete.reset_password.builder import ResetPasswordBuilder
 
 
 PAYLOAD_MAP = {
-    "otp": OtpPayload,
-    "reset_password": ResetPasswordPayload,
+    "otp": OtpDraft,
+    "reset_password": ResetPasswordDraft,
 }
 
 BUILDER_MAP = {
