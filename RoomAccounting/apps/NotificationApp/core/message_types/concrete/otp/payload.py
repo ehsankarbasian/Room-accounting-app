@@ -1,4 +1,4 @@
-from ..interface import PayloadInterface
+from ....payloads.interface import PayloadInterface
 from django.template.loader import render_to_string
 
 

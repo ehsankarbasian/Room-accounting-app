@@ -1,11 +1,11 @@
-from .message_sender import SENDER_MAP
+from ..message_sender import SENDER_MAP
 
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING or True:
     from apps.ReportApp.models import User
     from apps.NotificationApp.models import NotificationMethod
-    from .message_sender.interface import MessageSenderInterface
+    from ..message_sender.interface.sender_interface import MessageSenderInterface
 
 
 class MessageFactory:
@@ -15,9 +15,8 @@ class MessageFactory:
                    message_type: str,
                    context: dict
                    ) -> MessageSenderInterface:
-        # method: NotificationMethod = user.notification_methods.get(is_primary=True)
-        method: NotificationMethod = user.notification_methods.get()
-        context["identifier"] = method.identifier
+        method: NotificationMethod = NotificationMethod.objects.get(user=user, is_primary=True)
+        # context["identifier"] = method.identifier
         
         SenderClass = SENDER_MAP[method.method_type]
         sender: MessageSenderInterface = SenderClass(message_type=message_type,
