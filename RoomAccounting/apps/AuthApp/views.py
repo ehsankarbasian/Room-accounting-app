@@ -6,13 +6,13 @@ from rest_framework.views import APIView
 from django.contrib.auth import authenticate
 from django.contrib.auth import login, logout
 from django.shortcuts import redirect, render
-from django.template.loader import get_template
-
-from apps.ReportApp.models import user
-from core.email_client import send_html_email
 
 from utils.custom_views.views import RawTemplateView
 from django.views.generic.base import View
+
+from apps.ReportApp.models import User
+
+from apps.NotificationApp.core import NotificationFacade
 
 from apps.AuthApp.persmissions.mixins import PermissionMixin
 from apps.AuthApp.persmissions.permissions import IsAuthenticated, IsAnonymous
@@ -29,7 +29,7 @@ class SignUpView(PermissionMixin, RawTemplateView):
         username = request.POST['username']
         password = request.POST['password']
 
-        user.objects.create_user(username=username,
+        User.objects.create_user(username=username,
                                 password=password,
                                 email=email,
                                 phone_number=phone_number,
@@ -75,32 +75,17 @@ class ForgotPasswordView(PermissionMixin, RawTemplateView):
     def get(self, request):
         email = request.GET['email']
 
-        user = user.objects.filter(email=email)
+        user = User.objects.filter(email=email)
         if user.count() == 0:
             context = {'result': "User not found"}
             return self.render_to_response(context, status=status.HTTP_404_NOT_FOUND)
 
         user = user[0]
         reset_password_token = user.token.reset_pass_token
-        self._send_reset_pass_email(email, user.fullname, reset_password_token)
+        NotificationFacade.send_reset_password(user, email, reset_password_token)
 
         context={'result': "Email sent"}
         return self.render_to_response(context)
-    
-    
-    def _send_reset_pass_email(email, fullname, token):
-        context = {
-            # 'HOST': HOST,
-            # 'PORT': PORT,
-            # 'app_base_url': ROOM_ACCOUNTING_APP_BASE_URL,
-            'email': email,
-            'name': fullname,
-            'token': token}
-        html_content = get_template('AuthApp/reset_password.html').render(context=context)
-        send_html_email(subject='reset password',
-                message='message',
-                to_list=[email],
-                html_content=html_content)
 
 
 class ResetPasswordByTokenAPI(PermissionMixin, APIView):

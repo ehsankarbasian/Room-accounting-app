@@ -13,7 +13,7 @@ class MessageSenderInterface(ABC):
     
     @property
     @abstractmethod
-    def payload(self):
+    def message(self):
         pass
     
     @abstractmethod
