@@ -1,5 +1,6 @@
 from ..interface.sender_interface import MessageSenderInterface
-from apps.NotificationApp.core.payloads import PAYLOAD_MAP
+from apps.NotificationApp.core.message_types import PAYLOAD_MAP
+# from apps.NotificationApp.core.message_sender impor
 
 
 class EmailSender(MessageSenderInterface):

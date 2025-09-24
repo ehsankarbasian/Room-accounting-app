@@ -1,5 +1,5 @@
-from ..message_types.concrete.otp.otp import OtpPayload
-from ..message_types.concrete.reset_password.reset_password import ResetPasswordPayload
+from .concrete import OtpPayload
+from .concrete import ResetPasswordPayload
 
 
 PAYLOAD_MAP = {
