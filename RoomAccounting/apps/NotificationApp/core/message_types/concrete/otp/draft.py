@@ -1,6 +1,9 @@
 from ...interface.draft_interface import DraftInterface
 
+from apps.NotificationApp.core.registry import PayloadRegistry
 
+
+@PayloadRegistry.register(name="otp")
 class OtpDraft(DraftInterface):
     
     @staticmethod
