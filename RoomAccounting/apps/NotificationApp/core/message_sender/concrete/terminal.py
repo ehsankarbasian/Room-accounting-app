@@ -1,12 +1,16 @@
 from ..interface.sender_interface import MessageSenderInterface
+
 from apps.NotificationApp.core.message_types import BUILDER_MAP
+from apps.NotificationApp.core.registry import SenderRegistry
 from apps.NotificationApp.core.message_types.interface.builder_interface import MessageBuilderInterface
 
 
+@SenderRegistry.register(name="terminal")
 class TerminalSender(MessageSenderInterface):
     
     def __init__(self, message_type, context):
         self.build_payload(message_type, context)
+    
     
     def build_payload(self, message_type, context):
         builder: MessageBuilderInterface = BUILDER_MAP[message_type]()
@@ -15,9 +19,11 @@ class TerminalSender(MessageSenderInterface):
         self._to = context["identifier"]
         print(f'builde message setted: {text}')
     
+    
     @property
     def message(self):
         return self._message
+    
     
     def send(self):
         print('\n', '-'*80)

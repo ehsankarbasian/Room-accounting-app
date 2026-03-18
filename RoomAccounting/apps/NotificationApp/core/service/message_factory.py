@@ -1,4 +1,4 @@
-from ..message_sender import SENDER_MAP
+from ..registry import SenderRegistry
 
 
 from typing import TYPE_CHECKING
@@ -19,7 +19,7 @@ class MessageFactory:
         # context["identifier"] = method.identifier
         
         context["identifier"] = method.identifier
-        SenderClass = SENDER_MAP[method.method_type]
+        SenderClass = SenderRegistry.REGISTRY[method.method_type]
         sender: MessageSenderInterface = SenderClass(message_type=message_type,
                                                      context=context)
         

@@ -5,6 +5,7 @@ from apps.NotificationApp.core.message_types.interface.builder_interface import 
 from django.core.mail import send_mail as _send_mail
 from django.core.mail import EmailMultiAlternatives as _Email
 from core.settings import DEFAULT_FROM_EMAIL
+from apps.NotificationApp.core.registry import SenderRegistry
 
 
 def _send_html_email(subject, message, to_list, html_content):
@@ -25,6 +26,7 @@ def _send_text_email(subject, message, to_list):
         recipient_list=to_list)
 
 
+@SenderRegistry.register(name="email")
 class EmailSender(MessageSenderInterface):
     
     def __init__(self, message_type, context):
