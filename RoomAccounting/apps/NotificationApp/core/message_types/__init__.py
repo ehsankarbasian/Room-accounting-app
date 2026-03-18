@@ -10,10 +10,5 @@ PAYLOAD_MAP = {
     "reset_password": ResetPasswordDraft,
 }
 
-BUILDER_MAP = {
-    "otp": OTPBuilder,
-    "reset_password": ResetPasswordBuilder,
-}
 
-
-__all__ = ["PAYLOAD_MAP", "BUILDER_MAP"]
+__all__ = ["PAYLOAD_MAP"]

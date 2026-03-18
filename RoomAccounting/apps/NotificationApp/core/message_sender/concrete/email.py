@@ -1,11 +1,10 @@
 from ..interface.sender_interface import MessageSenderInterface
-from apps.NotificationApp.core.message_types import BUILDER_MAP
 from apps.NotificationApp.core.message_types.interface.builder_interface import MessageBuilderInterface
 
 from django.core.mail import send_mail as _send_mail
 from django.core.mail import EmailMultiAlternatives as _Email
 from core.settings import DEFAULT_FROM_EMAIL
-from apps.NotificationApp.core.registry import SenderRegistry
+from apps.NotificationApp.core.registry import SenderRegistry, BuilderRegistry
 
 
 def _send_html_email(subject, message, to_list, html_content):
@@ -33,7 +32,7 @@ class EmailSender(MessageSenderInterface):
         self.build_payload(message_type, context)
     
     def build_payload(self, message_type, context):
-        builder: MessageBuilderInterface = BUILDER_MAP[message_type]()
+        builder: MessageBuilderInterface = BuilderRegistry.REGISTRY[message_type]()
         text = builder.build_message(context)
         self._message = text
         self._to = context["identifier"]
