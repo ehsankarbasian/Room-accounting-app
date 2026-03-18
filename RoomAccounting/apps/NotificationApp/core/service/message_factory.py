@@ -18,6 +18,7 @@ class MessageFactory:
         method: NotificationMethod = NotificationMethod.objects.get(user=user, is_primary=True)
         # context["identifier"] = method.identifier
         
+        context["identifier"] = method.identifier
         SenderClass = SENDER_MAP[method.method_type]
         sender: MessageSenderInterface = SenderClass(message_type=message_type,
                                                      context=context)

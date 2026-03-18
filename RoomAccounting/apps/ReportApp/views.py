@@ -17,6 +17,8 @@ from utils.custom_views.mixins import PaginationMixin
 from apps.AuthApp.persmissions.mixins import PermissionMixin
 from apps.AuthApp.persmissions.permissions import IsAuthenticated, AllowAny
 
+from apps.NotificationApp.core import NotificationFacade
+
 
 class LandingPageView(PermissionMixin, RawTemplateView):
     permission_classes = (AllowAny, )
@@ -161,4 +163,10 @@ class FinalReportAPI(PermissionMixin, APIView):
 
 
 class ReportEmailView(PermissionMixin, View):
-    pass
+    
+    def post(self, request):
+        result = request.POST
+        
+        NotificationFacade.send_otp(user=request.user, code=123)
+        
+        return render(request, 'result.html', context={'result': result})
