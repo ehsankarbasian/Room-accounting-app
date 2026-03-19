@@ -1,9 +1,10 @@
 from apps.NotificationApp.core.registry import SenderRegistry, BuilderRegistry
-
 from apps.NotificationApp.core.interfaces import MessageSenderInterface, MessageBuilderInterface
 
+from apps.NotificationContribApp.notification_types import SenderType
 
-@SenderRegistry.register(name="terminal")
+
+@SenderRegistry.register(name=SenderType.TERMINAL)
 class TerminalSender(MessageSenderInterface):
     
     def __init__(self, message_type, context):

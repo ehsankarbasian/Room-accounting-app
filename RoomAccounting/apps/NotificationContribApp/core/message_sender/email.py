@@ -6,6 +6,8 @@ from core.settings import DEFAULT_FROM_EMAIL
 from apps.NotificationApp.core.registry import SenderRegistry, BuilderRegistry
 from apps.NotificationApp.core.interfaces import MessageSenderInterface, MessageBuilderInterface
 
+from apps.NotificationContribApp.notification_types import SenderType
+
 
 def _send_html_email(subject, message, to_list, html_content):
     email_obj = _Email(
@@ -25,7 +27,7 @@ def _send_text_email(subject, message, to_list):
         recipient_list=to_list)
 
 
-@SenderRegistry.register(name="email")
+@SenderRegistry.register(name=SenderType.EMAIL)
 class EmailSender(MessageSenderInterface):
     
     def __init__(self, message_type, context):
