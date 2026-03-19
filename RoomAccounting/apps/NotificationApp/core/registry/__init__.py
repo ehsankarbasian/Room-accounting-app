@@ -1,1 +1,1 @@
-from .config import PayloadRegistry, BuilderRegistry, SenderRegistry
+from .config import BuilderRegistry, SenderRegistry
