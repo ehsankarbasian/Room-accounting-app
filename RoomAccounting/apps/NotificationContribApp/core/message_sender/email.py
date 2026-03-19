@@ -4,8 +4,8 @@ from django.core.mail import EmailMultiAlternatives as _Email
 from core.settings import DEFAULT_FROM_EMAIL
 
 from apps.NotificationApp.core.registry import SenderRegistry, BuilderRegistry
-from apps.NotificationApp.core.message_sender.interface.sender_interface import MessageSenderInterface
-from apps.NotificationApp.core.message_types.interface.builder_interface import MessageBuilderInterface
+from apps.NotificationApp.core.interfaces.sender_interface import MessageSenderInterface
+from apps.NotificationApp.core.interfaces.builder_interface import MessageBuilderInterface
 
 def _send_html_email(subject, message, to_list, html_content):
     email_obj = _Email(

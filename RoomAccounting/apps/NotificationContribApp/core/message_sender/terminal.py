@@ -1,7 +1,7 @@
 from apps.NotificationApp.core.registry import SenderRegistry, BuilderRegistry
 
-from apps.NotificationApp.core.message_sender.interface.sender_interface import MessageSenderInterface
-from apps.NotificationApp.core.message_types.interface.builder_interface import MessageBuilderInterface
+from apps.NotificationApp.core.interfaces.sender_interface import MessageSenderInterface
+from apps.NotificationApp.core.interfaces.builder_interface import MessageBuilderInterface
 
 
 @SenderRegistry.register(name="terminal")

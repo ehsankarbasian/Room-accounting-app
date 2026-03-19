@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING or True:
     from apps.ReportApp.models import User
     from apps.NotificationApp.models import NotificationMethod
-    from ..message_sender.interface.sender_interface import MessageSenderInterface
+    from apps.NotificationApp.core.interfaces.sender_interface import MessageSenderInterface
 
 
 class MessageFactory:

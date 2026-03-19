@@ -1,3 +1,3 @@
-from .concrete.email import *
-from .concrete.sms import *
-from .concrete.terminal import *
+from .email import *
+from .sms import *
+from .terminal import *

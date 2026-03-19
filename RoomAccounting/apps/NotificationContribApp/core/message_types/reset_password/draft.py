@@ -1,4 +1,4 @@
-from apps.NotificationApp.core.message_types.interface.draft_interface import DraftInterface
+from apps.NotificationApp.core.interfaces.draft_interface import DraftInterface
 from apps.NotificationApp.core.registry import PayloadRegistry
 
 from .data_model import MessageContext

@@ -8,6 +8,11 @@ if TYPE_CHECKING or True:
 class NotificationFacade:
     
     @staticmethod
+    def dispatch(user: User, message_key: str, context: dict):
+        sender = MessageFactory.get_sender(user, message_key, context)
+        sender.send()
+    
+    @staticmethod
     def send_otp(user: User, code: str):
         context = {'code': code}
         sender = MessageFactory.get_sender(user, "otp", context)
