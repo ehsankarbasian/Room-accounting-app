@@ -1,15 +1,24 @@
 from typing import Dict, Type, Optional, Callable
+from enum import Enum
 
 
 def make_registry(interface: Optional[Type] = None) -> tuple[Dict[str, Type], Callable]:
 
     REGISTRY: Dict[str, Type] = {}
 
-    def decorator_to_register(_cls=None, *, name: Optional[str] = None):
+    def decorator_to_register(_cls=None, *, name: Optional[Enum] = None):
 
         def decorator(cls: Type):
-            
-            key = name or cls.__name__
+
+            if name is None:
+                raise TypeError("Registry key must be provided via 'name' using an Enum value")
+
+            if not isinstance(name, Enum):
+                raise TypeError(
+                    f"Registry key must be an Enum instance, not {type(name).__name__}"
+                )
+
+            key = name.value
 
             if key in REGISTRY:
                 raise RuntimeError(f"{key!r} already registered")
