@@ -1,4 +1,4 @@
-from ...interface.builder_interface import MessageBuilderInterface
+from apps.NotificationApp.core.message_types.interface.builder_interface import MessageBuilderInterface
 
 from apps.NotificationApp.core.registry import BuilderRegistry
 

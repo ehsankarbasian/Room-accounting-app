@@ -1,9 +1,9 @@
-from ...interface.builder_interface import MessageBuilderInterface
 from .draft import ResetPasswordDraft
 from .data_model import MessageContext
 
 from django.template.loader import get_template
 
+from apps.NotificationApp.core.message_types.interface.builder_interface import MessageBuilderInterface
 from apps.NotificationApp.core.registry import BuilderRegistry
 
 
