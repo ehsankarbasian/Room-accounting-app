@@ -3,7 +3,7 @@ from .data_model import MessageContext
 
 from django.template.loader import get_template
 
-from apps.NotificationApp.core.interfaces.builder_interface import MessageBuilderInterface
+from apps.NotificationApp.core.interfaces import MessageBuilderInterface
 from apps.NotificationApp.core.registry import BuilderRegistry
 
 
