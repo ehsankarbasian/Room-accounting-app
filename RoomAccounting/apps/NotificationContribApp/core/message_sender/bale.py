@@ -1,4 +1,3 @@
-import json
 import requests
 
 from core.settings import BALE_BOT_TOKEN
