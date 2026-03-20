@@ -1,7 +1,5 @@
 from itertools import chain
 
-from apps.NotificationApp.core import NotificationFacade
-
 
 class EmailGenerator:
 

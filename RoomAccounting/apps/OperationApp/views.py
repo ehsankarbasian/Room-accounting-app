@@ -7,7 +7,6 @@ from django.views.generic.base import View
 
 from apps.ReportApp.models import Room, Person, Spend, Spenders, Partners, Transaction
 
-from apps.NotificationApp.core import NotificationFacade
 from apps.OperationApp.email_generator import EmailGenerator
 
 from apps.AuthApp.persmissions.mixins import PermissionMixin
