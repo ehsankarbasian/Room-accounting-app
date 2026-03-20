@@ -7,15 +7,15 @@ from apps.NotificationContribApp.notification_types import SenderType
 @SenderRegistry.register(name=SenderType.TERMINAL)
 class TerminalSender(MessageSenderInterface):
     
-    def __init__(self, message_type, context):
-        self.build_payload(message_type, context)
+    def __init__(self, message_type, data, identifier):
+        self._to = identifier
+        self.build_payload(message_type, data)
     
     
-    def build_payload(self, message_type, context):
+    def build_payload(self, message_type, data):
         builder: MessageBuilderInterface = BuilderRegistry.REGISTRY[message_type]()
-        text = builder.build_message(context)
+        text = builder.build_message(data)
         self._message = text
-        self._to = context["identifier"]
         print(f'builde message setted: {text}')
     
     

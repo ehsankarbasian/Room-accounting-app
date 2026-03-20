@@ -8,7 +8,7 @@ from .message_factory import MessageFactory
 class NotificationDispatcher:
     
     @staticmethod
-    def send(user: UserProtocol, message_type: Enum, context: dict):
+    def send(user: UserProtocol, message_type: Enum, data: dict):
         
         if not isinstance(message_type, Enum):
             raise TypeError(
@@ -18,7 +18,7 @@ class NotificationDispatcher:
         sender = MessageFactory.get_sender(
             user=user,
             message_type=message_type,
-            context=context
+            data=data
         )
 
         sender.send()

@@ -30,14 +30,14 @@ def _send_text_email(subject, message, to_list):
 @SenderRegistry.register(name=SenderType.EMAIL)
 class EmailSender(MessageSenderInterface):
     
-    def __init__(self, message_type, context):
-        self.build_payload(message_type, context)
+    def __init__(self, message_type, data, identifier):
+        self._to = identifier
+        self.build_payload(message_type, data)
     
-    def build_payload(self, message_type, context):
+    def build_payload(self, message_type, data):
         builder: MessageBuilderInterface = BuilderRegistry.REGISTRY[message_type]()
-        text = builder.build_message(context)
+        text = builder.build_message(data)
         self._message = text
-        self._to = context["identifier"]
         print(f'builde message setted: {text}')
     
     @property

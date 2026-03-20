@@ -9,5 +9,5 @@ class MessageBuilderInterface(ABC):
     draft_class: DraftInterface
     
     @abstractmethod
-    def build_message(self, context: dict) -> dict | str:
+    def build_message(self, data: dict) -> dict | str:
         pass

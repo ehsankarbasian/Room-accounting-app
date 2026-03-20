@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 class MessageSenderInterface(ABC):
     
     @abstractmethod
-    def __init__(self, message_type, context):
+    def __init__(self, message_type, data, identifier):
         pass
     
     @abstractmethod
