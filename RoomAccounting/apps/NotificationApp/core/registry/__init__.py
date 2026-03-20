@@ -1,1 +1,2 @@
-from .config import BuilderRegistry, SenderRegistry
+from .config import DataModelRegistry, SenderRegistry, MapperRegistry
+from .config import BuilderRegistry # TODO: delete
