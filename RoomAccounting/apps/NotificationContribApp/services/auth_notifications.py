@@ -1,4 +1,4 @@
-from apps.NotificationApp.core.service import MessageFactory
+from apps.NotificationApp.core.service import NotificationDispatcher
 
 from apps.NotificationContribApp.notification_types import MessageType
 
@@ -12,8 +12,7 @@ class AuthNotifications:
     @staticmethod
     def send_otp(user: User, code: str):
         context = {'code': code}
-        sender = MessageFactory.get_sender(user, MessageType.OTP, context)
-        sender.send()
+        NotificationDispatcher.send(user, MessageType.OTP, context)
     
     @staticmethod
     def send_message_identifier_verification(user: User):

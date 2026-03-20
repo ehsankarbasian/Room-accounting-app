@@ -1,4 +1,4 @@
-from apps.NotificationApp.core.service import MessageFactory
+from apps.NotificationApp.core.service import NotificationDispatcher
 
 from apps.NotificationContribApp.notification_types import MessageType
 
