@@ -8,25 +8,17 @@ if TYPE_CHECKING or True:
     from apps.NotificationApp.models import NotificationMethod
     from apps.NotificationApp.core.interfaces.sender_interface import MessageSenderInterface
 
+from apps.NotificationContribApp.core.models.canonical import NotificationCanonicalMessage
+
 
 class MessageFactory:
     
     @staticmethod
-    def get_sender(user: UserProtocol,
-                   message_type: Enum,
-                   data: dict
-                ) -> MessageSenderInterface:
-        
-        if not isinstance(message_type, Enum):
-            raise TypeError(
-                f"'message_type' must be an Enum instance, not {type(message_type).__name__}"
-            )
+    def get_sender(user: UserProtocol) -> MessageSenderInterface:
         
         method: NotificationMethod = NotificationMethod.objects.get(user=user, is_primary=True)
         
         SenderClass = SenderRegistry.REGISTRY[method.method_type]
-        sender: MessageSenderInterface = SenderClass(message_type=message_type,
-                                                     data=data,
-                                                     identifier=method.identifier)
+        sender: MessageSenderInterface = SenderClass(identifier=method.identifier)
         
         return sender

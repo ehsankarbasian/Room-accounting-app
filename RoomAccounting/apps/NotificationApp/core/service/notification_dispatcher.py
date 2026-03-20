@@ -1,6 +1,7 @@
 from enum import Enum
 
 from apps.NotificationApp.core.types import UserProtocol
+from apps.NotificationApp.core.registry import MapperRegistry
 
 from .message_factory import MessageFactory
 
@@ -15,10 +16,12 @@ class NotificationDispatcher:
                 f"'message_type' must be an Enum instance, not {type(message_type).__name__}"
             )
         
-        sender = MessageFactory.get_sender(
-            user=user,
-            message_type=message_type,
-            data=data
-        )
+        sender = MessageFactory.get_sender(user=user)
 
-        sender.send()
+        
+        MapperClass = MapperRegistry.REGISTRY[message_type]
+        cononical_data = MapperClass.map(data=data)
+        
+        payload = sender.render_payload(message=cononical_data)
+        
+        sender.send(payload=payload)
