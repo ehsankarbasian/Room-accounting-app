@@ -28,6 +28,9 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')
 DEFAULT_TO_EMAIL = os.environ.get('DEFAULT_TO_EMAIL')
 
+# Bale config
+BALE_BOT_TOKEN = os.environ.get('BALE_BOT_TOKEN')
+
 # Django admin panel
 ADMIN_PRIORITY = [
     "Users",
