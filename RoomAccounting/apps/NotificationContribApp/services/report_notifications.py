@@ -1,5 +1,7 @@
 from apps.NotificationApp.core.service import MessageFactory
 
+from apps.NotificationContribApp.notification_types import MessageType
+
 from typing import TYPE_CHECKING
 if TYPE_CHECKING or True:
     from apps.ReportApp.models import Person
