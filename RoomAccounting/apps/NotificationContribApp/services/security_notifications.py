@@ -11,6 +11,6 @@ if TYPE_CHECKING or True:
 class SecurityNotifications:
     
     @staticmethod
-    def send_reset_password(user: User, email: str, token: str):
-        data = ResetPasswordDataModel(recipient=email, reset_token=token)
+    def send_reset_password(user: User, token: str):
+        data = ResetPasswordDataModel(reset_token=token, username=user.username)
         NotificationDispatcher.send(user, MessageType.RESET_PASSWORD, data)

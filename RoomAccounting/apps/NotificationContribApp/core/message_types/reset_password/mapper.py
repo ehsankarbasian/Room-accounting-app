@@ -1,5 +1,3 @@
-from django.template.loader import get_template
-
 from apps.NotificationContribApp.core.interfaces import MessageMapperInterface
 from apps.NotificationContribApp.core.models.canonical import NotificationCanonicalMessage
 
@@ -15,16 +13,5 @@ class ResetPasswordMapper(MessageMapperInterface):
     @staticmethod
     def map(data: ResetPasswordDataModel) -> NotificationCanonicalMessage:
 
-        context = {
-            "email": data.recipient,
-            "name": data.username or "",
-            "token": data.reset_token,
-        }
-
-        html_content = get_template(
-            "AuthApp/reset_password.html"
-        ).render(context=context)
-
-        return NotificationCanonicalMessage(
-            text=html_content
-        )
+        result = f'{data.username} TOKEN: {data.reset_token}'
+        return NotificationCanonicalMessage(text=result)

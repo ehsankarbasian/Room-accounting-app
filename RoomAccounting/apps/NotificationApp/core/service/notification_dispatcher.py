@@ -17,11 +17,9 @@ class NotificationDispatcher:
             )
         
         sender = MessageFactory.get_sender(user=user)
-
         
         MapperClass = MapperRegistry.REGISTRY[message_type]
         cononical_data = MapperClass.map(data=data)
         
         payload = sender.render_payload(message=cononical_data)
-        
         sender.send(payload=payload)

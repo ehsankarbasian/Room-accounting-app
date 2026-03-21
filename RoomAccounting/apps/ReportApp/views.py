@@ -167,7 +167,7 @@ class ReportEmailView(PermissionMixin, View):
     def post(self, request):
         
         # AuthNotifications.send_otp(user=request.user, code=123)
-        SecurityNotifications.send_reset_password(user=request.user, email=request.user.email, token="__TOKEN__")
+        SecurityNotifications.send_reset_password(user=request.user, token="__TOKEN__")
         
         result = request.POST
         return render(request, 'result.html', context={'result': result})
