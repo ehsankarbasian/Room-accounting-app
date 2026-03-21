@@ -1,18 +1,20 @@
 from dataclasses import dataclass
 
 from apps.NotificationApp.core.registry import MessageRegistry
+from apps.NotificationApp.core.message_definition import MessageDefinitionInterface
+
 from apps.NotificationContribApp.notification_types import MessageType
 from apps.NotificationContribApp.core.interfaces import MessageMapperInterface
 from apps.NotificationContribApp.core.models.canonical import NotificationCanonicalMessage, Button
-from apps.NotificationApp.core.message_definition import MessageDefinition
 
 
 @MessageRegistry.register(MessageType.OTP)
-class OtpMessage(MessageDefinition):
+class OtpMessage(MessageDefinitionInterface):
 
     @dataclass
     class Data:
         code: str
+
 
     class Mapper(MessageMapperInterface):
 

@@ -4,7 +4,6 @@ from dataclasses import is_dataclass
 from typing import Type
 
 from apps.NotificationApp.core.types import UserProtocol
-# from apps.NotificationApp.core.registry import MapperRegistry, DataModelRegistry
 from apps.NotificationApp.core.registry import MessageRegistry
 
 from .message_factory import MessageFactory
@@ -25,7 +24,6 @@ class NotificationDispatcher:
                 f"data must be a dataclass instance, got {type(data).__name__}"
             )
 
-        # expected_datamodel = DataModelRegistry.REGISTRY[message_type]
         expected_datamodel = MessageRegistry.REGISTRY[message_type].Data
         if not isinstance(data, expected_datamodel):
             raise TypeError(
@@ -33,7 +31,6 @@ class NotificationDispatcher:
                 f"got {type(data).__name__}"
             )
 
-        # mapper = MapperRegistry.REGISTRY[message_type]
         mapper = MessageRegistry.REGISTRY[message_type].Mapper
         canonical_data = mapper.map(data=data)
 
