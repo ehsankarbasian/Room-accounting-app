@@ -1,2 +1,1 @@
-from .config import DataModelRegistry, SenderRegistry, MapperRegistry
-from .config import MessageRegistry
+from .config import SenderRegistry, MessageRegistry
