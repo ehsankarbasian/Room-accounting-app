@@ -1,7 +1,7 @@
+from apps.NotificationApp.core.registry import MapperRegistry
+
 from apps.NotificationContribApp.core.interfaces import MessageMapperInterface
 from apps.NotificationContribApp.core.models.canonical import NotificationCanonicalMessage, Button
-
-from apps.NotificationApp.core.registry import MapperRegistry
 from apps.NotificationContribApp.notification_types import MessageType
 
 from .data_model import OtpDataModel
