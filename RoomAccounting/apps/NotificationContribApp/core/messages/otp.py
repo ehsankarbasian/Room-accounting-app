@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
-from apps.NotificationApp.core.registry import MessageRegistry
-from apps.NotificationApp.core.message_definition import MessageDefinitionInterface
+from apps.NotificationApp.registry import MessageRegistry
+from apps.NotificationApp.message_definition import MessageDefinitionInterface
 
 from apps.NotificationContribApp.notification_types import MessageType
 from apps.NotificationContribApp.core.interfaces import MessageMapperInterface

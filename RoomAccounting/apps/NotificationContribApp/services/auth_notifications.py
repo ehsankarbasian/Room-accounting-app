@@ -1,6 +1,6 @@
-from apps.NotificationApp.core.service import NotificationDispatcher
-from apps.NotificationContribApp.notification_types import MessageType
+from apps.NotificationApp.dispatcher import NotificationDispatcher
 
+from apps.NotificationContribApp.notification_types import MessageType
 from apps.NotificationContribApp.core.messages.otp import OtpMessage
 
 from typing import TYPE_CHECKING

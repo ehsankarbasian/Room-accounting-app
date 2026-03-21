@@ -1,13 +1,13 @@
 from enum import Enum
 from dataclasses import is_dataclass
 
-from apps.NotificationApp.core.types import UserProtocol
-from apps.NotificationApp.core.registry import MessageRegistry, SenderRegistry
+from apps.NotificationApp.types import UserProtocol
+from apps.NotificationApp.registry import MessageRegistry, SenderRegistry
 from apps.NotificationApp.models import NotificationMethod
 
 from typing import TYPE_CHECKING, Type
 if TYPE_CHECKING or True:
-    from apps.NotificationApp.core.types import UserProtocol
+    from apps.NotificationApp.types import UserProtocol
 
 
 class NotificationDispatcher:

@@ -1,7 +1,7 @@
 from .registry import make_registry as _make_registry
 
-from apps.NotificationApp.core.interfaces import MessageSenderInterface
-from apps.NotificationApp.core.message_definition import MessageDefinitionInterface
+from apps.NotificationApp.interfaces import MessageSenderInterface
+from apps.NotificationApp.message_definition import MessageDefinitionInterface
 
 
 # Create separate registries for different domains

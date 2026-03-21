@@ -1,1 +1,0 @@
-from .sender_interface import MessageSenderInterface
