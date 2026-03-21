@@ -1,12 +1,13 @@
 from enum import Enum
 from dataclasses import is_dataclass
 
-from typing import Type
-
 from apps.NotificationApp.core.types import UserProtocol
-from apps.NotificationApp.core.registry import MessageRegistry
+from apps.NotificationApp.core.registry import MessageRegistry, SenderRegistry
+from apps.NotificationApp.models import NotificationMethod
 
-from .message_factory import MessageFactory
+from typing import TYPE_CHECKING, Type
+if TYPE_CHECKING or True:
+    from apps.NotificationApp.core.types import UserProtocol
 
 
 class NotificationDispatcher:
@@ -30,9 +31,13 @@ class NotificationDispatcher:
                 f"{message_type} expects {expected_datamodel.__name__} instance, "
                 f"got {type(data).__name__}"
             )
-
+        
+        notification_method = NotificationMethod.objects.get(user=user, is_primary=True)
+        sender_type = notification_method.method_type
+        SenderClass = SenderRegistry.REGISTRY[sender_type]
+        
         mapper = MessageRegistry.REGISTRY[message_type].Mapper
         canonical_data = mapper.map(data=data)
-
-        sender = MessageFactory.get_sender(user=user)
-        sender.send(message=canonical_data)
+        identifier = notification_method.identifier
+        
+        SenderClass.send(identifier=identifier, message=canonical_data)

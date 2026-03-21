@@ -1,5 +1,3 @@
-from typing import Any
-
 import requests
 
 from core.settings import BALE_BOT_TOKEN
@@ -14,15 +12,15 @@ from apps.NotificationContribApp.notification_types import SenderType
 @SenderRegistry.register(SenderType.BALE)
 class BaleSender(MessageSenderInterface):
 
-    def render_payload(self, message: NotificationCanonicalMessage) -> dict:
+    @staticmethod
+    def render_payload(message: NotificationCanonicalMessage) -> dict:
         # Converts the canonical NotificationMessage to a Bale-specific payload.
 
         payload = {
-            "chat_id": self.identifier,
             "text": message.text
         }
 
-        # اگر دکمه وجود دارد، تبدیل به inline_keyboard مخصوص بله
+        # Bale inline_keyboard:
         if message.buttons:
             payload["reply_markup"] = {
                 "inline_keyboard": [
@@ -38,12 +36,16 @@ class BaleSender(MessageSenderInterface):
 
         return payload
 
-    
-    def send_payload(self, payload: dict) -> None:
+
+    @staticmethod
+    def send_payload(identifier: int, payload: dict) -> None:
         # Sends the payload to Bale API.
         
-        url = f"https://tapi.bale.ai/bot{BALE_BOT_TOKEN}/sendMessage"
-        response = requests.post(url=url, json=payload)
+        # Add chat_id identifier to payload:
+        final_payload = payload.copy()
+        final_payload["chat_id"] = identifier
+        
+        BALE_SEND_MESSAGE_URL = f"https://tapi.bale.ai/bot{BALE_BOT_TOKEN}/sendMessage"
+        
+        response = requests.post(url=BALE_SEND_MESSAGE_URL, json=final_payload, timeout=5)
         response.raise_for_status()
-
-        return response

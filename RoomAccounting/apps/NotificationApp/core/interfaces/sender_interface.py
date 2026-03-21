@@ -6,20 +6,19 @@ from apps.NotificationContribApp.core.models.canonical import NotificationCanoni
 
 class MessageSenderInterface(ABC):
 
-    def __init__(self, identifier: Any):
-        # identifier = chat_id, phone_number, email, etc...
-        self.identifier = identifier
+    @classmethod
+    def send(cls, identifier: Any, message: NotificationCanonicalMessage) -> None:
+        payload = cls.render_payload(message)
+        cls.send_payload(identifier, payload)
 
-    def send(self, message: NotificationCanonicalMessage) -> None:
-        payload = self.render_payload(message)
-        self.send_payload(payload)
-
+    @staticmethod
     @abstractmethod
-    def render_payload(self, message: NotificationCanonicalMessage) -> Any:
+    def render_payload(message: NotificationCanonicalMessage) -> Any:
         # Converts canonical NotificationCanonicalMessage → platform specific payload (dict)
         pass
     
+    @staticmethod
     @abstractmethod
-    def send_payload(self, payload: dict) -> None:
+    def send_payload(identifier: Any, payload: dict) -> None:
         # Renders payload accordint to specific message channel:
         pass
