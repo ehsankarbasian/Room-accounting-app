@@ -5,6 +5,7 @@ from .models.canonical import NotificationCanonicalMessage
 
 class MessageMapperInterface(ABC):
 
+    @staticmethod
     @abstractmethod
-    def map(self, data) -> NotificationCanonicalMessage:
+    def map(data) -> NotificationCanonicalMessage:
         pass

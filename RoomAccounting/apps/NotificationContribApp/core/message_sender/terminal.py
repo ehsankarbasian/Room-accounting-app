@@ -8,13 +8,11 @@ from apps.NotificationContribApp.notification_types import SenderType
 @SenderRegistry.register(name=SenderType.TERMINAL)
 class TerminalSender(MessageSenderInterface):
 
-    def __init__(self, identifier):
-        self._to = identifier
-
-    def render_payload(self, message: NotificationCanonicalMessage):
+    def render_payload(self, message: NotificationCanonicalMessage) -> str:
         return message.text
 
-    def send(self, payload):
+
+    def send_payload(self, payload: dict) -> None:
 
         print("\n", "-" * 80)
 
@@ -24,6 +22,6 @@ class TerminalSender(MessageSenderInterface):
         print(f"    {payload}")
 
         print("\nmessage reciever identifier:")
-        print(f"    {self._to}")
+        print(f"    {self.identifier}")
 
         print("\n", "-" * 80, "\n")

@@ -12,10 +12,7 @@ from apps.NotificationContribApp.notification_types import SenderType
 @SenderRegistry.register(name=SenderType.EMAIL)
 class EmailSender(MessageSenderInterface):
 
-    def __init__(self, identifier):
-        self._to = identifier
-
-    def render_payload(self, message: NotificationCanonicalMessage):
+    def render_payload(self, message: NotificationCanonicalMessage) -> dict:
 
         payload = {
             "subject": "reset password",
@@ -26,7 +23,7 @@ class EmailSender(MessageSenderInterface):
         return payload
 
 
-    def send(self, payload):
+    def send_payload(self, payload: dict) -> None:
         
         print(payload)
 
@@ -34,7 +31,7 @@ class EmailSender(MessageSenderInterface):
             subject=payload["subject"],
             body=payload["text_content"],
             from_email=DEFAULT_FROM_EMAIL,
-            to=[self._to],
+            to=[self.identifier],
         )
 
         email_obj.attach_alternative(
