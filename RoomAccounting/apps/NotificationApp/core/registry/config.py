@@ -8,6 +8,7 @@ from apps.NotificationContribApp.core.interfaces import MessageMapperInterface
 SENDER_REGISTRY, register_sender = _make_registry(interface=MessageSenderInterface)
 DATAMODEL_REGISTRY, register_datamodel = _make_registry(interface=None)
 MAPPER_REGISTRY, register_mapper = _make_registry(interface=MessageMapperInterface)
+MESSAGE_REGISTRY, register_message = _make_registry(interface=None)
 
 
 class SenderRegistry:
@@ -21,3 +22,7 @@ class DataModelRegistry:
 class MapperRegistry:
     REGISTRY = MAPPER_REGISTRY
     register = register_mapper
+
+class MessageRegistry:
+    REGISTRY = MESSAGE_REGISTRY
+    register = register_message
