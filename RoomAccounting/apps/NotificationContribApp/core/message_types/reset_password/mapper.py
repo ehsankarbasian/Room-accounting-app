@@ -7,7 +7,7 @@ from apps.NotificationContribApp.core.models.canonical import NotificationCanoni
 from .data_model import ResetPasswordDataModel
 
 
-@MapperRegistry.register(name=MessageType.RESET_PASSWORD)
+@MapperRegistry.register(MessageType.RESET_PASSWORD)
 class ResetPasswordMapper(MessageMapperInterface):
 
     @staticmethod

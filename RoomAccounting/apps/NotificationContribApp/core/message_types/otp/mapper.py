@@ -7,7 +7,7 @@ from apps.NotificationContribApp.notification_types import MessageType
 from .data_model import OtpDataModel
 
 
-@MapperRegistry.register(name=MessageType.OTP)
+@MapperRegistry.register(MessageType.OTP)
 class OtpMessageMapper(MessageMapperInterface):
 
     @staticmethod

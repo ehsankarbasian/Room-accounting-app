@@ -4,6 +4,6 @@ from apps.NotificationApp.core.interfaces import MessageSenderInterface
 from apps.NotificationContribApp.notification_types import SenderType
 
 
-@SenderRegistry.register(name=SenderType.SMS)
+@SenderRegistry.register(SenderType.SMS)
 class SmsSender(MessageSenderInterface):
     pass

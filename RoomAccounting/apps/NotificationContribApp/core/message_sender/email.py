@@ -9,7 +9,7 @@ from apps.NotificationContribApp.core.models.canonical import NotificationCanoni
 from apps.NotificationContribApp.notification_types import SenderType
 
 
-@SenderRegistry.register(name=SenderType.EMAIL)
+@SenderRegistry.register(SenderType.EMAIL)
 class EmailSender(MessageSenderInterface):
 
     def render_payload(self, message: NotificationCanonicalMessage) -> dict:

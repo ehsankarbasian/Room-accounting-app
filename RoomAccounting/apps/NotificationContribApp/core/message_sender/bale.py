@@ -11,7 +11,7 @@ from apps.NotificationContribApp.core.models.canonical import NotificationCanoni
 from apps.NotificationContribApp.notification_types import SenderType
 
 
-@SenderRegistry.register(name=SenderType.BALE)
+@SenderRegistry.register(SenderType.BALE)
 class BaleSender(MessageSenderInterface):
 
     def render_payload(self, message: NotificationCanonicalMessage) -> dict:

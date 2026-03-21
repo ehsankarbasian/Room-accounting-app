@@ -5,7 +5,7 @@ from apps.NotificationContribApp.core.models.canonical import NotificationCanoni
 from apps.NotificationContribApp.notification_types import SenderType
 
 
-@SenderRegistry.register(name=SenderType.TERMINAL)
+@SenderRegistry.register(SenderType.TERMINAL)
 class TerminalSender(MessageSenderInterface):
 
     def render_payload(self, message: NotificationCanonicalMessage) -> str:

@@ -29,17 +29,14 @@ def make_registry(interface: Optional[Type] = None) -> tuple[Dict[str, Type], Ca
 
     REGISTRY: Dict[str, Type] = _RegistryDict(interface)
 
-    def decorator_to_register(_cls=None, *, name: Optional[Enum] = None):
+    def decorator_to_register(name: Enum, /):
+
+        if not isinstance(name, Enum):
+            raise TypeError(
+                f"Registry key must be an Enum instance, not {type(name).__name__}"
+            )
 
         def decorator(cls: Type):
-
-            if name is None:
-                raise TypeError("Registry key must be provided via 'name' using an Enum value")
-
-            if not isinstance(name, Enum):
-                raise TypeError(
-                    f"Registry key must be an Enum instance, not {type(name).__name__}"
-                )
 
             key = name.value
 
@@ -54,9 +51,6 @@ def make_registry(interface: Optional[Type] = None) -> tuple[Dict[str, Type], Ca
             REGISTRY[key] = cls
             return cls
 
-        if _cls is None:
-            return decorator
-
-        return decorator(_cls)
+        return decorator
 
     return REGISTRY, decorator_to_register
