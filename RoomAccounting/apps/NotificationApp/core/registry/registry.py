@@ -1,11 +1,33 @@
 from typing import Dict, Type, Optional, Callable
 
+from collections import UserDict
 from enum import Enum
+
+
+class _RegistryDict(UserDict):
+
+    def __init__(self, interface=None):
+        super().__init__()
+        self.interface = interface
+
+    def __getitem__(self, key):
+        
+        if key not in self.data:
+            if self.interface:
+                raise KeyError(
+                    f"{key!r} is not registered. "
+                    f"You probably forgot to register a "
+                    f"{self.interface.__name__} for this key."
+                )
+                
+            raise KeyError(f"{key!r} is not registered.")
+
+        return self.data[key]
 
 
 def make_registry(interface: Optional[Type] = None) -> tuple[Dict[str, Type], Callable]:
 
-    REGISTRY: Dict[str, Type] = {}
+    REGISTRY: Dict[str, Type] = _RegistryDict(interface)
 
     def decorator_to_register(_cls=None, *, name: Optional[Enum] = None):
 
