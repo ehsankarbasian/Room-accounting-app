@@ -27,7 +27,7 @@ _MESSAGE_REGISTRY, _register_message = _make_registry(
 
 class _RegistryBase:
     """
-    Base helper providing controlled access to registry dictionaries.
+    Base helper (mixin) providing controlled access to registry dictionaries.
 
     This abstraction prevents external code from interacting directly
     with the internal dictionary structure.

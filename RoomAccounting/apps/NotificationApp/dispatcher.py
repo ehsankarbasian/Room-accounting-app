@@ -74,15 +74,14 @@ class NotificationDispatcher:
                 user=user,
                 is_primary=True,
             )
-            sender_type = notification_method.method_type
+            sender_type = notification_method.channel_type
 
         else:
             sender_type = channel_override
             notification_method = NotificationChannel.objects.get(
                 user=user,
-                method_type=channel_override,
+                channel_type=channel_override,
             )
-
         
         sender_class = SenderRegistry.get(sender_type)
 
