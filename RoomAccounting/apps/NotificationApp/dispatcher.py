@@ -17,7 +17,7 @@ from typing import Type
 
 from apps.NotificationApp.types import UserProtocol
 from apps.NotificationApp.registry import MessageRegistry, SenderRegistry
-from apps.NotificationApp.models import NotificationMethod
+from apps.NotificationApp.models import NotificationChannel
 
 
 class NotificationDispatcher:
@@ -70,7 +70,7 @@ class NotificationDispatcher:
 
         # channel resolution
         if channel_override is None:
-            notification_method = NotificationMethod.objects.get(
+            notification_method = NotificationChannel.objects.get(
                 user=user,
                 is_primary=True,
             )
@@ -78,7 +78,7 @@ class NotificationDispatcher:
 
         else:
             sender_type = channel_override
-            notification_method = NotificationMethod.objects.get(
+            notification_method = NotificationChannel.objects.get(
                 user=user,
                 method_type=channel_override,
             )

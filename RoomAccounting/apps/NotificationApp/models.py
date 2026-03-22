@@ -5,9 +5,9 @@ from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 
 
-class NotificationMethod(models.Model):
+class NotificationChannel(models.Model):
 
-    class MethodType(models.TextChoices):
+    class ChannelType(models.TextChoices):
         # TODO: update
         EMAIL = "email", _("Email")
         SMS = "sms", _("SMS")
@@ -22,7 +22,7 @@ class NotificationMethod(models.Model):
 
     method_type = models.CharField(
         max_length=20,
-        choices=MethodType.choices,
+        choices=ChannelType.choices,
         verbose_name=_("Method Type"),
     )
 
