@@ -8,4 +8,5 @@ class NotificationContribAppConfig(AppConfig):
     def ready(self):
         from apps.NotificationApp.registry.autodiscover import autodiscover_modules
         
-        autodiscover_modules("apps.NotificationContribApp.core")
+        autodiscover_modules("apps.NotificationContribApp.messages")
+        autodiscover_modules("apps.NotificationContribApp.senders")
