@@ -6,7 +6,7 @@ Pipeline:
 
 Responsibilities:
     - Validate message type and data model
-    - Resolve user's primary notification method
+    - Resolve user's primary notification method (or overridden channel)
     - Transform message data into canonical representation
     - Delegate delivery to the appropriate sender
 """
@@ -22,13 +22,25 @@ from apps.NotificationApp.models import NotificationMethod
 
 class NotificationDispatcher:
 
+    # TODO(v2): Introduce a NotificationOptions object to support advanced dispatch controls
+    # such as priority, timeout, scheduling, retries, and channel fallback.
     @staticmethod
-    def send(user: UserProtocol, message_type: Enum, data: Type):
+    def send(
+        user: UserProtocol,
+        message_type: Enum,
+        data: Type,
+        *,
+        channel_override: Enum | None = None,
+    ):
         """
         Execute the notification delivery pipeline.
 
         data:
             Dataclass instance matching the expected Data model of the message definition.
+
+        channel_override:
+            Optional override for the notification channel. If provided,
+            the dispatcher will bypass the user's primary notification method.
 
         Raises:
             TypeError
@@ -56,12 +68,22 @@ class NotificationDispatcher:
                 f"got {type(data).__name__}"
             )
 
-        notification_method = NotificationMethod.objects.get(
-            user=user,
-            is_primary=True,
-        )
+        # channel resolution
+        if channel_override is None:
+            notification_method = NotificationMethod.objects.get(
+                user=user,
+                is_primary=True,
+            )
+            sender_type = notification_method.method_type
 
-        sender_type = notification_method.method_type
+        else:
+            sender_type = channel_override
+            notification_method = NotificationMethod.objects.get(
+                user=user,
+                method_type=channel_override,
+            )
+
+        
         sender_class = SenderRegistry.get(sender_type)
 
         mapper_class = message_definition.Mapper

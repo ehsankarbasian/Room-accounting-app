@@ -18,6 +18,7 @@ from apps.AuthApp.persmissions.mixins import PermissionMixin
 from apps.AuthApp.persmissions.permissions import IsAuthenticated, AllowAny
 
 from apps.NotificationContribApp.services import AuthNotifications, SecurityNotifications
+from apps.NotificationContribApp.notification_types import SenderType
 
 
 class LandingPageView(PermissionMixin, RawTemplateView):
@@ -166,7 +167,7 @@ class ReportEmailView(PermissionMixin, View):
     
     def post(self, request):
         
-        AuthNotifications.send_otp(user=request.user, code=123)
+        AuthNotifications.send_otp(user=request.user, code=123, channel_name=SenderType.BALE)
         # SecurityNotifications.send_reset_password(user=request.user, token="__TOKEN__")
         
         result = request.POST
