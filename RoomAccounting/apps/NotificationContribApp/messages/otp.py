@@ -1,11 +1,11 @@
 from dataclasses import dataclass
 
 from apps.NotificationApp.registry import MessageRegistry
-from apps.NotificationApp.message_definition import MessageDefinitionInterface
+from apps.NotificationApp.interfaces.message_base import MessageDefinitionInterface
+from apps.NotificationApp.interfaces.message_mapper import MessageMapperInterface
 
 from apps.NotificationContribApp.notification_types import MessageType
-from apps.NotificationContribApp.core.interfaces import MessageMapperInterface
-from apps.NotificationContribApp.core.models.canonical import NotificationCanonicalMessage, Button
+from apps.NotificationContribApp.messages.canonical import CanonicalMessage, Button
 
 
 @MessageRegistry.register(MessageType.OTP)
@@ -19,7 +19,7 @@ class OtpMessage(MessageDefinitionInterface):
     class Mapper(MessageMapperInterface):
 
         @staticmethod
-        def map(data: "OtpMessage.Data") -> NotificationCanonicalMessage:
+        def map(data: "OtpMessage.Data") -> CanonicalMessage:
             """
             Converts OtpDataModel into the canonical NotificationMessage.
 
@@ -37,7 +37,7 @@ class OtpMessage(MessageDefinitionInterface):
                 )
             ]
 
-            message = NotificationCanonicalMessage(
+            message = CanonicalMessage(
                 text=text,
                 buttons=buttons
             )

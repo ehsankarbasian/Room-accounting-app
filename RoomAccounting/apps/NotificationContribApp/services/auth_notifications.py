@@ -1,7 +1,7 @@
 from apps.NotificationApp.dispatcher import NotificationDispatcher
 
 from apps.NotificationContribApp.notification_types import MessageType
-from apps.NotificationContribApp.core.messages.otp import OtpMessage
+from apps.NotificationContribApp.messages import OtpMessage
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING or True:

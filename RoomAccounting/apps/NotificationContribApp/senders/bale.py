@@ -5,7 +5,7 @@ from core.settings import BALE_BOT_TOKEN
 from apps.NotificationApp.registry import SenderRegistry
 from apps.NotificationApp.interfaces import MessageSenderInterface
 
-from apps.NotificationContribApp.core.models.canonical import NotificationCanonicalMessage
+from apps.NotificationContribApp.messages.canonical import CanonicalMessage
 from apps.NotificationContribApp.notification_types import SenderType
 
 
@@ -13,8 +13,8 @@ from apps.NotificationContribApp.notification_types import SenderType
 class BaleSender(MessageSenderInterface):
 
     @staticmethod
-    def render_payload(message: NotificationCanonicalMessage) -> dict:
-        # Converts the canonical NotificationMessage to a Bale-specific payload.
+    def render_payload(message: CanonicalMessage) -> dict:
+        # Converts the canonical message to a Bale-specific payload.
 
         payload = {
             "text": message.text

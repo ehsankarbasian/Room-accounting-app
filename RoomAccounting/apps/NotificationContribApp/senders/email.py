@@ -5,7 +5,7 @@ from core.settings import DEFAULT_FROM_EMAIL
 from apps.NotificationApp.registry import SenderRegistry
 from apps.NotificationApp.interfaces import MessageSenderInterface
 
-from apps.NotificationContribApp.core.models.canonical import NotificationCanonicalMessage
+from apps.NotificationContribApp.messages.canonical import CanonicalMessage
 from apps.NotificationContribApp.notification_types import SenderType
 
 
@@ -13,7 +13,7 @@ from apps.NotificationContribApp.notification_types import SenderType
 class EmailSender(MessageSenderInterface):
 
     @staticmethod
-    def render_payload(message: NotificationCanonicalMessage) -> dict:
+    def render_payload(message: CanonicalMessage) -> dict:
 
         payload = {
             "subject": "reset password",
