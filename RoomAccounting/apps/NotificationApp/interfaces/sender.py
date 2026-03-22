@@ -1,20 +1,20 @@
 from abc import ABC, abstractmethod
 from typing import Any
 
-from apps.NotificationContribApp.core.models.canonical import NotificationCanonicalMessage
+from .canonical import CanonicalMessageInterface
 
 
 class MessageSenderInterface(ABC):
 
     @classmethod
-    def send(cls, identifier: Any, message: NotificationCanonicalMessage) -> None:
+    def send(cls, identifier: Any, message: CanonicalMessageInterface) -> None:
         payload = cls.render_payload(message)
         cls.send_payload(identifier, payload)
 
     @staticmethod
     @abstractmethod
-    def render_payload(message: NotificationCanonicalMessage) -> Any:
-        # Converts canonical NotificationCanonicalMessage → platform specific payload (dict)
+    def render_payload(message: CanonicalMessageInterface) -> Any:
+        # Converts canonical CanonicalMessageInterface → platform specific payload (dict)
         pass
     
     @staticmethod

@@ -1,11 +1,11 @@
 from abc import ABC, abstractmethod
 
-from .models.canonical import NotificationCanonicalMessage
+from .canonical import CanonicalMessageInterface
 
 
 class MessageMapperInterface(ABC):
 
     @staticmethod
     @abstractmethod
-    def map(data) -> NotificationCanonicalMessage:
+    def map(data) -> CanonicalMessageInterface:
         pass

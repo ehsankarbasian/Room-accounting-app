@@ -8,6 +8,7 @@ from django.conf import settings
 class NotificationMethod(models.Model):
 
     class MethodType(models.TextChoices):
+        # TODO: update
         EMAIL = "email", _("Email")
         SMS = "sms", _("SMS")
         # TELEGRAM = "telegram", _("Telegram")

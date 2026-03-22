@@ -12,7 +12,7 @@ from django.views.generic.base import View
 
 from apps.ReportApp.models import User
 
-from apps.NotificationApp.core.service import NotificationDispatcher
+# from apps.NotificationApp.dispatcher import NotificationDispatcher
 
 from apps.AuthApp.persmissions.mixins import PermissionMixin
 from apps.AuthApp.persmissions.permissions import IsAuthenticated, IsAnonymous
@@ -82,7 +82,7 @@ class ForgotPasswordView(PermissionMixin, RawTemplateView):
 
         user = user[0]
         reset_password_token = user.token.reset_pass_token
-        NotificationDispatcher.send_reset_password(user, email, reset_password_token)
+        # NotificationDispatcher.send_reset_password(user, email, reset_password_token)
 
         context={'result': "Email sent"}
         return self.render_to_response(context)
