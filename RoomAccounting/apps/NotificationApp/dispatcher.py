@@ -47,7 +47,7 @@ class NotificationDispatcher:
                 f"data must be a dataclass instance, got {type(data).__name__}"
             )
 
-        message_definition = MessageRegistry.REGISTRY[message_type]
+        message_definition = MessageRegistry.get(message_type)
         expected_data_model = message_definition.Data
 
         if not isinstance(data, expected_data_model):
@@ -62,7 +62,7 @@ class NotificationDispatcher:
         )
 
         sender_type = notification_method.method_type
-        sender_class = SenderRegistry.REGISTRY[sender_type]
+        sender_class = SenderRegistry.get(sender_type)
 
         mapper_class = message_definition.Mapper
         canonical_message = mapper_class.map(data=data)
