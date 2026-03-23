@@ -13,24 +13,25 @@ Responsibilities:
 
 from enum import Enum
 from dataclasses import is_dataclass
-from typing import Type
+from typing import Type, Optional
 
 from apps.NotificationApp.types import UserProtocol
 from apps.NotificationApp.registry import MessageRegistry, SenderRegistry
-from apps.NotificationApp.models import NotificationChannel
+
+from .resolver import ChannelResolver
 
 
 class NotificationDispatcher:
 
     # TODO(v2): Introduce a NotificationOptions object to support advanced dispatch controls
-    # such as priority, timeout, scheduling, retries, and channel fallback.
+    # such as async, timeout, scheduling, retries, and channel fallback.
     @staticmethod
     def send(
         user: UserProtocol,
         message_type: Enum,
         data: Type,
         *,
-        channel_override: Enum | None = None,
+        channel_override: Optional[Enum] = None,
     ):
         """
         Execute the notification delivery pipeline.
@@ -68,27 +69,13 @@ class NotificationDispatcher:
                 f"got {type(data).__name__}"
             )
 
-        # channel resolution
-        if channel_override is None:
-            notification_method = NotificationChannel.objects.get(
-                user=user,
-                is_primary=True,
-            )
-            sender_type = notification_method.channel_type
-
-        else:
-            sender_type = channel_override
-            notification_method = NotificationChannel.objects.get(
-                user=user,
-                channel_type=channel_override,
-            )
+        notification_channel = ChannelResolver.resolve(user=user, channel_override=channel_override)
         
-        sender_class = SenderRegistry.get(sender_type)
+        sender_class = SenderRegistry.get(notification_channel.channel_type)
+        identifier = notification_channel.identifier
 
         mapper_class = message_definition.Mapper
         canonical_message = mapper_class.map(data=data)
-
-        identifier = notification_method.identifier
 
         sender_class.send(
             identifier=identifier,

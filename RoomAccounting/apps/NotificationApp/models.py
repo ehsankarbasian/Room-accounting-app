@@ -51,6 +51,20 @@ class NotificationChannel(models.Model):
         unique_together = ("user", "channel_type", "identifier")
         verbose_name = _("Notification Channel")
         verbose_name_plural = _("Notification Channels")
+        
+        indexes = [
+            models.Index(fields=["user", "channel_type"]),
+            models.Index(fields=["user", "is_primary"]),
+            models.Index(fields=["user", "priority"]),
+        ]
+        
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user"],
+                condition=models.Q(is_primary=True),
+                name="unique_primary_channel_per_user",
+            ),
+        ]
 
     def __str__(self):
         return f"{self.user} - {self.channel_type} ({self.identifier})"
