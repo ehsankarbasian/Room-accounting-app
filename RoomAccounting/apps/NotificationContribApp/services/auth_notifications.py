@@ -16,7 +16,7 @@ class AuthNotifications:
         data = OtpMessage.Data(code=code)
         NotificationDispatcher.send(user, MessageType.OTP, data,
                                     channel_override=channel_name,
-                                    preferred_channels=[SenderType.TERMINAL, SenderType.EMAIL])
+                                    preferred_channels=[SenderType.BALE, SenderType.EMAIL])
     
     @staticmethod
     def send_message_identifier_verification(user: User):

@@ -7,6 +7,7 @@ from .errors import (
     ChannelUnavailableError,
     NoAvailableChannelError,
     NoPreferredChannelAvailableError,
+    ChannelOverrideConflictError,
 )
 
 
@@ -19,6 +20,17 @@ class ChannelResolver:
         channel_override: Optional[Enum] = None,
         preferred_channels: Optional[List[Enum]] = None
     ):
+
+        if (
+            channel_override
+            and preferred_channels
+            and channel_override not in preferred_channels
+        ):
+            raise ChannelOverrideConflictError(
+                channel_override,
+                preferred_channels
+            )
+
         queryset = NotificationChannel.objects.filter(
             user=user,
             is_verified=True,
