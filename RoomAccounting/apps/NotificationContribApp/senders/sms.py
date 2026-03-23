@@ -6,4 +6,9 @@ from apps.NotificationContribApp.notification_types import SenderType
 
 @SenderRegistry.register(SenderType.SMS)
 class SmsSender(MessageSenderInterface):
+    """
+    This is currently a placeholder and should be implemented
+    using an SMS provider.
+    """
+
     pass
