@@ -38,6 +38,10 @@ class _RegistryBase:
     @classmethod
     def get(cls, key):
         return cls._REGISTRY[key]
+    
+    @classmethod
+    def get_registered_types(cls):
+        return cls._REGISTRY.keys()
 
 
 class SenderRegistry(_RegistryBase):

@@ -53,11 +53,7 @@ class NotificationChannel(models.Model):
         verbose_name_plural = _("Notification Channels")
 
     def __str__(self):
-        return f"{self.get_method_type_display()} ({self.identifier})"
-
-    @property
-    def display_name(self) -> str:
-        return f"{self.get_method_type_display()} - {self.identifier}"
+        return f"{self.user} - {self.channel_type} ({self.identifier})"
     
     def clean(self):
         super().clean()
