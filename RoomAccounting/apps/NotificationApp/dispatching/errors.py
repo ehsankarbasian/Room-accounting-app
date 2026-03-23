@@ -22,3 +22,14 @@ class NoAvailableChannelError(NotificationError):
         super().__init__(
             f"User '{user}' has no verified notification channels"
         )
+
+
+class NoPreferredChannelAvailableError(NotificationError):
+
+    def __init__(self, preferred, actual):
+        self.preferred = preferred
+        self.actual = actual
+        super().__init__(
+            f"No channels match the preferred list {preferred}. "
+            f"Available channels: {[c.channel_type for c in actual]}"
+        )

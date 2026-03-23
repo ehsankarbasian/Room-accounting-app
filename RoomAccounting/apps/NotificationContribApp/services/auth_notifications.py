@@ -1,6 +1,6 @@
-from apps.NotificationApp.dispatcher import NotificationDispatcher
+from apps.NotificationApp.dispatching import NotificationDispatcher
 
-from apps.NotificationContribApp.notification_types import MessageType
+from apps.NotificationContribApp.notification_types import MessageType, SenderType
 from apps.NotificationContribApp.messages import OtpMessage
 
 from typing import TYPE_CHECKING, Optional
@@ -15,7 +15,8 @@ class AuthNotifications:
     def send_otp(user: User, code: str, *, channel_name: Optional[Enum] = None):
         data = OtpMessage.Data(code=code)
         NotificationDispatcher.send(user, MessageType.OTP, data,
-                                    channel_override=channel_name)
+                                    channel_override=channel_name,
+                                    preferred_channels=[SenderType.TERMINAL, SenderType.EMAIL])
     
     @staticmethod
     def send_message_identifier_verification(user: User):

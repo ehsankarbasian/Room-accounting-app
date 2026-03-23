@@ -1,4 +1,4 @@
-from apps.NotificationApp.dispatcher import NotificationDispatcher
+from apps.NotificationApp.dispatching import NotificationDispatcher
 
 from apps.NotificationContribApp.notification_types import MessageType
 

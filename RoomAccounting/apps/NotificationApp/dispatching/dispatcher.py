@@ -11,9 +11,10 @@ Responsibilities:
     - Delegate delivery to the appropriate sender
 """
 
-from enum import Enum
 from dataclasses import is_dataclass
-from typing import Type, Optional
+
+from enum import Enum
+from typing import Type, Optional, List
 
 from apps.NotificationApp.types import UserProtocol
 from apps.NotificationApp.registry import MessageRegistry, SenderRegistry
@@ -32,6 +33,7 @@ class NotificationDispatcher:
         data: Type,
         *,
         channel_override: Optional[Enum] = None,
+        preferred_channels: Optional[List[Enum]] = None
     ):
         """
         Execute the notification delivery pipeline.
@@ -69,7 +71,9 @@ class NotificationDispatcher:
                 f"got {type(data).__name__}"
             )
 
-        notification_channel = ChannelResolver.resolve(user=user, channel_override=channel_override)
+        notification_channel = ChannelResolver.resolve(user=user,
+                                                       channel_override=channel_override,
+                                                       preferred_channels=preferred_channels)
         
         sender_class = SenderRegistry.get(notification_channel.channel_type)
         identifier = notification_channel.identifier
