@@ -11,23 +11,28 @@ from apps.NotificationContribApp.notification_types import SenderType
 
 @SenderRegistry.register(SenderType.EMAIL)
 class EmailSender(MessageSenderInterface):
+    """
+    Email sender implementation using Django's email backend.
+    """
 
     @staticmethod
     def render_payload(message: CanonicalMessage) -> dict:
+        """
+        Convert CanonicalMessage into an email payload.
+        """
 
-        payload = {
+        return {
             "subject": "reset password",
             "html_content": message.text,
-            "text_content": "message"
+            "text_content": "message",
         }
-
-        return payload
 
 
     @staticmethod
     def send_payload(identifier: str, payload: dict) -> None:
-        
-        print(payload)
+        """
+        Send email using Django's EmailMultiAlternatives.
+        """
 
         email_obj = _Email(
             subject=payload["subject"],
@@ -38,7 +43,7 @@ class EmailSender(MessageSenderInterface):
 
         email_obj.attach_alternative(
             payload["html_content"],
-            "text/html"
+            "text/html",
         )
 
         email_obj.send()
