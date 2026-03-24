@@ -17,6 +17,9 @@ class OtpMessage(MessageDefinitionInterface):
 
 
     class Mapper(MessageMapperInterface):
+        """
+        Converts OTP data into a CanonicalMessage representation.
+        """
 
         @staticmethod
         def map(data: "OtpMessage.Data") -> CanonicalMessage:
@@ -37,9 +40,7 @@ class OtpMessage(MessageDefinitionInterface):
                 )
             ]
 
-            message = CanonicalMessage(
+            return CanonicalMessage(
                 text=text,
                 buttons=buttons
             )
-
-            return message

@@ -3,9 +3,9 @@ from typing import Optional
 
 from apps.NotificationApp.registry import MessageRegistry
 from apps.NotificationApp.interfaces.message_base import MessageDefinitionInterface
+from apps.NotificationApp.interfaces.message_mapper import MessageMapperInterface
 
 from apps.NotificationContribApp.notification_types import MessageType
-from apps.NotificationApp.interfaces.message_mapper import MessageMapperInterface
 from apps.NotificationContribApp.messages.canonical import CanonicalMessage
 
 
@@ -19,8 +19,11 @@ class ResetPasswordMessage(MessageDefinitionInterface):
 
 
     class Mapper(MessageMapperInterface):
+        """
+        Maps ResetPasswordMessage.Data to CanonicalMessage.
+        """
 
         @staticmethod
         def map(data: "ResetPasswordMessage.Data") -> CanonicalMessage:
-            result = f"{data.username} TOKEN: {data.reset_token}"
-            return CanonicalMessage(text=result)
+            text = f"{data.username} TOKEN: {data.reset_token}"
+            return CanonicalMessage(text=text)
