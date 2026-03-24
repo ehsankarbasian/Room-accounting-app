@@ -8,6 +8,10 @@ if TYPE_CHECKING or True:
 
 
 class ReportNotifications:
+    """
+    Notification service responsible for report-related messages.
+    This layer orchestrates sending reports through the notification framework.
+    """
     
     @staticmethod
     def send_spend_report(person: Person):
