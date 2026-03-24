@@ -9,7 +9,7 @@ MessageRegistry
 
 from .registry import make_registry as _make_registry
 
-from apps.NotificationApp.interfaces import (
+from ..interfaces import (
     MessageSenderInterface,
     MessageDefinitionInterface,
 )
@@ -42,6 +42,10 @@ class _RegistryBase:
     @classmethod
     def get_registered_types(cls):
         return cls._REGISTRY.keys()
+    
+    @classmethod
+    def exists(cls, key):
+        return key in cls._REGISTRY
 
 
 class SenderRegistry(_RegistryBase):

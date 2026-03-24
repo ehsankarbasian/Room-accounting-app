@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 from django.conf import settings
 
-from apps.NotificationApp.registry import SenderRegistry
+from .registry import SenderRegistry
 
 
 class NotificationChannel(models.Model):

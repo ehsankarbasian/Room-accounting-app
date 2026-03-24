@@ -16,8 +16,8 @@ from dataclasses import is_dataclass
 from enum import Enum
 from typing import Type, Optional, List
 
-from apps.NotificationApp.types import UserProtocol
-from apps.NotificationApp.registry import MessageRegistry, SenderRegistry
+from ..types import UserProtocol
+from ..registry import MessageRegistry, SenderRegistry
 
 from .resolver import ChannelResolver
 

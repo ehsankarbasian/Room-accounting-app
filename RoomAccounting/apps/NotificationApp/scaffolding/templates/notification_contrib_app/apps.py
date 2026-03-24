@@ -13,5 +13,5 @@ class {{ app_config_class }}(AppConfig):
 
         from NotificationApp.registry.autodiscover import autodiscover_modules
 
-        autodiscover_modules("NotificationContribApp.messages")
-        autodiscover_modules("NotificationContribApp.senders")
+        autodiscover_modules("{{ app_name }}.messages")
+        autodiscover_modules("{{ app_name }}.senders")
