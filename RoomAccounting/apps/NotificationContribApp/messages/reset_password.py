@@ -6,7 +6,7 @@ from apps.NotificationApp.interfaces.message_base import MessageDefinitionInterf
 from apps.NotificationApp.interfaces.message_mapper import MessageMapperInterface
 
 from apps.NotificationContribApp.notification_types import MessageType
-from apps.NotificationContribApp.messages.canonical import CanonicalMessage
+from apps.NotificationContribApp.message_schema import CanonicalMessage
 
 
 @MessageRegistry.register(MessageType.RESET_PASSWORD)

@@ -1,21 +1,9 @@
 from typing import List, Optional
-
 from dataclasses import dataclass
 
 from apps.NotificationApp.interfaces import CanonicalMessageInterface
 
-
-# TODO: Create folder later (when extended message item)
-
-
-@dataclass
-class Button:
-    """
-    Interactive button that may appear in supported channels
-    """
-
-    text: str
-    target: str
+from .components import Button
 
 
 @dataclass

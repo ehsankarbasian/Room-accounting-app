@@ -14,13 +14,13 @@ class ReportNotifications:
     """
     
     @staticmethod
-    def send_spend_report(person: Person):
+    def send_spend_report(person: "Person"):
         pass
     
     @staticmethod
-    def send_transaction_report(person: Person):
+    def send_transaction_report(person: "Person"):
         pass
     
     @staticmethod
-    def send_final_report(person: Person):
+    def send_final_report(person: "Person"):
         pass

@@ -19,7 +19,7 @@ class AuthNotifications:
     """
 
     @staticmethod
-    def send_otp(user: User, code: str, *, channel_name: Optional[Enum] = None):
+    def send_otp(user: "User", code: str, *, channel_name: Optional[Enum] = None):
         """
         Send a one-time password (OTP) notification to a user.
 
@@ -39,9 +39,9 @@ class AuthNotifications:
         )
 
     @staticmethod
-    def send_message_identifier_verification(user: User):
+    def send_message_identifier_verification(user: "User"):
         pass
     
     @staticmethod
-    def send_person_message_identifier_verification(person: Person):
+    def send_person_message_identifier_verification(person: "Person"):
         pass

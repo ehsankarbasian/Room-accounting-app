@@ -3,7 +3,7 @@ from typing import Any
 from apps.NotificationApp.registry import SenderRegistry
 from apps.NotificationApp.interfaces import MessageSenderInterface
 
-from apps.NotificationContribApp.messages.canonical import CanonicalMessage
+from apps.NotificationContribApp.message_schema import CanonicalMessage
 from apps.NotificationContribApp.notification_types import SenderType
 
 

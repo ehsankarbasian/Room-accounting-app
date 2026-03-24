@@ -15,7 +15,7 @@ class SecurityNotifications:
     """
 
     @staticmethod
-    def send_reset_password(user: User, token: str):
+    def send_reset_password(user: "User", token: str):
 
         data = ResetPasswordMessage.Data(
             reset_token=token,
