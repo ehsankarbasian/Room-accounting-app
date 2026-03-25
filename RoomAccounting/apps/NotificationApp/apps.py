@@ -3,4 +3,9 @@ from django.apps import AppConfig
 
 class NotificationAppConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "NotificationApp"
+    
+    # In published PyPI packages:
+    # name = "NotificationApp"
+    # The user will modify it if necessary
+    
+    name = "apps.NotificationApp"
