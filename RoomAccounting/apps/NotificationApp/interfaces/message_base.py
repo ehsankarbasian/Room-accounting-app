@@ -1,6 +1,7 @@
 from abc import ABC
-from typing import Type
+from typing import Type, Iterable
 
+from .permission import PermissionInterface
 from .message_mapper import MessageMapperInterface
 
 
@@ -13,6 +14,8 @@ class MessageDefinitionInterface(ABC):
     A message definition describes how a domain message is represented
     and transformed into a canonical notification message.
     """
+    
+    permission_classes: Iterable[Type[PermissionInterface]]
 
     Data: Type
     Mapper: Type[MessageMapperInterface]
