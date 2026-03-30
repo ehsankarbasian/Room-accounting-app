@@ -25,6 +25,7 @@ from apps.ReportApp.views import LandingPageView
 from apps.AuthApp.apps import AuthAppConfig
 from apps.ReportApp.apps import ReportAppConfig
 from apps.OperationApp.apps import OperationAppConfig
+from apps.NotificationContribApp.apps import NotificationContribAppConfig
 
 
 urlpatterns = [
@@ -35,6 +36,7 @@ urlpatterns = [
     path(AuthAppConfig.name + "/", include('apps.AuthApp.urls')),
     path(ReportAppConfig.name + "/", include('apps.ReportApp.urls')),
     path(OperationAppConfig.name + "/", include('apps.OperationApp.urls')),
+    path(NotificationContribAppConfig.name + "/", include('apps.NotificationContribApp.urls')),
 ]
 
 
