@@ -1,9 +1,9 @@
-class NotificationError(Exception):
+class NotificationDispatchError(Exception):
     """Base exception for the notification framework."""
     pass
 
 
-class ChannelOverrideConflictError(NotificationError):
+class ChannelOverrideConflictError(NotificationDispatchError):
     """
     Raised when channel_override is not part of preferred_channels.
     """
@@ -19,7 +19,7 @@ class ChannelOverrideConflictError(NotificationError):
         )
 
 
-class ChannelUnavailableError(NotificationError):
+class ChannelUnavailableError(NotificationDispatchError):
     """Requested channel is not available for the user."""
 
     def __init__(self, channel_type):
@@ -31,7 +31,7 @@ class ChannelUnavailableError(NotificationError):
         )
 
 
-class NoAvailableChannelError(NotificationError):
+class NoAvailableChannelError(NotificationDispatchError):
     """User has no verified notification channels."""
 
     def __init__(self, user):
@@ -43,7 +43,7 @@ class NoAvailableChannelError(NotificationError):
         )
 
 
-class NoPreferredChannelAvailableError(NotificationError):
+class NoPreferredChannelAvailableError(NotificationDispatchError):
     """None of the preferred channels are available."""
 
     def __init__(self, preferred):
@@ -53,4 +53,16 @@ class NoPreferredChannelAvailableError(NotificationError):
             "None of the preferred notification channels are available: "
             f"preferred={preferred}. "
             "The user either does not have these channels configured or they are not verified."
+        )
+
+
+class MessagePermissionDenied(NotificationDispatchError):
+    """
+    Raised when a notification message fails its permission checks.
+    """
+
+    def __init__(self, message_type, permission_class):
+        super().__init__(
+            f"Permission denied for message '{message_type.__name__}'. "
+            f"Failed permission: '{permission_class.__name__}'."
         )

@@ -18,9 +18,10 @@ from typing import Type, Optional, List
 
 from ..types import UserProtocol
 from ..registry import MessageRegistry, SenderRegistry
+from ..interfaces import MessageDefinitionInterface
 
 from .resolver import ChannelResolver
-from ..interfaces import MessageDefinitionInterface
+from .errors import MessagePermissionDenied
 
 
 class NotificationDispatcher:
@@ -79,8 +80,13 @@ class NotificationDispatcher:
         )
 
         for permission in message_definition.permission_classes:
+            
             if not permission.has_permission(user):
-                raise Exception(f"'{message_definition.__class__.__name__}' Message Permission Denied: '{permission.__name__}'")
+                
+                raise MessagePermissionDenied(
+                    message_type=message_definition,
+                    permission_class=permission
+                )
         
         sender_class = SenderRegistry.get(notification_channel.channel_type)
         identifier = notification_channel.identifier
