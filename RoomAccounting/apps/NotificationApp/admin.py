@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib import admin
 
-from .models import NotificationChannel
+from .models import NotificationChannel, NotificationChannelVerification
 from .registry import SenderRegistry
 
 
@@ -28,6 +28,7 @@ class NotificationChannelAdmin(admin.ModelAdmin):
     form = NotificationChannelAdminForm
 
     list_display = (
+        "id",
         "recipient",
         "channel_type",
         "identifier",
@@ -44,4 +45,26 @@ class NotificationChannelAdmin(admin.ModelAdmin):
 
     search_fields = (
         "identifier",
+    )
+
+
+@admin.register(NotificationChannelVerification)
+class NotificationChannelVerificationAdmin(admin.ModelAdmin):
+    
+    list_display = (
+        "id",
+        "token",
+        "is_used",
+        "created_at",
+        "expires_at",
+        "channel_id",
+    )
+
+    list_filter = (
+        "is_used",
+        "channel_id",
+    )
+
+    search_fields = (
+        "token",
     )
