@@ -20,10 +20,7 @@ class Verified(PermissionInterface):
 
     @staticmethod
     def has_permission(user):
-        return NotificationChannel.objects.filter(
-            user=user,
-            is_verified=True,
-        ).exists()
+        return NotificationChannel.objects.for_recipient(user).filter(is_verified=True).exists()
 
 
 class NotVerified(PermissionInterface):

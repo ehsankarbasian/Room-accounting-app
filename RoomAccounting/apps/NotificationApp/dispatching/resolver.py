@@ -68,10 +68,7 @@ class ChannelResolver:
         # ------------------------------------------------
 
         # Base queryset: only verified channels for the user
-        queryset = NotificationChannel.objects.filter(
-            user=user,
-            is_verified=True,
-        )
+        queryset = NotificationChannel.objects.for_recipient(user).filter(is_verified=True)
 
         # Restrict to the explicitly requested channel
         if channel_override:

@@ -6,7 +6,8 @@ from django.core.exceptions import ValidationError
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 
-from .registry import SenderRegistry
+from ..registry import SenderRegistry
+from .managers import NotificationChannelQuerySet
 
 
 class NotificationChannel(models.Model):
@@ -21,6 +22,8 @@ class NotificationChannel(models.Model):
     A recipient can have multiple channels per type, each with its own
     verification state and delivery priority.
     """
+    
+    objects = NotificationChannelQuerySet.as_manager()
 
     recipient_content_type = models.ForeignKey(
         ContentType,
