@@ -7,7 +7,7 @@ from apps.NotificationContribApp.messages import OtpMessage
 
 from typing import TYPE_CHECKING, Optional
 if TYPE_CHECKING:
-    from apps.ReportApp.models import User, Person
+    from apps.ReportApp.models import User
 
 
 class AuthNotifications:
@@ -39,9 +39,5 @@ class AuthNotifications:
         )
 
     @staticmethod
-    def send_message_identifier_verification(user: "User"):
-        pass
-    
-    @staticmethod
-    def send_person_message_identifier_verification(person: "Person"):
+    def send_message_identifier_verification(recipient):
         pass

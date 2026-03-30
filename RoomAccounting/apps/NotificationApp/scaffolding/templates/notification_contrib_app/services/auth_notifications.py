@@ -44,10 +44,5 @@ class AuthNotifications:
         )
 
     @staticmethod
-    def send_message_identifier_verification(
-        user: "User",
-        code: str, 
-        *,
-        channel_name: Optional[Enum] = None
-    ):
+    def send_message_identifier_verification(recipient):
         pass
