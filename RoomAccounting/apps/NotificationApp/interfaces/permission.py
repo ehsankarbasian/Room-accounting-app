@@ -10,5 +10,5 @@ class PermissionInterface(ABC):
     
     @staticmethod
     @abstractmethod
-    def has_permission(user) -> bool:
+    def has_permission(recipient) -> bool:
         pass

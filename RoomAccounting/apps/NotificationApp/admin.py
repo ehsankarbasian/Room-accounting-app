@@ -28,7 +28,7 @@ class NotificationChannelAdmin(admin.ModelAdmin):
     form = NotificationChannelAdminForm
 
     list_display = (
-        "user",
+        "recipient",
         "channel_type",
         "identifier",
         "priority",
@@ -44,6 +44,4 @@ class NotificationChannelAdmin(admin.ModelAdmin):
 
     search_fields = (
         "identifier",
-        "user__username",
-        "user__email",
     )

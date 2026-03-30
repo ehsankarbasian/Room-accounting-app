@@ -6,7 +6,7 @@ Pipeline:
 
 Responsibilities:
     - Validate message type and data model
-    - Resolve user's primary notification method (or overridden channel)
+    - Resolve recipient's primary notification method (or overridden channel)
     - Transform message data into canonical representation
     - Delegate delivery to the appropriate sender
 """
@@ -16,7 +16,6 @@ from dataclasses import is_dataclass
 from enum import Enum
 from typing import Type, Optional, List
 
-from ..types import UserProtocol
 from ..registry import MessageRegistry, SenderRegistry
 from ..interfaces import MessageDefinitionInterface
 
@@ -30,7 +29,7 @@ class NotificationDispatcher:
     # such as async, timeout, scheduling, retries, and channel fallback.
     @staticmethod
     def send(
-        user: UserProtocol,
+        recipient,
         message_type: Enum,
         data: Type,
         *,
@@ -45,7 +44,7 @@ class NotificationDispatcher:
 
         channel_override:
             Optional override for the notification channel. If provided,
-            the dispatcher will bypass the user's primary notification method.
+            the dispatcher will bypass the recipient's primary notification method.
 
         Raises:
             TypeError
@@ -74,14 +73,14 @@ class NotificationDispatcher:
             )
 
         notification_channel = ChannelResolver.resolve(
-            user=user,
+            recipient=recipient,
             channel_override=channel_override,
             preferred_channels=preferred_channels
         )
 
         for permission in message_definition.permission_classes:
             
-            if not permission.has_permission(user):
+            if not permission.has_permission(recipient):
                 
                 raise MessagePermissionDenied(
                     message_type=message_definition,

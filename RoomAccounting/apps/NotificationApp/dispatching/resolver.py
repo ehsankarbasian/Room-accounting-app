@@ -14,7 +14,7 @@ from .errors import (
 class ChannelResolver:
     """
     Selection is based on:
-        - verified user channels
+        - verified recipient channels
         - optional channel override
         - optional preferred channel list
 
@@ -24,16 +24,16 @@ class ChannelResolver:
 
     @staticmethod
     def resolve(
-        user,
+        recipient,
         *,
         channel_override: Optional[Enum] = None,
         preferred_channels: Optional[List[Enum]] = None
     ):
         """
-        Select the best notification channel for the given user.
+        Select the best notification channel for the given recipient.
 
         Args:
-            user: Target user instance.
+            recipient: Target recipient instance.
             channel_override: Explicit channel type requested by the caller.
             preferred_channels: Ordered list of acceptable channel types.
 
@@ -67,8 +67,8 @@ class ChannelResolver:
         # 2. DATABASE QUERY (minimal, efficient)
         # ------------------------------------------------
 
-        # Base queryset: only verified channels for the user
-        queryset = NotificationChannel.objects.for_recipient(user).filter(is_verified=True)
+        # Base queryset: only verified channels for the recipient
+        queryset = NotificationChannel.objects.for_recipient(recipient).filter(is_verified=True)
 
         # Restrict to the explicitly requested channel
         if channel_override:
@@ -103,8 +103,8 @@ class ChannelResolver:
                     preferred=preferred_channels
                 )
 
-            # User has no verified channels
-            raise NoAvailableChannelError(user)
+            # Recipient has no verified channels
+            raise NoAvailableChannelError(recipient)
 
         # First result is the selected channel due to ordering
         return channels[0]

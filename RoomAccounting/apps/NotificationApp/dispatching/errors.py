@@ -20,26 +20,26 @@ class ChannelOverrideConflictError(NotificationDispatchError):
 
 
 class ChannelUnavailableError(NotificationDispatchError):
-    """Requested channel is not available for the user."""
+    """Requested channel is not available for the recipient."""
 
     def __init__(self, channel_type):
         self.channel_type = channel_type
 
         super().__init__(
             "Requested notification channel is unavailable: "
-            f"user has no verified '{channel_type}' channel configured."
+            f"recipient has no verified '{channel_type}' channel configured."
         )
 
 
 class NoAvailableChannelError(NotificationDispatchError):
-    """User has no verified notification channels."""
+    """Recipient has no verified notification channels."""
 
-    def __init__(self, user):
-        self.user = user
+    def __init__(self, recipient):
+        self.recipient = recipient
 
         super().__init__(
             "Notification delivery failed: "
-            f"user '{user}' does not have any verified notification channels configured."
+            f"recipient '{recipient}' does not have any verified notification channels configured."
         )
 
 
@@ -52,7 +52,7 @@ class NoPreferredChannelAvailableError(NotificationDispatchError):
         super().__init__(
             "None of the preferred notification channels are available: "
             f"preferred={preferred}. "
-            "The user either does not have these channels configured or they are not verified."
+            "The recipient either does not have these channels configured or they are not verified."
         )
 
 
