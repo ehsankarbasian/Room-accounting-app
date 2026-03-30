@@ -19,3 +19,4 @@ class MessageType(StrEnum):
 
     OTP = "otp"
     RESET_PASSWORD = "reset_password"
+    VERIFY_CHANNEL = "verify_channel"

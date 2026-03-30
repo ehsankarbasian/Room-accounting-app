@@ -1,13 +1,28 @@
 from enum import Enum
 
+from django.urls import reverse
+from django.conf import settings
+
 from apps.NotificationApp.dispatching import NotificationDispatcher
+from apps.NotificationApp.models import NotificationChannelVerification
 
 from apps.NotificationContribApp.notification_types import MessageType, SenderType
-from apps.NotificationContribApp.messages import OtpMessage
+from apps.NotificationContribApp.messages import OtpMessage, VerifyChannelMessage
 
 from typing import TYPE_CHECKING, Optional
 if TYPE_CHECKING:
     from apps.ReportApp.models import User
+
+
+# Helper function
+def _build_verification_url(token: str) -> str:
+
+    path = reverse(
+        "notifications:verify-channel",
+        kwargs={"token": token},
+    )
+
+    return f"{settings.BASE_URL}{path}"
 
 
 class AuthNotifications:
@@ -39,5 +54,35 @@ class AuthNotifications:
         )
 
     @staticmethod
-    def send_message_identifier_verification(recipient):
-        pass
+    def send_message_identifier_verification(recipient, channel):
+        
+        # TODO (security):
+        # Store a hash of the verification token instead of the raw token.
+        #
+        # Current implementation stores the token in plaintext, which means
+        # a database leak would allow attackers to immediately use verification links.
+        #
+        # Recommended improvement:
+        #   - Generate a random token
+        #   - Store SHA256(token) in the database
+        #   - Send the raw token in the verification URL
+        #   - When verifying, hash the incoming token and compare
+        #
+        # This follows the same pattern used in password reset token systems
+        # and prevents token reuse in case of database compromise.
+
+        verification = NotificationChannelVerification.create_for_channel(channel)
+
+        verification_url = _build_verification_url(
+            verification.token
+        )
+
+        data = VerifyChannelMessage.Data(
+            verification_url=verification_url
+        )
+
+        NotificationDispatcher.send(
+            recipient,
+            MessageType.CHANNEL_VERIFICATION,
+            data,
+        )
