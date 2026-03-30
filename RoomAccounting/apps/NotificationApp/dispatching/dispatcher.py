@@ -20,6 +20,7 @@ from ..types import UserProtocol
 from ..registry import MessageRegistry, SenderRegistry
 
 from .resolver import ChannelResolver
+from ..interfaces import MessageDefinitionInterface
 
 
 class NotificationDispatcher:
@@ -62,7 +63,7 @@ class NotificationDispatcher:
                 f"data must be a dataclass instance, got {type(data).__name__}"
             )
 
-        message_definition = MessageRegistry.get(message_type)
+        message_definition: MessageDefinitionInterface = MessageRegistry.get(message_type)
         expected_data_model = message_definition.Data
 
         if not isinstance(data, expected_data_model):
@@ -71,9 +72,15 @@ class NotificationDispatcher:
                 f"got {type(data).__name__}"
             )
 
-        notification_channel = ChannelResolver.resolve(user=user,
-                                                       channel_override=channel_override,
-                                                       preferred_channels=preferred_channels)
+        notification_channel = ChannelResolver.resolve(
+            user=user,
+            channel_override=channel_override,
+            preferred_channels=preferred_channels
+        )
+
+        for permission in message_definition.permission_classes:
+            if not permission.has_permission(user):
+                raise Exception(f"'{message_definition.__class__.__name__}' Message Permission Denied: '{permission.__name__}'")
         
         sender_class = SenderRegistry.get(notification_channel.channel_type)
         identifier = notification_channel.identifier
