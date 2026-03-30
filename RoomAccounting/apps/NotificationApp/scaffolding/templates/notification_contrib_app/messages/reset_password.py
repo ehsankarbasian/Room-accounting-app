@@ -7,10 +7,13 @@ from NotificationApp.interfaces.message_mapper import MessageMapperInterface
 
 from ..notification_types import MessageType
 from ..message_schema import CanonicalMessage
+from ..permissions import NotLoggedIn, Verified
 
 
 @MessageRegistry.register(MessageType.RESET_PASSWORD)
 class ResetPasswordMessage(MessageDefinitionInterface):
+    
+    permission_classes = (NotLoggedIn, Verified)
 
     @dataclass
     class Data:

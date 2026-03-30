@@ -7,10 +7,13 @@ from NotificationApp.interfaces.message_mapper import MessageMapperInterface
 from ..notification_types import MessageType
 from ..message_schema import CanonicalMessage
 from ..message_schema.components import Button
+from ..permissions import NotLoggedIn, Verified
 
 
 @MessageRegistry.register(MessageType.OTP)
 class OtpMessage(MessageDefinitionInterface):
+    
+    permission_classes = (NotLoggedIn, Verified)
 
     @dataclass
     class Data:
