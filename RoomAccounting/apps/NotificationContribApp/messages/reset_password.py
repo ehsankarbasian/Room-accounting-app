@@ -1,16 +1,13 @@
 from dataclasses import dataclass
 from typing import Optional
 
-from apps.NotificationApp.registry import MessageRegistry
 from apps.NotificationApp.interfaces.message_base import MessageDefinitionInterface
 from apps.NotificationApp.interfaces.message_mapper import MessageMapperInterface
 
-from apps.NotificationContribApp.notification_types import MessageType
 from apps.NotificationContribApp.message_schema import CanonicalMessage
 from apps.NotificationContribApp.permissions import NotLoggedIn, Verified
 
 
-@MessageRegistry.register(MessageType.RESET_PASSWORD)
 class ResetPasswordMessage(MessageDefinitionInterface):
     
     permission_classes = (NotLoggedIn, Verified)

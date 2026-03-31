@@ -1,6 +1,5 @@
 from apps.NotificationApp.dispatching import NotificationDispatcher
 
-from apps.NotificationContribApp.notification_types import MessageType
 from apps.NotificationContribApp.messages import ResetPasswordMessage
 
 from typing import TYPE_CHECKING
@@ -24,6 +23,6 @@ class SecurityNotifications:
 
         NotificationDispatcher.send(
             user,
-            MessageType.RESET_PASSWORD,
+            ResetPasswordMessage,
             data,
         )

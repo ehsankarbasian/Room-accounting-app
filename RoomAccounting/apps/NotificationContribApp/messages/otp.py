@@ -1,16 +1,13 @@
 from dataclasses import dataclass
 
-from apps.NotificationApp.registry import MessageRegistry
 from apps.NotificationApp.interfaces.message_base import MessageDefinitionInterface
 from apps.NotificationApp.interfaces.message_mapper import MessageMapperInterface
 
-from apps.NotificationContribApp.notification_types import MessageType
 from apps.NotificationContribApp.message_schema import CanonicalMessage
 from apps.NotificationContribApp.message_schema.components import Button
 from apps.NotificationContribApp.permissions import NotLoggedIn, Verified
 
 
-@MessageRegistry.register(MessageType.OTP)
 class OtpMessage(MessageDefinitionInterface):
     
     permission_classes = (NotLoggedIn, Verified)

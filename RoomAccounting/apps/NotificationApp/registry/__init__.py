@@ -1,1 +1,1 @@
-from .settings import SenderRegistry, MessageRegistry
+from .settings import SenderRegistry

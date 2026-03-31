@@ -9,19 +9,12 @@ MessageRegistry
 
 from .registry import make_registry as _make_registry
 
-from ..interfaces import (
-    MessageSenderInterface,
-    MessageDefinitionInterface,
-)
+from ..interfaces import MessageSenderInterface
 
 
 # Create separate registries for different domains
 _SENDER_REGISTRY, _register_sender = _make_registry(
     interface=MessageSenderInterface
-)
-
-_MESSAGE_REGISTRY, _register_message = _make_registry(
-    interface=MessageDefinitionInterface
 )
 
 
@@ -51,8 +44,3 @@ class _RegistryBase:
 class SenderRegistry(_RegistryBase):
     _REGISTRY = _SENDER_REGISTRY
     register = _register_sender
-
-
-class MessageRegistry(_RegistryBase):
-    _REGISTRY = _MESSAGE_REGISTRY
-    register = _register_message

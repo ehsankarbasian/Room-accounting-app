@@ -61,8 +61,8 @@ class MessagePermissionDenied(NotificationDispatchError):
     Raised when a notification message fails its permission checks.
     """
 
-    def __init__(self, message_type, permission_class):
+    def __init__(self, message_class, permission_class):
         super().__init__(
-            f"Permission denied for message '{message_type.__name__}'. "
+            f"Permission denied for message '{message_class.__name__}'. "
             f"Failed permission: '{permission_class.__name__}'."
         )

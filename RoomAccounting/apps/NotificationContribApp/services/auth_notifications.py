@@ -6,7 +6,7 @@ from django.conf import settings
 from apps.NotificationApp.dispatching import NotificationDispatcher
 from apps.NotificationApp.models import NotificationChannelVerification
 
-from apps.NotificationContribApp.notification_types import MessageType, SenderType
+from apps.NotificationContribApp.notification_types import SenderType
 from apps.NotificationContribApp.messages import OtpMessage, VerifyChannelMessage
 
 from typing import TYPE_CHECKING, Optional
@@ -47,7 +47,7 @@ class AuthNotifications:
 
         NotificationDispatcher.send(
             user,
-            MessageType.OTP,
+            OtpMessage,
             data,
             channel_override=channel_name,
             preferred_channels=[SenderType.BALE, SenderType.EMAIL],
@@ -83,6 +83,6 @@ class AuthNotifications:
 
         NotificationDispatcher.send(
             recipient,
-            MessageType.CHANNEL_VERIFICATION,
+            VerifyChannelMessage,
             data,
         )

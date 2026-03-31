@@ -13,10 +13,9 @@ Responsibilities:
 
 from dataclasses import is_dataclass
 
-from enum import Enum
 from typing import Type, Optional, List
 
-from ..registry import MessageRegistry, SenderRegistry
+from ..registry import SenderRegistry
 from ..interfaces import MessageDefinitionInterface
 
 from .resolver import ChannelResolver
@@ -30,11 +29,11 @@ class NotificationDispatcher:
     @staticmethod
     def send(
         recipient,
-        message_type: Enum,
+        message_class: Type[MessageDefinitionInterface],
         data: Type,
         *,
-        channel_override: Optional[Enum] = None,
-        preferred_channels: Optional[List[Enum]] = None
+        channel_override: Optional[MessageDefinitionInterface] = None,
+        preferred_channels: Optional[List[MessageDefinitionInterface]] = None
     ):
         """
         Execute the notification delivery pipeline.
@@ -48,14 +47,14 @@ class NotificationDispatcher:
 
         Raises:
             TypeError
-                If message_type or data are invalid.
+                If message_class or data are invalid.
             KeyError
-                If the message or sender has not been registered.
+                If the sender has not been registered.
         """
 
-        if not isinstance(message_type, Enum):
+        if not issubclass(message_class, MessageDefinitionInterface):
             raise TypeError(
-                f"'message_type' must be an Enum instance, not {type(message_type).__name__}"
+                f"'{message_class.__name__}' must be a MessageDefinitionInterface implementation"
             )
 
         if not is_dataclass(data):
@@ -63,12 +62,11 @@ class NotificationDispatcher:
                 f"data must be a dataclass instance, got {type(data).__name__}"
             )
 
-        message_definition: MessageDefinitionInterface = MessageRegistry.get(message_type)
-        expected_data_model = message_definition.Data
+        expected_data_model = message_class.Data
 
         if not isinstance(data, expected_data_model):
             raise TypeError(
-                f"{message_type} expects {expected_data_model.__name__} instance, "
+                f"{message_class} expects {expected_data_model.__name__} instance, "
                 f"got {type(data).__name__}"
             )
 
@@ -78,19 +76,19 @@ class NotificationDispatcher:
             preferred_channels=preferred_channels
         )
 
-        for permission in message_definition.permission_classes:
+        for permission in message_class.permission_classes:
             
             if not permission.has_permission(recipient):
                 
                 raise MessagePermissionDenied(
-                    message_type=message_definition,
+                    message_class=message_class,
                     permission_class=permission
                 )
         
         sender_class = SenderRegistry.get(notification_channel.channel_type)
         identifier = notification_channel.identifier
 
-        mapper_class = message_definition.Mapper
+        mapper_class = message_class.Mapper
         canonical_message = mapper_class.map(data=data)
 
         sender_class.send(

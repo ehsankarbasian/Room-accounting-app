@@ -1,15 +1,12 @@
 from dataclasses import dataclass
 
-from apps.NotificationApp.registry import MessageRegistry
 from apps.NotificationApp.interfaces.message_base import MessageDefinitionInterface
 from apps.NotificationApp.interfaces.message_mapper import MessageMapperInterface
 
-from apps.NotificationContribApp.notification_types import MessageType
 from apps.NotificationContribApp.message_schema import CanonicalMessage
 from apps.NotificationContribApp.permissions import NotVerified
 
 
-@MessageRegistry.register(MessageType.VERIFY_CHANNEL)
 class VerifyChannelMessage(MessageDefinitionInterface):
 
     permission_classes = (NotVerified, )

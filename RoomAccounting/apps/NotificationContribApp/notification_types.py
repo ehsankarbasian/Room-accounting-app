@@ -10,13 +10,3 @@ class SenderType(StrEnum):
     SMS = "sms"
     TERMINAL = "terminal"
     BALE = "bale"
-
-
-class MessageType(StrEnum):
-    """
-    Built-in message types used by contrib services.
-    """
-
-    OTP = "otp"
-    RESET_PASSWORD = "reset_password"
-    VERIFY_CHANNEL = "verify_channel"
