@@ -1,13 +1,9 @@
 from typing import Any
 
-from apps.NotificationApp.registry import SenderRegistry
 from apps.NotificationApp.interfaces import MessageSenderInterface
-
 from apps.NotificationContribApp.message_schema import CanonicalMessage
-from apps.NotificationContribApp.notification_types import SenderType
 
 
-@SenderRegistry.register(SenderType.TERMINAL)
 class TerminalSender(MessageSenderInterface):
     """
     Development sender that prints notifications to the terminal.
@@ -15,7 +11,8 @@ class TerminalSender(MessageSenderInterface):
     Useful for debugging and local development environments.
     """
 
-
+    sender_key = "terminal"
+    
     @staticmethod
     def render_payload(message: CanonicalMessage) -> str:
         """

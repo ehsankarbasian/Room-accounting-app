@@ -1,1 +1,2 @@
-from .settings import SenderRegistry
+from .registry import SenderRegistry
+from .autodiscover import autodiscover_modules

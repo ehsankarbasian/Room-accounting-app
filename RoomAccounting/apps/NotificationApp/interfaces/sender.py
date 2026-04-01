@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Any
 
 from .canonical import CanonicalMessageInterface
+from ..registry import SenderRegistry
 
 
 class MessageSenderInterface(ABC):
@@ -11,6 +12,14 @@ class MessageSenderInterface(ABC):
     Each sender implementation is responsible for converting canonical
     messages into platform-specific payloads and delivering them.
     """
+
+    sender_key: str | None = None
+
+    def __init_subclass__(cls, **kwargs):
+        super().__init_subclass__(**kwargs)
+        if cls.sender_key is None:
+            return
+        SenderRegistry.register(cls.sender_key, cls)
 
     @classmethod
     def send(cls, identifier: Any, message: CanonicalMessageInterface) -> None:

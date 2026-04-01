@@ -2,19 +2,17 @@ import requests
 
 from core.settings import BALE_BOT_TOKEN
 
-from apps.NotificationApp.registry import SenderRegistry
 from apps.NotificationApp.interfaces import MessageSenderInterface
-
 from apps.NotificationContribApp.message_schema import CanonicalMessage
-from apps.NotificationContribApp.notification_types import SenderType
 
 
-@SenderRegistry.register(SenderType.BALE)
 class BaleSender(MessageSenderInterface):
     """
     Sender implementation for Bale messenger bot API.
     """
-
+    
+    sender_key = "bale"
+    
     @staticmethod
     def render_payload(message: CanonicalMessage) -> dict:
         """

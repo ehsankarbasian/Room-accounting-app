@@ -2,18 +2,16 @@ from django.core.mail import EmailMultiAlternatives as _Email
 
 from core.settings import DEFAULT_FROM_EMAIL
 
-from apps.NotificationApp.registry import SenderRegistry
 from apps.NotificationApp.interfaces import MessageSenderInterface
-
 from apps.NotificationContribApp.message_schema import CanonicalMessage
-from apps.NotificationContribApp.notification_types import SenderType
 
 
-@SenderRegistry.register(SenderType.EMAIL)
 class EmailSender(MessageSenderInterface):
     """
     Email sender implementation using Django's email backend.
     """
+    
+    sender_key = "email"
 
     @staticmethod
     def render_payload(message: CanonicalMessage) -> dict:
