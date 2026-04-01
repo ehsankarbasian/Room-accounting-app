@@ -36,7 +36,11 @@ urlpatterns = [
     path(AuthAppConfig.name + "/", include('apps.AuthApp.urls')),
     path(ReportAppConfig.name + "/", include('apps.ReportApp.urls')),
     path(OperationAppConfig.name + "/", include('apps.OperationApp.urls')),
-    path(NotificationContribAppConfig.name + "/", include('apps.NotificationContribApp.urls')),
+    
+    path(
+        NotificationContribAppConfig.name + "/",
+        include('apps.NotificationApp.verification.urls')
+    ),
 ]
 
 
