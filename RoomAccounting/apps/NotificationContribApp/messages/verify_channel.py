@@ -2,9 +2,9 @@ from dataclasses import dataclass
 
 from apps.NotificationApp.interfaces.message_base import MessageDefinitionInterface
 from apps.NotificationApp.interfaces.message_mapper import MessageMapperInterface
+from apps.NotificationApp.contrib.permissions import NotVerified
 
 from apps.NotificationContribApp.message_schema import CanonicalMessage
-from apps.NotificationContribApp.permissions import NotVerified
 
 
 class VerifyChannelMessage(MessageDefinitionInterface):

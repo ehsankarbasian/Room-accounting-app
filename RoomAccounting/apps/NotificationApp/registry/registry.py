@@ -11,3 +11,11 @@ class SenderRegistry:
     @classmethod
     def get(cls, key):
         return cls._registry.get(key)
+    
+    @classmethod
+    def get_registered_types(cls):
+        return list(cls._registry.keys())
+    
+    @classmethod
+    def exists(cls, key):
+        return key in cls._registry.keys()
