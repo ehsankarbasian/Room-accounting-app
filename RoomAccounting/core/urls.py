@@ -39,7 +39,7 @@ urlpatterns = [
     
     path(
         NotificationContribAppConfig.name + "/",
-        include('apps.NotificationApp.verification.urls')
+        include('apps.NotificationApp.contrib.verification.urls')
     ),
 ]
 
