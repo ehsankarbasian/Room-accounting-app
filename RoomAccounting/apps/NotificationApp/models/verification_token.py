@@ -15,7 +15,7 @@ class NotificationChannelVerification(models.Model):
     )
 
     token = models.CharField(
-        max_length=128,
+        max_length=6,
         unique=True,
         db_index=True,
     )
@@ -34,6 +34,13 @@ class NotificationChannelVerification(models.Model):
         verbose_name = _("Notification Channel Verification")
         verbose_name_plural = _("Channel Verification Tokens")
         
+        constraints = [
+            models.UniqueConstraint(
+                fields=["channel", "token"],
+                name="unique_channel_token"
+            )
+        ]
+        
         indexes = [
             models.Index(fields=["token"]),
         ]
@@ -41,7 +48,7 @@ class NotificationChannelVerification(models.Model):
     @classmethod
     def create_for_channel(cls, channel):
 
-        token = secrets.token_urlsafe(32)
+        token = str(secrets.randbelow(900000) + 100000)
 
         verification = cls.objects.create(
             channel=channel,

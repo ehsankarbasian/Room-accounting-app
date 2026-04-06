@@ -29,9 +29,12 @@ class NotificationChannel(models.Model):
         ContentType,
         on_delete=models.CASCADE,
         verbose_name=_("Recipient Content Type"),
+        null=False,
     )
 
-    recipient_object_id = models.PositiveBigIntegerField()
+    recipient_object_id = models.PositiveBigIntegerField(
+        null=False,
+    )
 
     recipient = GenericForeignKey(
         "recipient_content_type",
