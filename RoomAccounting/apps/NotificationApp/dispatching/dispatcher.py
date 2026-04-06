@@ -73,7 +73,8 @@ class NotificationDispatcher:
         notification_channel = ChannelResolver.resolve(
             recipient=recipient,
             channel_override=channel_override,
-            preferred_channels=preferred_channels
+            preferred_channels=preferred_channels,
+            is_verified=False
         )
 
         for permission in message_class.permission_classes:

@@ -1,6 +1,6 @@
 from django.http import HttpResponse
-from django.utils import timezone
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
 
 from ...models import NotificationChannelVerification
 
@@ -8,7 +8,7 @@ from ...models import NotificationChannelVerification
 def verify_channel(request, token):
 
     verification = get_object_or_404(
-        NotificationChannelVerification,
+        NotificationChannelVerification.objects.select_related("channel"),
         token=token,
         is_used=False,
     )
@@ -18,8 +18,9 @@ def verify_channel(request, token):
 
     channel = verification.channel
 
-    channel.is_verified = True
-    channel.save(update_fields=["is_verified"])
+    if not channel.is_verified:
+        channel.is_verified = True
+        channel.save(update_fields=["is_verified"])
 
     verification.is_used = True
     verification.save(update_fields=["is_used"])

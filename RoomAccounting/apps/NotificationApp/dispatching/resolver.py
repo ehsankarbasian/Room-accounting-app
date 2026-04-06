@@ -27,7 +27,8 @@ class ChannelResolver:
         recipient,
         *,
         channel_override: Optional[Enum] = None,
-        preferred_channels: Optional[List[Enum]] = None
+        preferred_channels: Optional[List[Enum]] = None,
+        is_verified = True
     ):
         """
         Select the best notification channel for the given recipient.
@@ -68,7 +69,7 @@ class ChannelResolver:
         # ------------------------------------------------
 
         # Base queryset: only verified channels for the recipient
-        queryset = NotificationChannel.objects.for_recipient(recipient).filter(is_verified=True)
+        queryset = NotificationChannel.objects.for_recipient(recipient).filter(is_verified=is_verified)
 
         # Restrict to the explicitly requested channel
         if channel_override:
