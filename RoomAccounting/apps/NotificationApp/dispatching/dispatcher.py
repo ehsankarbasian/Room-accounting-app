@@ -79,7 +79,7 @@ class NotificationDispatcher:
 
         for permission in message_class.permission_classes:
             
-            if not permission.has_permission(recipient):
+            if not permission.has_permission(recipient, channel=notification_channel):
                 
                 raise MessagePermissionDenied(
                     message_class=message_class,

@@ -1,4 +1,4 @@
-from ...interfaces import PermissionInterface
+from ...interfaces import PermissionInterface, MessageSenderInterface
 from ...models import NotificationChannel
 
 
@@ -19,12 +19,17 @@ class AllowNobody(PermissionInterface):
 class Verified(PermissionInterface):
 
     @staticmethod
-    def has_permission(recipient):
-        return NotificationChannel.objects.for_recipient(recipient).filter(is_verified=True).exists()
+    def has_permission(recipient, *, channel: MessageSenderInterface):
+        
+        this_recipient_channels = NotificationChannel.objects.for_recipient(recipient)
+        the_specific_channel = this_recipient_channels.filter(id=channel.id)
+        channel_is_verified = the_specific_channel.filter(is_verified=True).exists()
+        
+        return channel_is_verified
 
 
 class NotVerified(PermissionInterface):
 
     @staticmethod
-    def has_permission(recipient):
-        return not Verified.has_permission(recipient)
+    def has_permission(recipient, *, channel: MessageSenderInterface):
+        return not Verified.has_permission(recipient, channel=channel)
