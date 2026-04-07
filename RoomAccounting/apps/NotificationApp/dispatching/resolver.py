@@ -2,6 +2,7 @@ from typing import Optional, List
 from enum import Enum
 
 from ..models import NotificationChannel
+from ..interfaces import MessageSenderInterface
 
 from .errors import (
     ChannelUnavailableError,
@@ -27,6 +28,7 @@ class ChannelResolver:
         recipient,
         *,
         channel_override: Optional[Enum] = None,
+        explicit_channel: Optional[MessageSenderInterface] = None,
         preferred_channels: Optional[List[Enum]] = None,
         is_verified = True
     ):
@@ -67,6 +69,9 @@ class ChannelResolver:
         # ------------------------------------------------
         # 2. DATABASE QUERY (minimal, efficient)
         # ------------------------------------------------
+        
+        if explicit_channel:
+            return explicit_channel
 
         # Base queryset: only verified channels for the recipient
         queryset = NotificationChannel.objects.for_recipient(recipient).filter(is_verified=is_verified)

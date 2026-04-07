@@ -53,5 +53,5 @@ class VerifyChannelMessage(MessageDefinitionInterface):
 
         @staticmethod
         def map(data: "VerifyChannelMessage.Data") -> CanonicalMessage:
-            text=f"Please verify your channel by visiting this link:\n{data.verification_url}",
+            text=f"Please verify your channel by visiting this link:\n{data.verification_url}"
             return CanonicalMessage(text=text)

@@ -2,6 +2,7 @@ from datetime import timedelta
 
 from django.urls import reverse
 from django.utils import timezone
+from django.apps import apps
 
 from ...models import NotificationChannelVerification
 from .tokens import VerificationTokenGenerator
@@ -31,11 +32,22 @@ class VerificationService:
         )
 
         NotificationDispatcher.send(
-            recipient=channel.recipient,
+            recipient=cls._get_recipient(channel),
             message_class=VerifyChannelMessage,
             data=data,
-            channel_override=channel.channel_type,
+            explicit_channel=channel,
         )
+    
+    
+    @staticmethod
+    def _get_recipient(channel):
+        recipient_model = apps.get_model(
+            channel.recipient_content_type.app_label,
+            channel.recipient_content_type.model,
+        )
+        
+        return recipient_model._base_manager.get(pk=channel.recipient_object_id)
+    
 
     @staticmethod
     def _build_verification_url(token: str) -> str:

@@ -16,7 +16,7 @@ from dataclasses import is_dataclass
 from typing import Type, Optional, List
 
 from ..registry import SenderRegistry
-from ..interfaces import MessageDefinitionInterface
+from ..interfaces import MessageDefinitionInterface, MessageSenderInterface
 
 from .resolver import ChannelResolver
 from .errors import MessagePermissionDenied
@@ -32,6 +32,7 @@ class NotificationDispatcher:
         message_class: Type[MessageDefinitionInterface],
         data: Type,
         *,
+        explicit_channel: Optional[MessageSenderInterface] = None,
         channel_override: Optional[MessageDefinitionInterface] = None,
         preferred_channels: Optional[List[MessageDefinitionInterface]] = None
     ):
@@ -74,7 +75,8 @@ class NotificationDispatcher:
             recipient=recipient,
             channel_override=channel_override,
             preferred_channels=preferred_channels,
-            is_verified=False
+            is_verified=False,
+            explicit_channel=explicit_channel
         )
 
         for permission in message_class.permission_classes:
