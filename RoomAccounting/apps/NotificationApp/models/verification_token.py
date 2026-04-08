@@ -44,16 +44,3 @@ class NotificationChannelVerification(models.Model):
         indexes = [
             models.Index(fields=["token"]),
         ]
-
-    @classmethod
-    def create_for_channel(cls, channel):
-
-        token = str(secrets.randbelow(900000) + 100000)
-
-        verification = cls.objects.create(
-            channel=channel,
-            token=token,
-            expires_at=timezone.now() + timedelta(hours=24),
-        )
-
-        return verification

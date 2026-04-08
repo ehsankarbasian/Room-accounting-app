@@ -5,14 +5,14 @@ from ...models import NotificationChannel
 class AllowAny(PermissionInterface):
 
     @staticmethod
-    def has_permission(recipient, *, channel: MessageSenderInterface):
+    def has_permission(recipient, *, channel):
         return True
 
 
 class AllowNobody(PermissionInterface):
 
     @staticmethod
-    def has_permission(recipient, *, channel: MessageSenderInterface):
+    def has_permission(recipient, *, channel):
         return False
 
 
