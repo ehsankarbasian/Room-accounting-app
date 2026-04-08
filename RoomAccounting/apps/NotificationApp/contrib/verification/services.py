@@ -1,9 +1,11 @@
+import secrets
 from datetime import timedelta
 
 from django.urls import reverse
 from django.utils import timezone
 from django.apps import apps
 from django.conf import settings
+from django.contrib.auth.hashers import make_password
 
 from ...models import NotificationChannelVerification
 from ...contrib.tokens import TokenGenerator
@@ -18,13 +20,22 @@ class VerificationService:
     @classmethod
     def send_verification(cls, channel):
 
-        raw_token = TokenGenerator.generate()
+        # selector + secret (raw token)
+        selector = secrets.token_hex(8)
+        secret = TokenGenerator.generate()
+
+        # hash only the secret
+        hashed_token = make_password(secret)
 
         NotificationChannelVerification.objects.create(
             channel=channel,
-            token=raw_token,
+            selector=selector,
+            token=hashed_token,
             expires_at=timezone.now() + timedelta(minutes=cls.DEFAULT_EXPIRATION_MINUTES),
         )
+
+        # raw token sent to user (selector.secret)
+        raw_token = f"{selector}.{secret}"
 
         verification_url = cls._build_verification_url(raw_token)
 

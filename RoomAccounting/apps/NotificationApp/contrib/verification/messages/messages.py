@@ -28,7 +28,7 @@ class VerifyChannelMessage(MessageDefinitionInterface):
         @staticmethod
         def map(data: "VerifyChannelMessage.Data") -> CanonicalMessageBase:
             
-            text = f"Please click on the button below to verify your channel identifier\nOr use the token {data.verification_token}"
+            text = f"Please click on the button below to verify your channel identifier\nOr use the token *{data.verification_token.split('.')[1]}*"
             verify_channel_button = ButtonLink(
                 text='Verify Channel Identifier',
                 target=data.verification_url
