@@ -29,7 +29,8 @@ class VerificationService:
         verification_url = cls._build_verification_url(raw_token)
 
         data = VerifyChannelMessage.Data(
-            verification_url=verification_url
+            verification_url=verification_url,
+            verification_token=raw_token,
         )
 
         NotificationDispatcher.send(
