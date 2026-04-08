@@ -26,13 +26,13 @@ class TerminalSender(MessageSenderInterface):
         
         if message.buttons:
             result += "\n\n" + 35*"-" + " Buttons " + 35*"-" + "\n"
-            for button in message.buttons:
-                result += f"\n{button.text}:\n{button.target}\n"
+        for button in message.buttons:
+            result += f"\n{button.text}:\n{button.target}\n"
             
         if message.button_links:
             result += "\n\n" + 35*"-" + " Button Links " + 35*"-" + "\n"
-            for link in message.button_links:
-                result += f"\n{link.text}:\n{link.target}\n"
+        for link in message.button_links:
+            result += f"\n{link.text}:\n{link.target}\n"
             
         return f"{result_begin}\n\n{result}\n\n{result_end}"
 

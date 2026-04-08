@@ -19,36 +19,17 @@ class BaleSender(MessageSenderInterface):
         Convert CanonicalMessage into Bale API payload.
         """
 
-        payload = {
-            "text": message.text
-        }
-
-        if message.buttons:
-            payload["reply_markup"] = {
-                "inline_keyboard": [
-                    [
-                        {
-                            "text": btn.text,
-                            "url": btn.target
-                        }
-                    ]
-                    for btn in message.buttons
-                ]
-            }
+        inline_keyboard = []
+        for button in message.buttons + message.button_links:
+            inline_keyboard.append([{
+                "text": button.text,
+                "url": button.target
+            }])
         
-        if message.button_links:
-            payload["reply_markup"] = {
-                "inline_keyboard": [
-                    [
-                        {
-                            "text": btn.text,
-                            "url": btn.target
-                        }
-                    ]
-                    for btn in message.button_links
-                ]
-            }
-
+        payload = {
+            "text": message.text,
+            "reply_markup": {"inline_keyboard": inline_keyboard}
+        }
         return payload
 
 

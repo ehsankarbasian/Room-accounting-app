@@ -1,5 +1,5 @@
-from typing import List, Optional
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import List
 
 from apps.NotificationApp.interfaces import CanonicalMessageInterface
 
@@ -17,5 +17,5 @@ class CanonicalMessageBase(CanonicalMessageInterface):
 
     text: str
     
-    buttons: Optional[List[Button]] = None
-    button_links: Optional[List[ButtonLink]] = None
+    buttons: List[Button] = field(default_factory=list)
+    button_links: List[ButtonLink] = field(default_factory=list)
