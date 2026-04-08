@@ -35,6 +35,19 @@ class BaleSender(MessageSenderInterface):
                     for btn in message.buttons
                 ]
             }
+        
+        if message.button_links:
+            payload["reply_markup"] = {
+                "inline_keyboard": [
+                    [
+                        {
+                            "text": btn.text,
+                            "url": btn.target
+                        }
+                    ]
+                    for btn in message.button_links
+                ]
+            }
 
         return payload
 
