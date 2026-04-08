@@ -2,6 +2,8 @@ from django.urls import path
 
 from .views import verify_channel
 
+app_name = "NotificationApp"
+
 
 urlpatterns = [
     path(

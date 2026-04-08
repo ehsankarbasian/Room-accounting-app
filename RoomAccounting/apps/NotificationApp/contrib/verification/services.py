@@ -3,6 +3,7 @@ from datetime import timedelta
 from django.urls import reverse
 from django.utils import timezone
 from django.apps import apps
+from django.conf import settings
 
 from ...models import NotificationChannelVerification
 from .tokens import VerificationTokenGenerator
@@ -52,9 +53,9 @@ class VerificationService:
     @staticmethod
     def _build_verification_url(token: str) -> str:
         
-        return '__TODO__'
-
-        # return reverse(
-        #     "apps.notificationapp:verify-channel",
-        #     kwargs={"token": token},
-        # )
+        path = reverse(
+            "NotificationApp:verify-channel",
+            kwargs={"token": token},
+        )
+        
+        return f"{settings.SITE_BASE_URL}{path}"
