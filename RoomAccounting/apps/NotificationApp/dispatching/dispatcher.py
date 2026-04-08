@@ -34,7 +34,8 @@ class NotificationDispatcher:
         *,
         explicit_channel: Optional[MessageSenderInterface] = None,
         channel_override: Optional[MessageDefinitionInterface] = None,
-        preferred_channels: Optional[List[MessageDefinitionInterface]] = None
+        preferred_channels: Optional[List[MessageDefinitionInterface]] = None,
+        is_verified: bool = True,
     ):
         """
         Execute the notification delivery pipeline.
@@ -75,7 +76,7 @@ class NotificationDispatcher:
             recipient=recipient,
             channel_override=channel_override,
             preferred_channels=preferred_channels,
-            is_verified=False,
+            is_verified=is_verified,
             explicit_channel=explicit_channel
         )
 

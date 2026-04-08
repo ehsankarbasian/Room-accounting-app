@@ -49,7 +49,7 @@ class AuthNotifications:
             OtpMessage,
             data,
             channel_override=channel_name,
-            preferred_channels=['bale', 'email'],
+            preferred_channels=['bale', 'email', 'terminal'],
         )
 
     @staticmethod

@@ -38,6 +38,7 @@ class VerificationService:
             message_class=VerifyChannelMessage,
             data=data,
             explicit_channel=channel,
+            is_verified=False,
         )
     
     
