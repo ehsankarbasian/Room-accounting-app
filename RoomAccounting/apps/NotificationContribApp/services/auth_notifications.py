@@ -4,9 +4,8 @@ from django.urls import reverse
 from django.conf import settings
 
 from apps.NotificationApp.dispatching import NotificationDispatcher
-from apps.NotificationApp.models import NotificationChannelVerification
 
-from apps.NotificationContribApp.messages import OtpMessage, VerifyChannelMessagee
+from apps.NotificationContribApp.messages import OtpMessage
 
 from typing import TYPE_CHECKING, Optional
 if TYPE_CHECKING:

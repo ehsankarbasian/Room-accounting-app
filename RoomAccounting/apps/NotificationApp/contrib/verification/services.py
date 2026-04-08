@@ -6,7 +6,7 @@ from django.apps import apps
 from django.conf import settings
 
 from ...models import NotificationChannelVerification
-from .tokens import VerificationTokenGenerator
+from ...contrib.tokens import TokenGenerator
 from .messages.messages import VerifyChannelMessage
 from ...dispatching.dispatcher import NotificationDispatcher
 
@@ -18,7 +18,7 @@ class VerificationService:
     @classmethod
     def send_verification(cls, channel):
 
-        raw_token = VerificationTokenGenerator.generate()
+        raw_token = TokenGenerator.generate()
 
         NotificationChannelVerification.objects.create(
             channel=channel,
