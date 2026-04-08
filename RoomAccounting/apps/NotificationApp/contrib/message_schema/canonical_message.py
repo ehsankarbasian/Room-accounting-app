@@ -7,7 +7,7 @@ from .components import Button, ButtonLink
 
 
 @dataclass
-class CanonicalMessage(CanonicalMessageInterface):
+class CanonicalMessageBase(CanonicalMessageInterface):
     """
     Canonical message representation used internally by the notification framework.
 

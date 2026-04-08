@@ -5,7 +5,7 @@ from apps.NotificationApp.interfaces.message_mapper import MessageMapperInterfac
 from apps.NotificationApp.contrib.permissions import Verified
 
 from apps.NotificationContribApp.message_schema import CanonicalMessage
-from apps.NotificationContribApp.message_schema.components import Button
+from apps.NotificationApp.contrib.message_schema.components import Button
 from apps.NotificationContribApp.permissions import NotLoggedIn
 
 

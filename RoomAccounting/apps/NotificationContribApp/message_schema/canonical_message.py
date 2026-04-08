@@ -1,19 +1,13 @@
-from typing import List, Optional
 from dataclasses import dataclass
 
-from apps.NotificationApp.interfaces import CanonicalMessageInterface
-
-from .components import Button
+from apps.NotificationApp.contrib.message_schema import CanonicalMessageBase
 
 
 @dataclass
-class CanonicalMessage(CanonicalMessageInterface):
+class CanonicalMessage(CanonicalMessageBase):
     """
     Canonical message representation used internally by the notification framework.
 
     All message definitions are mapped into this format before
     being rendered by specific senders.
     """
-
-    text: str
-    buttons: Optional[List[Button]] = None

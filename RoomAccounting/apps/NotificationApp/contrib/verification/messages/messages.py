@@ -6,7 +6,7 @@ from ....interfaces.message_mapper import MessageMapperInterface
 
 from dataclasses import dataclass
 
-from ...message_schema import CanonicalMessage
+from ...message_schema import CanonicalMessageBase
 from ...message_schema.components import ButtonLink
 
 
@@ -26,7 +26,7 @@ class VerifyChannelMessage(MessageDefinitionInterface):
     class Mapper(MessageMapperInterface):
 
         @staticmethod
-        def map(data: "VerifyChannelMessage.Data") -> CanonicalMessage:
+        def map(data: "VerifyChannelMessage.Data") -> CanonicalMessageBase:
             
             text = f"Please click on the button below to verify your channel identifier\nOr use the token {data.verification_token}"
             verify_channel_button = ButtonLink(
@@ -34,4 +34,4 @@ class VerifyChannelMessage(MessageDefinitionInterface):
                 target=data.verification_url
             )
             
-            return CanonicalMessage(text=text, button_links=[verify_channel_button])
+            return CanonicalMessageBase(text=text, button_links=[verify_channel_button])

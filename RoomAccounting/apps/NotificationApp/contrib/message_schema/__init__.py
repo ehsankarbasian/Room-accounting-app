@@ -1,1 +1,1 @@
-from .canonical_message import CanonicalMessage
+from .canonical_message import CanonicalMessageBase
