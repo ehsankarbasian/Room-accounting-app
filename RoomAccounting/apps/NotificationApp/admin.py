@@ -57,12 +57,6 @@ class NotificationChannelAdmin(admin.ModelAdmin):
         "updated_at",
     )
 
-    list_editable = (
-        "priority",
-        "is_primary",
-        "is_verified",
-    )
-
     list_filter = (
         "channel_type",
         "is_primary",

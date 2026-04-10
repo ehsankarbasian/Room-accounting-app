@@ -7,7 +7,7 @@ from django.apps import apps
 from django.conf import settings
 from django.contrib.auth.hashers import make_password
 
-from ...models import NotificationToken
+from ...models import NotificationToken, ChannelVerificationToken
 from ...contrib.tokens import TokenGenerator
 from .messages.messages import VerifyChannelMessage
 from ...dispatching.dispatcher import NotificationDispatcher
@@ -27,11 +27,16 @@ class VerificationService:
         # hash only the secret
         hashed_token = make_password(secret)
 
-        NotificationToken.objects.create(
-            channel=channel,
+        token = NotificationToken.objects.create(
+            # channel=channel,
             selector=selector,
-            token=hashed_token,
+            token_hash=hashed_token,
             expires_at=timezone.now() + timedelta(minutes=cls.DEFAULT_EXPIRATION_MINUTES),
+        )
+        
+        ChannelVerificationToken.objects.create(
+            token=token,
+            channel=channel,
         )
 
         # raw token sent to user (selector.secret)
