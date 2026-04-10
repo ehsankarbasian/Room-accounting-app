@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.contrib.auth.hashers import check_password
 
-from ...models import NotificationChannelVerification
+from ...models import NotificationToken
 
 
 def verify_channel(request, token):
@@ -14,7 +14,7 @@ def verify_channel(request, token):
         return HttpResponse("Invalid token format", status=400)
 
     verification = get_object_or_404(
-        NotificationChannelVerification.objects.select_related("channel"),
+        NotificationToken.objects.select_related("channel"),
         selector=selector,
         is_used=False,
     )

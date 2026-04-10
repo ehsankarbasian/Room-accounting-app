@@ -1,26 +1,11 @@
 from enum import Enum
 
-from django.urls import reverse
-from django.conf import settings
-
 from apps.NotificationApp.dispatching import NotificationDispatcher
-
 from apps.NotificationContribApp.messages import OtpMessage
 
 from typing import TYPE_CHECKING, Optional
 if TYPE_CHECKING:
     from apps.ReportApp.models import User
-
-
-# Helper function
-def _build_verification_url(token: str) -> str:
-
-    path = reverse(
-        "notifications:verify-channel",
-        kwargs={"token": token},
-    )
-
-    return f"{settings.BASE_URL}{path}"
 
 
 class AuthNotifications:
