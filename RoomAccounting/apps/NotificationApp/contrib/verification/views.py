@@ -2,37 +2,42 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.contrib.auth.hashers import check_password
+from django.db import transaction
 
-from ...models import NotificationToken
+from ...models import ChannelVerificationToken
 
 
 def verify_channel(request, token):
-
+    
     try:
         selector, secret = token.split(".")
     except ValueError:
         return HttpResponse("Invalid token format", status=400)
 
-    verification = get_object_or_404(
-        NotificationToken.objects.select_related("channel"),
-        selector=selector,
-        is_used=False,
+    channel_token = get_object_or_404(
+        ChannelVerificationToken.objects.select_related("token", "channel"),
+        token__selector=selector,
+        token__is_used=False,
     )
 
-    if verification.expires_at < timezone.now():
-        return HttpResponse("Verification link expired", status=400)
+    notification_token = channel_token.token
+    channel = channel_token.channel
 
-    # check hashed secret
-    if not check_password(secret, verification.token):
+    if notification_token is None or channel is None:
         return HttpResponse("Invalid or expired token", status=400)
 
-    channel = verification.channel
+    if notification_token.expires_at and notification_token.expires_at < timezone.now():
+        return HttpResponse("Verification link expired", status=400)
 
-    if not channel.is_verified:
-        channel.is_verified = True
-        channel.save(update_fields=["is_verified"])
+    if not check_password(secret, notification_token.token_hash):
+        return HttpResponse("Invalid or expired token", status=400)
 
-    verification.is_used = True
-    verification.save(update_fields=["is_used"])
+    with transaction.atomic():
+        if not channel.is_verified:
+            channel.is_verified = True
+            channel.save(update_fields=["is_verified"])
+
+        notification_token.is_used = True
+        notification_token.save(update_fields=["is_used"])
 
     return HttpResponse("Channel verified successfully")
