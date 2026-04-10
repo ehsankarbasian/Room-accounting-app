@@ -31,6 +31,9 @@ class ChannelVerificationTokenInline(admin.TabularInline):
     model = ChannelVerificationToken
     extra = 0
     autocomplete_fields = ("token",)
+    fields = ("token", "channel")
+    readonly_fields = ()
+    can_delete = True
 
 
 @admin.register(NotificationChannel)
@@ -54,6 +57,12 @@ class NotificationChannelAdmin(admin.ModelAdmin):
         "updated_at",
     )
 
+    list_editable = (
+        "priority",
+        "is_primary",
+        "is_verified",
+    )
+
     list_filter = (
         "channel_type",
         "is_primary",
@@ -70,6 +79,9 @@ class ChannelVerificationTokenInlineForToken(admin.TabularInline):
     model = ChannelVerificationToken
     extra = 0
     autocomplete_fields = ("channel",)
+    fields = ("channel", "token")
+    readonly_fields = ()
+    can_delete = True
 
 
 @admin.register(NotificationToken)
@@ -86,6 +98,11 @@ class NotificationTokenAdmin(admin.ModelAdmin):
         "purpose",
         "is_used",
         "created_at",
+        "expires_at",
+    )
+
+    list_editable = (
+        "is_used",
         "expires_at",
     )
 
@@ -108,7 +125,15 @@ class ChannelVerificationTokenAdmin(admin.ModelAdmin):
         "token",
     )
 
+    list_editable = (
+        "channel",
+        "token",
+    )
+
     search_fields = (
         "token__selector",
         "channel__identifier",
     )
+
+    def has_add_permission(self, request):
+        return False
