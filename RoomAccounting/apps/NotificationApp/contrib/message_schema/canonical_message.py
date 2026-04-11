@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import List
 
-from apps.NotificationApp.interfaces import CanonicalMessageInterface
+from ...interfaces import CanonicalMessageInterface
 
 from .components import Button, ButtonLink
 

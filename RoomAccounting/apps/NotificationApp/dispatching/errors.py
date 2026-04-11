@@ -1,3 +1,4 @@
+
 class NotificationDispatchError(Exception):
     """Base exception for the notification framework."""
     pass

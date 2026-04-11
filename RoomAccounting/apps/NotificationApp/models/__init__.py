@@ -1,4 +1,4 @@
-from .channel import NotificationChannel
+from .channels.channel import NotificationChannel
 
-from .token import NotificationToken
-from .channel_verification_token import ChannelVerificationToken
+from .tokens.token import NotificationToken
+from .tokens.channel_verification_token import ChannelVerificationToken
