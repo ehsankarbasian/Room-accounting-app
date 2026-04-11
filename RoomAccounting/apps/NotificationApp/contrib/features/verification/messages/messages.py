@@ -1,12 +1,12 @@
 from dataclasses import dataclass
 
-from ....interfaces.message_base import MessageDefinitionInterface
-from ....interfaces.message_mapper import MessageMapperInterface
+from .....interfaces.message_base import MessageDefinitionInterface
+from .....interfaces.message_mapper import MessageMapperInterface
 
-from ....message_schema import CanonicalMessageBase
-from ....message_schema.components import ButtonLink
+from .....message_schema import CanonicalMessageBase
+from .....message_schema.components import ButtonLink
 
-from ....contrib.permissions import NotVerified
+from .....contrib.permissions import NotVerified
 
 
 class VerifyChannelMessage(MessageDefinitionInterface):

@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.contrib.auth.hashers import check_password
 from django.db import transaction
 
-from ...models import ChannelVerificationToken
+from ....models import ChannelVerificationToken
 
 
 def verify_channel(request, token):
