@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from apps.NotificationApp.contrib.message_schema import CanonicalMessageBase
+from apps.NotificationApp.message_schema import CanonicalMessageBase
 
 
 @dataclass
