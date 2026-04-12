@@ -7,7 +7,7 @@ from django.db import transaction
 from ....models import ChannelVerificationToken
 
 
-def verify_channel(request, token):
+def verification_view(request, token):
     
     try:
         selector, secret = token.split(".")

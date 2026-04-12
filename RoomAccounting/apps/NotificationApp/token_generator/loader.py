@@ -2,7 +2,7 @@ from django.conf import settings
 from django.utils.module_loading import import_string
 
 
-_DEFAULT_TOKEN_GENERATOR = "apps.NotificationApp.contrib.tokens.default.NumericSixDigitTokenGenerator"
+_DEFAULT_TOKEN_GENERATOR = "apps.NotificationApp.token_generator.default.NumericSixDigitTokenGenerator"
 
 
 def _get_token_generator():

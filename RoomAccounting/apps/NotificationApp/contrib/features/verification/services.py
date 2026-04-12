@@ -9,8 +9,10 @@ from django.contrib.auth.hashers import make_password
 
 from ....models import NotificationToken, ChannelVerificationToken
 from ....token_generator import TokenGenerator
-from .messages.messages import VerifyChannelMessage
 from ....dispatching.dispatcher import NotificationDispatcher
+
+from .messages.messages import VerifyChannelMessage
+from .views import verification_view
 
 
 class VerificationService:
@@ -72,7 +74,7 @@ class VerificationService:
     def _build_verification_url(token: str) -> str:
         
         path = reverse(
-            "NotificationApp:verify-channel",
+           verification_view.url_name,
             kwargs={"token": token},
         )
         

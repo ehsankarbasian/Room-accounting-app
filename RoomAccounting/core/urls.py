@@ -25,6 +25,8 @@ from apps.ReportApp.views import LandingPageView
 from apps.AuthApp.apps import AuthAppConfig
 from apps.ReportApp.apps import ReportAppConfig
 from apps.OperationApp.apps import OperationAppConfig
+
+from apps.NotificationApp.url_patterns import verification_path
 from apps.NotificationContribApp.apps import NotificationContribAppConfig
 
 
@@ -37,9 +39,9 @@ urlpatterns = [
     path(ReportAppConfig.name + "/", include('apps.ReportApp.urls')),
     path(OperationAppConfig.name + "/", include('apps.OperationApp.urls')),
     
-    path(
-        NotificationContribAppConfig.name + "/",
-        include('apps.NotificationApp.contrib.features.verification.urls')
+    verification_path(
+        NotificationContribAppConfig.name + "/notifications/verify/<str:token>/",
+        name="account-verify",
     ),
 ]
 

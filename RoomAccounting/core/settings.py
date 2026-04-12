@@ -14,7 +14,7 @@ import os
 from pathlib import Path
 
 
-# NOTIFICATION_TOKEN_GENERATOR = "apps.NotificationContribApp.contrib.tokens.NumericSixDigitTokenGenerator"
+# NOTIFICATION_TOKEN_GENERATOR = "apps.NotificationContribApp.token_generator.NumericSixDigitTokenGenerator"
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
