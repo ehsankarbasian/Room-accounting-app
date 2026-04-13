@@ -11,7 +11,7 @@ from .....models import NotificationToken, ChannelVerificationToken
 from .....token_generator import TokenGenerator
 from .....dispatching.dispatcher import NotificationDispatcher
 
-from .messages.messages import VerifyChannelMessage
+from .message import VerifyChannelMessage
 from .views import verification_view
 
 
