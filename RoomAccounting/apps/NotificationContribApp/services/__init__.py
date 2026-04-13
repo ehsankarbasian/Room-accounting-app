@@ -1,3 +1,2 @@
-from .auth_notifications import AuthNotifications
 from .report_notifications import ReportNotifications
 from .security_notifications import SecurityNotifications

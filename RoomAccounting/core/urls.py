@@ -26,7 +26,7 @@ from apps.AuthApp.apps import AuthAppConfig
 from apps.ReportApp.apps import ReportAppConfig
 from apps.OperationApp.apps import OperationAppConfig
 
-from apps.NotificationApp.contrib.features.feature_urls import verification_path
+from apps.NotificationApp.contrib.features.feature_urls import verification_path, otp_path
 from apps.NotificationContribApp.apps import NotificationContribAppConfig
 
 
@@ -43,6 +43,7 @@ urlpatterns = [
         NotificationContribAppConfig.name + "/notifications/verify/<str:token>/",
         name="account-verify",
     ),
+    otp_path(name='otp'),
 ]
 
 
