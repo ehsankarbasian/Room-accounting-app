@@ -18,4 +18,4 @@ class NotificationAppConfig(AppConfig):
 
         from apps.NotificationApp.registry.autodiscover import autodiscover_modules
 
-        autodiscover_modules("apps.NotificationApp.contrib.features.verification")
+        autodiscover_modules("apps.NotificationApp.contrib.features.internal_features.verification")

@@ -7,9 +7,9 @@ from django.apps import apps
 from django.conf import settings
 from django.contrib.auth.hashers import make_password
 
-from ....models import NotificationToken, ChannelVerificationToken
-from ....token_generator import TokenGenerator
-from ....dispatching.dispatcher import NotificationDispatcher
+from .....models import NotificationToken, ChannelVerificationToken
+from .....token_generator import TokenGenerator
+from .....dispatching.dispatcher import NotificationDispatcher
 
 from .messages.messages import VerifyChannelMessage
 from .views import verification_view
