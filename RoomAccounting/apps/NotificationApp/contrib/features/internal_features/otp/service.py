@@ -6,17 +6,18 @@ from .....dispatching.dispatcher import NotificationDispatcher
 from .....models import NotificationToken
 
 from .message import OtpMessage
+from .query import get_latest_valid_otp_token
 
 
-@staticmethod
 def send_otp(user, code: str):
     
     data = OtpMessage.Data(code=code)
     
+    selector = f"user:{user.id}:otp"
     token_hash = hashlib.sha256(code.encode("utf-8")).hexdigest()
 
     NotificationToken.objects.create(
-        selector=str(user.id),
+        selector=selector,
         token_hash=token_hash,
         purpose="otp",
         expires_at=timezone.now() + timedelta(minutes=2),
@@ -27,3 +28,23 @@ def send_otp(user, code: str):
         OtpMessage,
         data,
     )
+
+
+def verify_otp(user, code: str) -> bool:
+
+    selector = f"user:{user.id}:otp"
+
+    token = get_latest_valid_otp_token(selector)
+
+    if not token:
+        return False
+
+    code_hash = hashlib.sha256(code.encode("utf-8")).hexdigest()
+
+    if token.token_hash != code_hash:
+        return False
+
+    token.is_used = True
+    token.save(update_fields=["is_used"])
+
+    return True
