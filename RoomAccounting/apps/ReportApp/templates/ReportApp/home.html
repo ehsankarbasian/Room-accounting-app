@@ -17,9 +17,20 @@
                     <div aria-orientation="vertical">
 
                         <h1>Welcome <i style="font-size: 32px">{{ username }}</i></h1>
+
+                        <hr>
                         <form action="{% url 'AuthApp:logout' %}" method="POST">
                             <button type="submit"><u><b style="font-size: 32px">Logout</b></u></button>
                         </form>
+
+                        <br>
+
+                        <hr>
+                        <form action="{% url 'AuthApp:forgot_password' %}" method="GET">
+                            <input type="email" name="email"/><br/><br>
+                            <button type="submit"><u><b style="font-size: 32px">Forgot Password</b></u></button>
+                        </form>
+                        <hr>
                     </div>
 
                     <h2 style="color: #ffffff">

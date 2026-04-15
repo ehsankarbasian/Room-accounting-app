@@ -12,7 +12,7 @@ from django.views.generic.base import View
 
 from apps.ReportApp.models import User
 
-# from apps.NotificationApp.dispatcher import NotificationDispatcher
+from apps.NotificationApp.contrib.features import send_otp
 
 from apps.AuthApp.persmissions.mixins import PermissionMixin
 from apps.AuthApp.persmissions.permissions import IsAuthenticated, IsAnonymous
@@ -81,9 +81,9 @@ class ForgotPasswordView(PermissionMixin, RawTemplateView):
             return self.render_to_response(context, status=status.HTTP_404_NOT_FOUND)
 
         user = user[0]
-        # NotificationDispatcher.send_reset_password(user, email, reset_password_token)
+        send_otp(user, code='__TODO__')
 
-        context={'result': "Email sent"}
+        context={'result': "Message sent"}
         return self.render_to_response(context)
 
 
