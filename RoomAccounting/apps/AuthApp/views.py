@@ -10,9 +10,8 @@ from django.shortcuts import redirect, render
 from utils.custom_views.views import RawTemplateView
 from django.views.generic.base import View
 
-from apps.ReportApp.models import User
-
-from apps.NotificationApp.contrib.features import send_forgot_password
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 from apps.AuthApp.persmissions.mixins import PermissionMixin
 from apps.AuthApp.persmissions.permissions import IsAuthenticated, IsAnonymous
@@ -66,25 +65,6 @@ class LogOutView(PermissionMixin, View):
     def post(self, request):
         logout(request)
         return redirect('landing_page')
-
-
-class ForgotPasswordView(PermissionMixin, RawTemplateView):
-    permission_classes = (IsAnonymous, )
-    template_name = "result.html"
-    
-    def get(self, request):
-        email = request.GET['email']
-
-        user = User.objects.filter(email=email)
-        if user.count() == 0:
-            context = {'result': "User not found"}
-            return self.render_to_response(context, status=status.HTTP_404_NOT_FOUND)
-
-        user = user[0]
-        send_forgot_password(user, code='*__TODO__*')
-
-        context={'result': "Message sent"}
-        return self.render_to_response(context)
 
 
 class ResetPasswordByTokenAPI(PermissionMixin, APIView):
