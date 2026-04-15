@@ -29,6 +29,7 @@ from apps.OperationApp.apps import OperationAppConfig
 from apps.NotificationApp.contrib.features.feature_urls import (
     verification_path,
     send_otp_path, verify_otp_path,
+    send_forgot_password_message_path,
 )
 from apps.NotificationContribApp.apps import NotificationContribAppConfig
 
@@ -49,6 +50,8 @@ urlpatterns = [
     
     send_otp_path(name='send_otp'),
     verify_otp_path(name='verify_otp'),
+    
+    send_forgot_password_message_path(name="fogot_password"),
 ]
 
 
