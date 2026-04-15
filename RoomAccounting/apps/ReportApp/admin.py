@@ -1,5 +1,5 @@
 from django.contrib import admin
-from apps.ReportApp.models import Room, Person, Spend, Spenders, Partners, User, Token, Transaction
+from apps.ReportApp.models import Room, Person, Spend, Spenders, Partners, User, Transaction
 
 
 class RoomInLine(admin.TabularInline):
@@ -42,14 +42,6 @@ class UserAdmin(admin.ModelAdmin):
     )
     readonly_fields = ['username', 'email', 'date_joined', 'last_login', 'is_staff', 'is_superuser']
     inlines = [RoomInLine]
-
-
-@admin.register(Token)
-class TokenAdmin(admin.ModelAdmin):
-    list_display = ['verify_email_code', 'user', 'verify_email_token']
-    fields = [('verify_email_code', 'verify_email_token')]
-    readonly_fields = ['verify_email_token']
-    search_fields = ['user__username']
 
 
 @admin.register(Room)

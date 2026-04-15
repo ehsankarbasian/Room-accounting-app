@@ -11,7 +11,6 @@ class User(AbstractUser):
 
     verified_email = models.BooleanField(default=False)
     verified_phone = models.BooleanField(default=False)
-    token = models.OneToOneField("Token", on_delete=models.CASCADE, null=True)
 
     class Meta:
         verbose_name_plural = verbose_name_plural('Users')

@@ -81,7 +81,6 @@ class ForgotPasswordView(PermissionMixin, RawTemplateView):
             return self.render_to_response(context, status=status.HTTP_404_NOT_FOUND)
 
         user = user[0]
-        reset_password_token = user.token.reset_pass_token
         # NotificationDispatcher.send_reset_password(user, email, reset_password_token)
 
         context={'result': "Email sent"}
