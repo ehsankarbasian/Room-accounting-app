@@ -1,11 +1,8 @@
-from secrets import token_hex
-
 from rest_framework import status
-from rest_framework.views import APIView
 
 from django.contrib.auth import authenticate
 from django.contrib.auth import login, logout
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 
 from utils.custom_views.views import RawTemplateView
 from django.views.generic.base import View
@@ -65,38 +62,3 @@ class LogOutView(PermissionMixin, View):
     def post(self, request):
         logout(request)
         return redirect('landing_page')
-
-
-class ResetPasswordByTokenAPI(PermissionMixin, APIView):
-    permission_classes = (IsAnonymous, )
-    
-    def post(self, request):
-        token = request.POST['token']
-        email = request.POST['email']
-        password_1 = request.POST['password_1']
-        password_2 = request.POST['password_2']
-
-        user = user.objects.filter(email=email)
-        if user.count() == 0:
-            return self._render_result("User not found")
-
-        if password_1 != password_2:
-            return self._render_result("the passwords are not equal")
-
-        user = user[0]
-        if not user.verified_email:
-            return self._render_result("Your email is not verified")
-
-        if user.token.reset_pass_token != token:
-            print(user.token.reset_pass_token)
-            print(token)
-            return self._render_result("Wrong token")
-
-        user.set_password(password_1)
-        user.token.reset_pass_token = token_hex(64)
-        user.save()
-        return self._render_result("Password changed successfully. you can sign in.")
-
-    
-    def _render_result(self, result):
-        return render(self.request, 'result.html', context={'result': result})
