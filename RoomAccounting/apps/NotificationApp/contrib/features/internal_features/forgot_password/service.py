@@ -9,7 +9,6 @@ from .....dispatching.dispatcher import NotificationDispatcher
 from .....models import NotificationToken
 
 from .message import ForgotPasswordMessage
-from .views import forgot_password_view
 
 
 def send_forgot_password(user, code: str):
@@ -35,10 +34,10 @@ def send_forgot_password(user, code: str):
 
 
 def _build_verification_url(token: str) -> str:
+    from .views import forgot_password_view
     
     path = reverse(
         forgot_password_view.url_name,
-        kwargs={"token": token},
     )
     
     return f"{settings.SITE_BASE_URL}{path}"

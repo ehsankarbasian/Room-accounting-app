@@ -26,7 +26,8 @@
                         <br>
 
                         <hr>
-                        <form action="{% url 'AuthApp:forgot_password' %}" method="GET">
+                        {% comment %} <form action="{% url 'AuthApp:forgot_password' %}" method="GET"> {% endcomment %}
+                        <form action="{% url 'forgot_password' %}" method="GET">
                             <input type="email" name="email"/><br/><br>
                             <button type="submit"><u><b style="font-size: 32px">Forgot Password</b></u></button>
                         </form>

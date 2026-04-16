@@ -51,7 +51,7 @@ urlpatterns = [
     send_otp_path(name='send_otp'),
     verify_otp_path(name='verify_otp'),
     
-    send_forgot_password_message_path(name="fogot_password"),
+    send_forgot_password_message_path(name="forgot_password"),
 ]
 
 
