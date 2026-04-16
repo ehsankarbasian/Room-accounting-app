@@ -32,7 +32,7 @@ def forgot_password_view(request):
 class ResetPasswordByToken(View):
     
     def get(self, request):
-        return render(request, "AuthApp/reset_password.html")
+        return render(request, "forgot_password/reset_password.html")
         
     
     def post(self, request):

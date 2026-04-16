@@ -13,7 +13,7 @@ from .message import ForgotPasswordMessage
 
 def send_forgot_password(user, code: str):
     
-    url = _build_verification_url(token=code)
+    url = _build_verification_url()
     data = ForgotPasswordMessage.Data(code=code, reset_password_url=url)
     
     selector = f"user:{user.id}:reset_password"
@@ -33,11 +33,11 @@ def send_forgot_password(user, code: str):
     )
 
 
-def _build_verification_url(token: str) -> str:
-    from .views import forgot_password_view
+def _build_verification_url() -> str:
+    from .views import ResetPasswordByToken
     
     path = reverse(
-        forgot_password_view.url_name,
+        ResetPasswordByToken.url_name,
     )
     
     return f"{settings.SITE_BASE_URL}{path}"

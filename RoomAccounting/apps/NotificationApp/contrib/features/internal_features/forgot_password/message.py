@@ -24,11 +24,11 @@ class ForgotPasswordMessage(MessageDefinitionInterface):
         @staticmethod
         def map(data: "ForgotPasswordMessage.Data") -> CanonicalMessageBase:
 
-            text = f"Reset your password using the link below:\n(code: *{data.code}* TODO: delete later)"
+            text = f"Reset your password using the link below\ncode: *{data.code}*"
             
             reset_password_button = ButtonLink(
                 text='Reset Password',
-                target=f"{data.reset_password_url}/{data.code}"
+                target=f"{data.reset_password_url}"
             )
             
             return CanonicalMessageBase(text=text, button_links=[reset_password_button])
