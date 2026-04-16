@@ -3,6 +3,7 @@ import hashlib
 from django.http import HttpResponse
 from django.views import View
 from django.shortcuts import render
+from django.urls import reverse
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -24,7 +25,8 @@ def forgot_password_view(request):
     user = user[0]
     
     code = NumericSixDigitTokenGenerator.generate()
-    send_forgot_password(user, code=code)
+    current_namespace = request.resolver_match.namespace
+    send_forgot_password(user, code=code, current_namespace=current_namespace)
 
     return HttpResponse("Message sent")
 
@@ -32,7 +34,15 @@ def forgot_password_view(request):
 class ResetPasswordByToken(View):
     
     def get(self, request):
-        return render(request, "forgot_password/reset_password.html")
+        namespace = request.resolver_match.namespace
+
+        if namespace:
+            reset_password_url = reverse(f"{namespace}:{self.url_name}")
+        else:
+            reset_password_url = reverse(self.url_name)
+
+        context = {"reset_password_url": reset_password_url}
+        return render(request, "forgot_password/reset_password.html", context=context)
         
     
     def post(self, request):

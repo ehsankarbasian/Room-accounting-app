@@ -11,9 +11,9 @@ from .....models import NotificationToken
 from .message import ForgotPasswordMessage
 
 
-def send_forgot_password(user, code: str):
+def send_forgot_password(user, code: str, current_namespace: str):
     
-    url = _build_verification_url()
+    url = _build_verification_url(current_namespace)
     data = ForgotPasswordMessage.Data(code=code, reset_password_url=url)
     
     selector = f"user:{user.id}:reset_password"
@@ -33,11 +33,11 @@ def send_forgot_password(user, code: str):
     )
 
 
-def _build_verification_url() -> str:
+def _build_verification_url(current_namespace) -> str:
     from .views import ResetPasswordByToken
     
     path = reverse(
-        ResetPasswordByToken.url_name,
+        f"{current_namespace}:{ResetPasswordByToken.url_name}",
     )
     
     return f"{settings.SITE_BASE_URL}{path}"
