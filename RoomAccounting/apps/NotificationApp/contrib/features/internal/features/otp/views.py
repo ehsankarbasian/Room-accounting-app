@@ -1,6 +1,6 @@
 from django.http import HttpResponse, JsonResponse
 
-from .....token_generator import TokenGenerator
+from ......token_generator import TokenGenerator
 
 from .service import send_otp as _send_otp
 from .service import verify_otp as _verify_otp

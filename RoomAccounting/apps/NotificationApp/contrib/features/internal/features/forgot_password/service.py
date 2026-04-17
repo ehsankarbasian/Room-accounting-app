@@ -5,8 +5,8 @@ from django.utils import timezone
 from django.urls import reverse
 from django.conf import settings
 
-from .....dispatching.dispatcher import NotificationDispatcher
-from .....models import NotificationToken
+from ......dispatching.dispatcher import NotificationDispatcher
+from ......models import NotificationToken
 
 from .message import ForgotPasswordMessage
 

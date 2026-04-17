@@ -2,8 +2,8 @@ import hashlib
 from datetime import timedelta
 from django.utils import timezone
 
-from .....dispatching.dispatcher import NotificationDispatcher
-from .....models import NotificationToken
+from ......dispatching.dispatcher import NotificationDispatcher
+from ......models import NotificationToken
 
 from .message import OtpMessage
 from .query import get_latest_valid_otp_token

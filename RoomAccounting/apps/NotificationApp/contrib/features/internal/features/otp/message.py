@@ -1,11 +1,11 @@
 from dataclasses import dataclass
 
-from .....interfaces.message_base import MessageDefinitionInterface
-from .....interfaces.message_mapper import MessageMapperInterface
+from ......interfaces.message_base import MessageDefinitionInterface
+from ......interfaces.message_mapper import MessageMapperInterface
 
-from .....message_schema import CanonicalMessageBase
+from ......message_schema import CanonicalMessageBase
 
-from ....permissions import Verified
+from .....permissions import Verified
 
 
 class OtpMessage(MessageDefinitionInterface):

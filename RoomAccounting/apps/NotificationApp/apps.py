@@ -20,9 +20,9 @@ class NotificationAppConfig(AppConfig):
         """
 
         from apps.NotificationApp.registry.autodiscover import autodiscover_modules
-        autodiscover_modules("apps.NotificationApp.contrib.features.internal_features.verification")
+        autodiscover_modules("apps.NotificationApp.contrib.features.internal.features.verification")
 
-        root = Path(__file__).resolve().parent / "contrib/features/internal_features"
+        root = Path(__file__).resolve().parent / "contrib/features/internal/features"
         if root.exists():
             feature_templates = [str(p) for p in root.glob("*/templates") if str(p) not in settings.TEMPLATES[0]["DIRS"]]
             settings.TEMPLATES[0]["DIRS"].extend(feature_templates)

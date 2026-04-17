@@ -1,6 +1,6 @@
 from django.utils import timezone
 
-from .....models import NotificationToken
+from ......models import NotificationToken
 
 
 def get_latest_valid_reset_password_token(selector: str):

@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
-from .....token_generator.default import NumericSixDigitTokenGenerator
+from ......token_generator.default import NumericSixDigitTokenGenerator
 
 from .service import send_forgot_password
 from .query import get_latest_valid_reset_password_token

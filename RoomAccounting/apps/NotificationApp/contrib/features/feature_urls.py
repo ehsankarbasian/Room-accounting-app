@@ -1,8 +1,8 @@
-from .internal_routing.factory import make_feature_path
+from .internal.routing.factory import make_feature_path
 
-from .internal_features.verification.views import verification_view
-from .internal_features.otp.views import send_otp_view, verify_otp_view
-from .internal_features.forgot_password.views import forgot_password_view, ResetPasswordByToken
+from .internal.features.verification.views import verification_view
+from .internal.features.otp.views import send_otp_view, verify_otp_view
+from .internal.features.forgot_password.views import forgot_password_view, ResetPasswordByToken
 
 
 verification_path = make_feature_path(
