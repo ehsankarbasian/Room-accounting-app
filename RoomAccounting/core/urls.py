@@ -26,11 +26,6 @@ from apps.AuthApp.apps import AuthAppConfig
 from apps.ReportApp.apps import ReportAppConfig
 from apps.OperationApp.apps import OperationAppConfig
 
-from apps.NotificationApp.contrib.features.feature_urls import (
-    verification_path,
-)
-from apps.NotificationContribApp.apps import NotificationContribAppConfig
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -40,11 +35,6 @@ urlpatterns = [
     path(AuthAppConfig.name + "/", include('apps.AuthApp.urls')),
     path(ReportAppConfig.name + "/", include('apps.ReportApp.urls')),
     path(OperationAppConfig.name + "/", include('apps.OperationApp.urls')),
-    
-    # verification_path(
-    #     NotificationContribAppConfig.name + "/notifications/verify/<str:token>/",
-    #     name="account-verify",
-    # ),
 ]
 
 
