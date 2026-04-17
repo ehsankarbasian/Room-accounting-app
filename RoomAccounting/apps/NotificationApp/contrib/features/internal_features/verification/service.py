@@ -11,6 +11,8 @@ from .....models import NotificationToken, ChannelVerificationToken
 from .....token_generator import TokenGenerator
 from .....dispatching.dispatcher import NotificationDispatcher
 
+from ...internal_utils.namespace_finder import get_url_namespace
+
 from .message import VerifyChannelMessage
 from .views import verification_view
 
@@ -73,9 +75,23 @@ class VerificationService:
     @staticmethod
     def _build_verification_url(token: str) -> str:
         
+        view_url_name = VerificationService._get_view_url_complete_name(verification_view)
+        
         path = reverse(
-           verification_view.url_name,
+            view_url_name,
             kwargs={"token": token},
         )
         
         return f"{settings.SITE_BASE_URL}{path}"
+    
+    
+    @staticmethod
+    def _get_view_url_complete_name(view):
+        
+        url_name = view.url_name
+        namespace = get_url_namespace(url_name)
+        
+        if namespace:
+            return f"{namespace}:{view.url_name}"
+        
+        return view.url_name

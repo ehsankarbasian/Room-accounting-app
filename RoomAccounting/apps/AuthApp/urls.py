@@ -12,7 +12,6 @@ from apps.NotificationApp.contrib.features.feature_urls import (
     send_forgot_password_message_path,
     reset_password_path,
 )
-from apps.NotificationContribApp.apps import NotificationContribAppConfig
 
 
 # Auto-generate app_name from AppConfig.name to handle optional 'apps.' prefix
@@ -25,7 +24,7 @@ urlpatterns = [
     path('logout', LogOutView.as_view(), name='logout'),
     
     verification_path(
-        NotificationContribAppConfig.name + "/notifications/verify/<str:token>/",
+        "verify_notification_channel/<str:token>/",
         name="account-verify",
     ),
     
