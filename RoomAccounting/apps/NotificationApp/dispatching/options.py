@@ -1,14 +1,16 @@
 from dataclasses import dataclass, fields
 from typing import Optional, List, Any, Dict
 
+from ..interfaces import MessageDefinitionInterface
+
 
 @dataclass(frozen=True)
 class NotificationOptions:
     retry_count: int = 0
     timeout_seconds: Optional[float] = None
     fallback_channels: Optional[List[Any]] = None
-    channel_override: Optional[Any] = None
-    preferred_channels: Optional[List[Any]] = None
+    channel_override: Optional[MessageDefinitionInterface] = None
+    preferred_channels: Optional[List[MessageDefinitionInterface]] = None
     require_verified: bool = True
 
     def copy_with(self, **overrides: Dict[str, Any]):

@@ -18,6 +18,7 @@ from typing import Type, Optional, List
 from ..registry import SenderRegistry
 from ..interfaces import MessageDefinitionInterface, MessageSenderInterface
 
+from .options import NotificationOptions
 from .resolver import ChannelResolver
 from .errors import MessagePermissionDenied
 
@@ -26,26 +27,21 @@ class NotificationDispatcher:
 
     # TODO(v2): Introduce a NotificationOptions object to support advanced dispatch controls
     # such as async, timeout, scheduling, retries, and channel fallback.
+    
     @staticmethod
     def send(
         recipient,
         message_class: Type[MessageDefinitionInterface],
         data: Type,
         *,
+        options: Optional[NotificationOptions],
         explicit_channel: Optional[MessageSenderInterface] = None,
-        channel_override: Optional[MessageDefinitionInterface] = None,
-        preferred_channels: Optional[List[MessageDefinitionInterface]] = None,
-        is_verified: bool = True,
     ):
         """
         Execute the notification delivery pipeline.
 
         data:
             Dataclass instance matching the expected Data model of the message definition.
-
-        channel_override:
-            Optional override for the notification channel. If provided,
-            the dispatcher will bypass the recipient's primary notification method.
 
         Raises:
             TypeError
@@ -74,9 +70,9 @@ class NotificationDispatcher:
 
         notification_channel = ChannelResolver.resolve(
             recipient=recipient,
-            channel_override=channel_override,
-            preferred_channels=preferred_channels,
-            is_verified=is_verified,
+            channel_override=options.channel_override,
+            preferred_channels=options.preferred_channels,
+            is_verified=options.require_verified,
             explicit_channel=explicit_channel
         )
 
