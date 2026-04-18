@@ -1,7 +1,18 @@
 from django.urls import get_resolver, URLResolver, URLPattern
 
 
-def get_url_namespace(view_url_name):
+def get_complete_view_url_name(view):
+        
+        url_name = view.url_name
+        namespace = _get_url_namespace(url_name)
+        
+        if namespace:
+            return f"{namespace}:{view.url_name}"
+        
+        return view.url_name
+
+
+def _get_url_namespace(view_url_name):
     
     resolver = get_resolver()
     stack = [resolver]
