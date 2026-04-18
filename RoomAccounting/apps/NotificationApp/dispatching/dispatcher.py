@@ -13,7 +13,7 @@ Responsibilities:
 
 from dataclasses import is_dataclass
 
-from typing import Type, Optional, List
+from typing import Type, Optional
 
 from ..registry import SenderRegistry
 from ..interfaces import MessageDefinitionInterface, MessageSenderInterface
