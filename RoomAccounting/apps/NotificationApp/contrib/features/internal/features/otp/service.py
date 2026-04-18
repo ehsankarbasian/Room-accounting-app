@@ -9,9 +9,9 @@ from .message import OtpMessage
 from .query import get_latest_valid_otp_token
 
 
-def send_otp(user, code: str):
+def send_otp(user, code: str, verify_otp_url: str):
     
-    data = OtpMessage.Data(code=code)
+    data = OtpMessage.Data(code=code, verify_otp_url=verify_otp_url)
     
     selector = f"user:{user.id}:otp"
     token_hash = hashlib.sha256(code.encode("utf-8")).hexdigest()

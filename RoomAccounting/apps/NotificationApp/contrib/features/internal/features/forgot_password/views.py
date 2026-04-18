@@ -10,6 +10,8 @@ User = get_user_model()
 
 from ......token_generator.default import NumericSixDigitTokenGenerator
 
+from ...utils.url_namespace import get_complete_view_url_name
+
 from .service import send_forgot_password
 from .query import get_latest_valid_reset_password_token
 
@@ -34,14 +36,10 @@ def forgot_password_view(request):
 class ResetPasswordByToken(View):
     
     def get(self, request):
-        namespace = request.resolver_match.namespace
-
-        if namespace:
-            reset_password_url = reverse(f"{namespace}:{self.url_name}")
-        else:
-            reset_password_url = reverse(self.url_name)
-
+        url_name = get_complete_view_url_name(view=self)
+        reset_password_url = reverse(url_name)
         context = {"reset_password_url": reset_password_url}
+        
         return render(request, "forgot_password/reset_password.html", context=context)
         
     
