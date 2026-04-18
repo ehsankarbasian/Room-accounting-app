@@ -34,8 +34,8 @@ class NotificationDispatcher:
         message_class: Type[MessageDefinitionInterface],
         data: Type,
         *,
-        dispatcher_options: Optional[DeliveryOptions],
-        channel_selection_options: Optional[ChannelSelectionOptions],
+        dispatcher_options: Optional[DeliveryOptions] = DeliveryOptions,
+        channel_selection_options: Optional[ChannelSelectionOptions] = ChannelSelectionOptions,
     ):
         """
         Execute the notification delivery pipeline.
