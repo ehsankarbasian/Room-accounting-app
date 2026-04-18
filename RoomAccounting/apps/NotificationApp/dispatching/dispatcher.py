@@ -26,7 +26,7 @@ from .errors import MessagePermissionDenied
 class NotificationDispatcher:
 
     # TODO(v2): Introduce a NotificationOptions object to support advanced dispatch controls
-    # such as async, timeout, scheduling, retries, and channel fallback.
+    # such as async, timeout, scheduling, and channel fallback.
     
     @staticmethod
     def send(
@@ -34,7 +34,7 @@ class NotificationDispatcher:
         message_class: Type[MessageDefinitionInterface],
         data: Type,
         *,
-        dispatcher_options: Optional[DeliveryOptions] = DeliveryOptions,
+        delivery_options: Optional[DeliveryOptions] = DeliveryOptions,
         channel_selection_options: Optional[ChannelSelectionOptions] = ChannelSelectionOptions,
     ):
         """
@@ -88,7 +88,17 @@ class NotificationDispatcher:
         mapper_class = message_class.Mapper
         canonical_message = mapper_class.map(data=data)
 
-        sender_class.send(
-            identifier=identifier,
-            message=canonical_message,
-        )
+        attempts = max(1, delivery_options.retry_count + 1)
+        last_exception = None
+
+        for _ in range(attempts):
+            try:
+                sender_class.send(
+                    identifier=identifier,
+                    message=canonical_message,
+                )
+                return
+            except Exception as new_excection:
+                last_exception = new_excection
+
+        raise last_exception

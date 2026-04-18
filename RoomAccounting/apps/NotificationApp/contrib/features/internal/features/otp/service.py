@@ -2,7 +2,7 @@ import hashlib
 from datetime import timedelta
 from django.utils import timezone
 
-from ......dispatching.dispatcher import NotificationDispatcher
+from ......dispatching import NotificationDispatcher
 from ......models import NotificationToken
 
 from .message import OtpMessage
