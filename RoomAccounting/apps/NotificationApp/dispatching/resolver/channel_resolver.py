@@ -1,8 +1,8 @@
 from typing import Optional, List
 from enum import Enum
 
-from ..models import NotificationChannel
-from ..interfaces import MessageSenderInterface
+from ...models import NotificationChannel
+from ...interfaces import MessageSenderInterface
 
 from .errors import (
     ChannelUnavailableError,
