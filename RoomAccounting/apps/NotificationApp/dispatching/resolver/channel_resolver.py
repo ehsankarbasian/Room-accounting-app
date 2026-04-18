@@ -1,8 +1,6 @@
-from typing import Optional, List
-from enum import Enum
+from typing import Optional
 
 from ...models import NotificationChannel
-from ...interfaces import MessageSenderInterface
 
 from .errors import (
     ChannelUnavailableError,
@@ -10,6 +8,7 @@ from .errors import (
     NoPreferredChannelAvailableError,
     ChannelOverrideConflictError,
 )
+from .options import ChannelSelectionOptions
 
 
 class ChannelResolver:
@@ -27,18 +26,14 @@ class ChannelResolver:
     def resolve(
         recipient,
         *,
-        channel_override: Optional[Enum] = None,
-        explicit_channel: Optional[MessageSenderInterface] = None,
-        preferred_channels: Optional[List[Enum]] = None,
-        is_verified = True
+        options: Optional[ChannelSelectionOptions],
     ):
         """
         Select the best notification channel for the given recipient.
 
         Args:
             recipient: Target recipient instance.
-            channel_override: Explicit channel type requested by the caller.
-            preferred_channels: Ordered list of acceptable channel types.
+            options: Options about how to resolve channel
 
         Returns:
             NotificationChannel: The selected channel instance.
@@ -57,32 +52,32 @@ class ChannelResolver:
         # Prevent inconsistent configuration where override
         # is not included in the preferred channel list.
         if (
-            channel_override
-            and preferred_channels
-            and channel_override not in preferred_channels
+            options.channel_override
+            and options.preferred_channels
+            and options.channel_override not in options.preferred_channels
         ):
             raise ChannelOverrideConflictError(
-                override=channel_override,
-                preferred=preferred_channels
+                override=options.channel_override,
+                preferred=options.preferred_channels
             )
 
         # ------------------------------------------------
         # 2. DATABASE QUERY (minimal, efficient)
         # ------------------------------------------------
         
-        if explicit_channel:
-            return explicit_channel
+        if options.explicit_channel:
+            return options.explicit_channel
 
         # Base queryset: only verified channels for the recipient
-        queryset = NotificationChannel.objects.for_recipient(recipient).filter(is_verified=is_verified)
+        queryset = NotificationChannel.objects.for_recipient(recipient).filter(is_verified=options.require_verified)
 
         # Restrict to the explicitly requested channel
-        if channel_override:
-            queryset = queryset.filter(channel_type=channel_override)
+        if options.channel_override:
+            queryset = queryset.filter(channel_type=options.channel_override)
 
         # Restrict to preferred channel types
-        if preferred_channels:
-            queryset = queryset.filter(channel_type__in=preferred_channels)
+        if options.preferred_channels:
+            queryset = queryset.filter(channel_type__in=options.preferred_channels)
 
         # Deterministic ordering for consistent selection
         channels = list(
@@ -100,13 +95,13 @@ class ChannelResolver:
         if not channels:
 
             # Explicit channel requested but unavailable
-            if channel_override:
-                raise ChannelUnavailableError(channel_override)
+            if options.channel_override:
+                raise ChannelUnavailableError(options.channel_override)
 
             # Preferred channels specified but none available
-            if preferred_channels:
+            if options.preferred_channels:
                 raise NoPreferredChannelAvailableError(
-                    preferred=preferred_channels
+                    preferred=options.preferred_channels
                 )
 
             # Recipient has no verified channels

@@ -9,8 +9,8 @@ from django.contrib.auth.hashers import make_password
 
 from ......models import NotificationToken, ChannelVerificationToken
 from ......token_generator import TokenGenerator
-from ......dispatching.dispatcher import NotificationDispatcher
-from ......dispatching.options import NotificationOptions
+from ......dispatching import NotificationDispatcher
+from ......dispatching import ChannelSelectionOptions
 
 from ...utils.url_namespace import get_complete_view_url_name
 
@@ -54,15 +54,15 @@ class VerificationService:
             verification_token=raw_token,
         )
 
-        notification_options = NotificationOptions(
-            require_verified=False
+        notification_options = ChannelSelectionOptions(
+            channel_override=channel,
+            require_verified=False,
         )
         NotificationDispatcher.send(
             recipient=cls._get_recipient(channel),
             message_class=VerifyChannelMessage,
             data=data,
-            options=notification_options,
-            explicit_channel=channel,
+            channel_selection_options=notification_options,
         )
     
     

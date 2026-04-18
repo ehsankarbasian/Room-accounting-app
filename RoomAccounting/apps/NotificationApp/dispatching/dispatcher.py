@@ -16,10 +16,10 @@ from dataclasses import is_dataclass
 from typing import Type, Optional
 
 from ..registry import SenderRegistry
-from ..interfaces import MessageDefinitionInterface, MessageSenderInterface
+from ..interfaces import MessageDefinitionInterface
 
-from .options import NotificationOptions
-from .resolver import ChannelResolver
+from .options import DeliveryOptions
+from .resolver import ChannelResolver, ChannelSelectionOptions
 from .errors import MessagePermissionDenied
 
 
@@ -34,8 +34,8 @@ class NotificationDispatcher:
         message_class: Type[MessageDefinitionInterface],
         data: Type,
         *,
-        options: Optional[NotificationOptions],
-        explicit_channel: Optional[MessageSenderInterface] = None,
+        dispatcher_options: Optional[DeliveryOptions],
+        channel_selection_options: Optional[ChannelSelectionOptions],
     ):
         """
         Execute the notification delivery pipeline.
@@ -70,10 +70,7 @@ class NotificationDispatcher:
 
         notification_channel = ChannelResolver.resolve(
             recipient=recipient,
-            channel_override=options.channel_override,
-            preferred_channels=options.preferred_channels,
-            is_verified=options.require_verified,
-            explicit_channel=explicit_channel
+            options=channel_selection_options
         )
 
         for permission in message_class.permission_classes:
