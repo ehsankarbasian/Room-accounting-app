@@ -24,9 +24,9 @@ def send_otp(user, code: str, verify_otp_url: str):
     )
 
     NotificationDispatcher.send(
-        user,
-        OtpMessage,
-        data,
+        recipient=user,
+        message_class=OtpMessage,
+        data=data,
     )
 
 

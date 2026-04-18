@@ -17,8 +17,6 @@ from utils.custom_views.mixins import PaginationMixin
 from apps.AuthApp.persmissions.mixins import PermissionMixin
 from apps.AuthApp.persmissions.permissions import IsAuthenticated, AllowAny
 
-from apps.NotificationContribApp.services import SecurityNotifications
-
 
 class LandingPageView(PermissionMixin, RawTemplateView):
     permission_classes = (AllowAny, )

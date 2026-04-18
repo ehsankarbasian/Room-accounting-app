@@ -27,9 +27,9 @@ def send_forgot_password(user, code: str, current_namespace: str):
     )
 
     NotificationDispatcher.send(
-        user,
-        ForgotPasswordMessage,
-        data,
+        recipient=user,
+        message_class=ForgotPasswordMessage,
+        data=data,
     )
 
 
