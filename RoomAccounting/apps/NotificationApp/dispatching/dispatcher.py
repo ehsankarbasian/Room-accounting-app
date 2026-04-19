@@ -23,7 +23,11 @@ from ..interfaces import MessageDefinitionInterface
 
 from .options import DeliveryOptions
 from .resolver import ChannelResolver, ChannelSelectionOptions
-from .errors import MessagePermissionDenied
+
+from .errors import (
+    MessagePermissionDeniedError,
+    MaxRetryExceededError,
+)
 
 
 class NotificationDispatcher:
@@ -80,7 +84,7 @@ class NotificationDispatcher:
             
             if not permission.has_permission(recipient, channel=notification_channel):
                 
-                raise MessagePermissionDenied(
+                raise MessagePermissionDeniedError(
                     message_class=message_class,
                     permission_class=permission
                 )
@@ -126,4 +130,10 @@ class NotificationDispatcher:
             except Exception as new_exception:
                 last_exception = new_exception
 
-        raise last_exception
+        retry_exception_object = MaxRetryExceededError(
+            attempts=attempts,
+            last_exception=last_exception,
+            channel=notification_channel.channel_type,
+            identifier=identifier
+        )
+        raise retry_exception_object from last_exception
