@@ -13,6 +13,9 @@ Responsibilities:
 
 from dataclasses import is_dataclass
 
+from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import TimeoutError as FuturesTimeoutError
+
 from typing import Type, Optional
 
 from ..registry import SenderRegistry
@@ -89,16 +92,38 @@ class NotificationDispatcher:
         canonical_message = mapper_class.map(data=data)
 
         attempts = max(1, delivery_options.retry_count + 1)
+        timeout_seconds = delivery_options.timeout_seconds
+
         last_exception = None
 
         for _ in range(attempts):
             try:
-                sender_class.send(
-                    identifier=identifier,
-                    message=canonical_message,
-                )
+                if timeout_seconds is not None:
+                    
+                    with ThreadPoolExecutor(max_workers=1) as executor:
+                        
+                        future = executor.submit(
+                            sender_class.send,
+                            identifier=identifier,
+                            message=canonical_message,
+                        )
+                        future.result(timeout=timeout_seconds)
+                        
+                else:
+                    sender_class.send(
+                        identifier=identifier,
+                        message=canonical_message,
+                    )
+                    
                 return
-            except Exception as new_excection:
-                last_exception = new_excection
+
+            except FuturesTimeoutError:
+                
+                last_exception = TimeoutError(
+                    f"Sender execution exceeded timeout of {timeout_seconds} seconds"
+                )
+
+            except Exception as new_exception:
+                last_exception = new_exception
 
         raise last_exception
