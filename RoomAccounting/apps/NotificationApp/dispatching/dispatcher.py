@@ -16,10 +16,10 @@ from dataclasses import is_dataclass
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import TimeoutError as FuturesTimeoutError
 
-from typing import Type, Optional
+from typing import Type, Optional, List
 
 from ..registry import SenderRegistry
-from ..interfaces import MessageDefinitionInterface
+from ..interfaces import MessageDefinitionInterface, MessageSenderInterface
 
 from .options import DeliveryOptions
 from .resolver import ChannelResolver, ChannelSelectionOptions
@@ -88,9 +88,6 @@ class NotificationDispatcher:
                     message_class=message_class,
                     permission_class=permission
                 )
-        
-        sender_class = SenderRegistry.get(notification_channel.channel_type)
-        identifier = notification_channel.identifier
 
         mapper_class = message_class.Mapper
         canonical_message = mapper_class.map(data=data)
@@ -98,42 +95,68 @@ class NotificationDispatcher:
         attempts = max(1, delivery_options.retry_count + 1)
         timeout_seconds = delivery_options.timeout_seconds
 
-        last_exception = None
+        # TODO: comment
+        sender_classes: List[type[MessageSenderInterface]] = []
+        primary_sender_class = SenderRegistry.get(notification_channel.channel_type)
+        sender_classes.append(primary_sender_class)
 
-        for _ in range(attempts):
-            try:
-                if timeout_seconds is not None:
-                    
-                    with ThreadPoolExecutor(max_workers=1) as executor:
+        # TODO: comment
+        fallback_channels: List[type[MessageSenderInterface]] = []
+        if delivery_options.fallback_channels:
+            fallback_channels = delivery_options.fallback_channels
+        sender_classes.extend(fallback_channels)
+
+        last_exception = None
+        last_channel_type = notification_channel.channel_type
+        last_identifier = notification_channel.identifier
+
+        for sender_class in sender_classes:
+
+            if sender_class is primary_sender_class:
+                identifier = notification_channel.identifier
+                channel_type = notification_channel.channel_type
+            else:
+                # TODO: use sender_class not the primary resolved channel
+                identifier = notification_channel.identifier
+                channel_type = sender_class.channel_type
+
+            for _ in range(attempts):
+                try:
+                    if timeout_seconds is not None:
                         
-                        future = executor.submit(
-                            sender_class.send,
+                        with ThreadPoolExecutor(max_workers=1) as executor:
+                            
+                            future = executor.submit(
+                                sender_class.send,
+                                identifier=identifier,
+                                message=canonical_message,
+                            )
+                            future.result(timeout=timeout_seconds)
+                            
+                    else:
+                        sender_class.send(
                             identifier=identifier,
                             message=canonical_message,
                         )
-                        future.result(timeout=timeout_seconds)
                         
-                else:
-                    sender_class.send(
-                        identifier=identifier,
-                        message=canonical_message,
-                    )
+                    return
+
+                except FuturesTimeoutError:
                     
-                return
+                    last_exception = TimeoutError(
+                        f"Sender execution exceeded timeout of {timeout_seconds} seconds"
+                    )
 
-            except FuturesTimeoutError:
-                
-                last_exception = TimeoutError(
-                    f"Sender execution exceeded timeout of {timeout_seconds} seconds"
-                )
+                except Exception as new_exception:
+                    last_exception = new_exception
 
-            except Exception as new_exception:
-                last_exception = new_exception
+            last_channel_type = channel_type
+            last_identifier = identifier
 
         retry_exception_object = MaxRetryExceededError(
             attempts=attempts,
             last_exception=last_exception,
-            channel=notification_channel.channel_type,
-            identifier=identifier
+            channel=last_channel_type,
+            identifier=last_identifier
         )
         raise retry_exception_object from last_exception
