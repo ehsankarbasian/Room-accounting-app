@@ -75,14 +75,14 @@ class NotificationDispatcher:
                 f"got {type(data).__name__}"
             )
 
-        notification_channel = ChannelResolver.resolve(
+        primary_resolved_channel = ChannelResolver.resolve(
             recipient=recipient,
             options=channel_selection_options
         )
 
         for permission in message_class.permission_classes:
             
-            if not permission.has_permission(recipient, channel=notification_channel):
+            if not permission.has_permission(recipient, channel=primary_resolved_channel):
                 
                 raise MessagePermissionDeniedError(
                     message_class=message_class,
@@ -95,30 +95,33 @@ class NotificationDispatcher:
         attempts = max(1, delivery_options.retry_count + 1)
         timeout_seconds = delivery_options.timeout_seconds
 
-        # TODO: comment
+        # Build the primary delivery channel based on the recipient's resolved notification method
         sender_classes: List[type[MessageSenderInterface]] = []
-        primary_sender_class = SenderRegistry.get(notification_channel.channel_type)
+        primary_sender_class = SenderRegistry.get(primary_resolved_channel.channel_type)
         sender_classes.append(primary_sender_class)
 
-        # TODO: comment
+        # Append fallback sender classes provided by delivery options for alternative delivery paths
         fallback_channels: List[type[MessageSenderInterface]] = []
         if delivery_options.fallback_channels:
             fallback_channels = delivery_options.fallback_channels
         sender_classes.extend(fallback_channels)
 
         last_exception = None
-        last_channel_type = notification_channel.channel_type
-        last_identifier = notification_channel.identifier
+        last_channel_type = primary_resolved_channel.channel_type
+        last_identifier = primary_resolved_channel.identifier
 
         for sender_class in sender_classes:
 
-            if sender_class is primary_sender_class:
-                identifier = notification_channel.identifier
-                channel_type = notification_channel.channel_type
-            else:
-                # TODO: use sender_class not the primary resolved channel
-                identifier = notification_channel.identifier
-                channel_type = sender_class.channel_type
+            resolved_channel = ChannelResolver.resolve(
+                recipient=recipient,
+                options=ChannelSelectionOptions(
+                    channel_override=sender_class.channel_type,
+                    require_verified=channel_selection_options.require_verified
+                )
+            )
+
+            identifier = resolved_channel.identifier
+            channel_type = resolved_channel.channel_type
 
             for _ in range(attempts):
                 try:
@@ -138,7 +141,7 @@ class NotificationDispatcher:
                             identifier=identifier,
                             message=canonical_message,
                         )
-                        
+
                     return
 
                 except FuturesTimeoutError:
