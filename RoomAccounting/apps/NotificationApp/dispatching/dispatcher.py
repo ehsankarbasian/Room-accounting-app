@@ -80,15 +80,6 @@ class NotificationDispatcher:
             options=channel_selection_options
         )
 
-        for permission in message_class.permission_classes:
-            
-            if not permission.has_permission(recipient, channel=primary_resolved_channel):
-                
-                raise MessagePermissionDeniedError(
-                    message_class=message_class,
-                    permission_class=permission
-                )
-
         mapper_class = message_class.Mapper
         canonical_message = mapper_class.map(data=data)
 
@@ -119,6 +110,13 @@ class NotificationDispatcher:
                     require_verified=channel_selection_options.require_verified
                 )
             )
+
+            for permission in message_class.permission_classes:
+                if not permission.has_permission(recipient, channel=resolved_channel):
+                    raise MessagePermissionDeniedError(
+                        message_class=message_class,
+                        permission_class=permission
+                    )
 
             identifier = resolved_channel.identifier
             channel_type = resolved_channel.channel_type
