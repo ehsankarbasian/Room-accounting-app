@@ -1,2 +1,4 @@
-from .registry import SenderRegistry
-from .autodiscover import autodiscover_modules
+from .utils import autodiscover_modules
+
+from .sender import SenderRegistry
+from .message_options import MessageOptionsRegistry

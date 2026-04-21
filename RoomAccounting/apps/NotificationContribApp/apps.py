@@ -11,6 +11,6 @@ class NotificationContribAppConfig(AppConfig):
         register themselves into the framework registries.
         """
 
-        from apps.NotificationApp.registry.autodiscover import autodiscover_modules
+        from apps.NotificationApp.registry import autodiscover_modules
 
         autodiscover_modules("apps.NotificationContribApp.senders")

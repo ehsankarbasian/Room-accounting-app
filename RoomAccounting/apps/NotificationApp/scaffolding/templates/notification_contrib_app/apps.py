@@ -11,7 +11,7 @@ class {{ app_config_class }}(AppConfig):
         register themselves into the framework registries.
         """
 
-        from NotificationApp.registry.autodiscover import autodiscover_modules
+        from apps.NotificationApp.registry import autodiscover_modules
 
         autodiscover_modules("{{ app_name }}.messages")
         autodiscover_modules("{{ app_name }}.senders")
