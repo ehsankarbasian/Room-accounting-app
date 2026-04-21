@@ -1,4 +1,4 @@
 from .dispatcher import NotificationDispatcher
 
-from .options import DeliveryOptions
+from ..dispatch_options.delivery import DeliveryOptions
 from .resolver import ChannelSelectionOptions

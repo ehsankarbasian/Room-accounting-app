@@ -1,2 +1,2 @@
 from .channel_resolver import ChannelResolver
-from .options import ChannelSelectionOptions
+from ...dispatch_options.channel_selection import ChannelSelectionOptions

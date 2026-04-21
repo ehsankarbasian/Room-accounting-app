@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import Type, Dict
 
 from ..interfaces import MessageDefinitionInterface
-from ..dispatching import DeliveryOptions, ChannelSelectionOptions
+from ..dispatch_options import DeliveryOptions, ChannelSelectionOptions
 
 
 @dataclass

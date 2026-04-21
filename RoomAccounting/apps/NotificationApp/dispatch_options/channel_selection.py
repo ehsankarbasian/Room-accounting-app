@@ -1,8 +1,8 @@
 from dataclasses import dataclass, fields
 from typing import Optional, List, Any, Dict
 
-from ...interfaces import MessageDefinitionInterface
-from ...models import NotificationChannel
+from ..interfaces import MessageDefinitionInterface
+from ..models import NotificationChannel
 
 
 @dataclass(frozen=True)

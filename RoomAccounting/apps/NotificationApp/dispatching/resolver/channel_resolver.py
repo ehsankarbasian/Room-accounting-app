@@ -8,7 +8,7 @@ from .errors import (
     NoPreferredChannelAvailableError,
     ChannelOverrideConflictError,
 )
-from .options import ChannelSelectionOptions
+from ...dispatch_options.channel_selection import ChannelSelectionOptions
 
 
 class ChannelResolver:
