@@ -16,12 +16,11 @@ from dataclasses import is_dataclass
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import TimeoutError as FuturesTimeoutError
 
-from typing import Type, Optional, List
+from typing import Type, List
 
-from ..registry import SenderRegistry
+from ..registry import SenderRegistry, MessageOptionsRegistry
 from ..interfaces import MessageDefinitionInterface, MessageSenderInterface
 
-from .options import DeliveryOptions
 from .resolver import ChannelResolver, ChannelSelectionOptions
 
 from .errors import (
@@ -40,9 +39,6 @@ class NotificationDispatcher:
         recipient,
         message_class: Type[MessageDefinitionInterface],
         data: Type,
-        *,
-        delivery_options: Optional[DeliveryOptions] = DeliveryOptions,
-        channel_selection_options: Optional[ChannelSelectionOptions] = ChannelSelectionOptions,
     ):
         """
         Execute the notification delivery pipeline.
@@ -74,6 +70,10 @@ class NotificationDispatcher:
                 f"{message_class} expects {expected_data_model.__name__} instance, "
                 f"got {type(data).__name__}"
             )
+
+        config = MessageOptionsRegistry.get(message_class)
+        delivery_options = config.delivery_options
+        channel_selection_options = config.channel_selection_options
 
         primary_resolved_channel = ChannelResolver.resolve(
             recipient=recipient,
