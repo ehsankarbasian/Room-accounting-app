@@ -18,7 +18,7 @@ from typing import Type, List
 from ..registry import SenderRegistry, MessageOptionsRegistry
 from ..interfaces import MessageDefinitionInterface, MessageSenderInterface
 
-from .resolver import ChannelResolver, ChannelSelectionOptions
+from .pipeline.resolvers import ChannelResolver, ChannelSelectionOptions
 
 from .errors import (
     MessagePermissionDeniedError,

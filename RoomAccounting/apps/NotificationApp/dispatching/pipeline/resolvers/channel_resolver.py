@@ -1,6 +1,6 @@
 from typing import Optional
 
-from ...models import NotificationChannel
+from ....models import NotificationChannel
 
 from .errors import (
     ChannelUnavailableError,
@@ -8,7 +8,7 @@ from .errors import (
     NoPreferredChannelAvailableError,
     ChannelOverrideConflictError,
 )
-from ...dispatch_options.channel_selection import ChannelSelectionOptions
+from ....dispatch_options.channel_selection import ChannelSelectionOptions
 
 
 class ChannelResolver:
