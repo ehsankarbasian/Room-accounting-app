@@ -13,12 +13,10 @@ Responsibilities:
 
 from concurrent.futures import TimeoutError as FuturesTimeoutError
 
-from typing import Type, List
+from typing import Type
 
-from ..registry import SenderRegistry, MessageOptionsRegistry
-from ..interfaces import MessageDefinitionInterface, MessageSenderInterface
-
-from .pipeline.resolvers import ChannelResolver, ChannelSelectionOptions
+from ..registry import MessageOptionsRegistry
+from ..interfaces import MessageDefinitionInterface
 
 from .errors import (
     MessagePermissionDeniedError,
@@ -26,6 +24,8 @@ from .errors import (
 )
 
 from .pipeline.validators import ensure_valid_message_inputs
+from .pipeline.resolvers import ChannelResolver, ChannelSelectionOptions
+from .pipeline.resolvers import build_sender_chain
 from .pipeline.permissions import ensure_permissions
 from .pipeline.timeout import execute_with_timeout
 
@@ -71,16 +71,7 @@ class NotificationDispatcher:
         attempts = max(1, delivery_options.retry_count + 1)
         timeout_seconds = delivery_options.timeout_seconds
 
-        # Build the primary delivery channel based on the recipient's resolved notification method
-        sender_classes: List[type[MessageSenderInterface]] = []
-        primary_sender_class = SenderRegistry.get(primary_resolved_channel.channel_type)
-        sender_classes.append(primary_sender_class)
-
-        # Append fallback sender classes provided by delivery options for alternative delivery paths
-        fallback_channels: List[type[MessageSenderInterface]] = []
-        if delivery_options.fallback_channels:
-            fallback_channels = delivery_options.fallback_channels
-        sender_classes.extend(fallback_channels)
+        sender_classes = build_sender_chain(delivery_options, primary_resolved_channel)
 
         last_exception = None
         last_channel_type = primary_resolved_channel.channel_type
