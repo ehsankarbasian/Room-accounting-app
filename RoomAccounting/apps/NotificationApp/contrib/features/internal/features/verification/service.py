@@ -7,10 +7,9 @@ from django.apps import apps
 from django.conf import settings
 from django.contrib.auth.hashers import make_password
 
-from ......models import NotificationToken, ChannelVerificationToken
+from ......models import NotificationToken, ChannelVerificationToken, NotificationChannel
 from ......token_generator import TokenGenerator
 from ......dispatching import NotificationDispatcher
-from ......dispatching import ChannelSelectionOptions
 
 from ...utils.url_namespace import get_complete_view_url_name
 
@@ -23,7 +22,7 @@ class VerificationService:
     DEFAULT_EXPIRATION_MINUTES = 30
 
     @classmethod
-    def send_verification(cls, channel):
+    def send_verification(cls, channel: NotificationChannel):
 
         # selector + secret (raw token)
         selector = secrets.token_hex(8)
@@ -54,15 +53,10 @@ class VerificationService:
             verification_token=raw_token,
         )
 
-        notification_options = ChannelSelectionOptions(
-            channel_override=channel,
-            require_verified=False,
-        )
         NotificationDispatcher.send(
             recipient=cls._get_recipient(channel),
             message_class=VerifyChannelMessage,
             data=data,
-            channel_selection_options=notification_options,
         )
     
     

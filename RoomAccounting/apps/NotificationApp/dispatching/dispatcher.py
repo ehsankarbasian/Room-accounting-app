@@ -32,7 +32,7 @@ from .errors import (
 class NotificationDispatcher:
 
     # TODO(v2): Introduce a NotificationOptions object to support advanced dispatch controls
-    # such as async, timeout, scheduling, and channel fallback.
+    # such as async, scheduling, and etc.
     
     @staticmethod
     def send(
