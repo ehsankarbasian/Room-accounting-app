@@ -28,6 +28,8 @@ from .errors import (
     MaxRetryExceededError,
 )
 
+from .pipeline.permissions import ensure_permissions
+
 
 class NotificationDispatcher:
 
@@ -111,17 +113,11 @@ class NotificationDispatcher:
                 )
             )
 
-            identifier = resolved_channel.identifier
             channel_type = resolved_channel.channel_type
+            identifier = resolved_channel.identifier
 
             try:
-                for permission in message_class.permission_classes:
-                    if not permission.has_permission(recipient, channel=resolved_channel):
-                        raise MessagePermissionDeniedError(
-                            message_class=message_class,
-                            permission_class=permission
-                        )
-
+                ensure_permissions(message_class, recipient, resolved_channel)
             except MessagePermissionDeniedError as permission_exception:
                 last_exception = permission_exception
                 last_channel_type = channel_type
