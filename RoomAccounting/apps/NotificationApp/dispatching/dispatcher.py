@@ -106,7 +106,7 @@ class NotificationDispatcher:
             resolved_channel = ChannelResolver.resolve(
                 recipient=recipient,
                 options=ChannelSelectionOptions(
-                    channel_override=sender_class.channel_type,
+                    channel_override=sender_class,
                     require_verified=channel_selection_options.require_verified
                 )
             )

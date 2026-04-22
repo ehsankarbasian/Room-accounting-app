@@ -25,8 +25,8 @@ class MessageOptionsRegistry:
         cls,
         message_class: Type[MessageDefinitionInterface],
         *,
-        delivery_options: DeliveryOptions,
-        channel_selection_options: ChannelSelectionOptions,
+        delivery_options: DeliveryOptions = DeliveryOptions(),
+        channel_selection_options: ChannelSelectionOptions = ChannelSelectionOptions(),
     ) -> None:
 
         if not issubclass(message_class, MessageDefinitionInterface):

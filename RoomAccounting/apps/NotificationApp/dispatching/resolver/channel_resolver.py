@@ -73,7 +73,7 @@ class ChannelResolver:
 
         # Restrict to the explicitly requested channel
         if options.channel_override:
-            queryset = queryset.filter(channel_type=options.channel_override.channel_type)
+            queryset = queryset.filter(channel_type=options.channel_override.sender_key)
 
         # Restrict to preferred channel types
         if options.preferred_channels:
@@ -96,7 +96,7 @@ class ChannelResolver:
 
             # Explicit channel requested but unavailable
             if options.channel_override:
-                raise ChannelUnavailableError(options.channel_override.channel_type)
+                raise ChannelUnavailableError(options.channel_override.sender_key)
 
             # Preferred channels specified but none available
             if options.preferred_channels:
