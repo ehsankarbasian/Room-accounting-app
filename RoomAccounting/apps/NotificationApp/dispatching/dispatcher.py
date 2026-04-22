@@ -11,8 +11,6 @@ Responsibilities:
     - Delegate delivery to the appropriate sender
 """
 
-from dataclasses import is_dataclass
-
 from concurrent.futures import TimeoutError as FuturesTimeoutError
 
 from typing import Type, List
@@ -27,6 +25,7 @@ from .errors import (
     MaxRetryExceededError,
 )
 
+from .pipeline.validators import ensure_valid_message_inputs
 from .pipeline.permissions import ensure_permissions
 from .pipeline.timeout import execute_with_timeout
 
@@ -54,24 +53,8 @@ class NotificationDispatcher:
             KeyError
                 If the sender has not been registered.
         """
-
-        if not issubclass(message_class, MessageDefinitionInterface):
-            raise TypeError(
-                f"'{message_class.__name__}' must be a MessageDefinitionInterface implementation"
-            )
-
-        if not is_dataclass(data):
-            raise TypeError(
-                f"data must be a dataclass instance, got {type(data).__name__}"
-            )
-
-        expected_data_model = message_class.Data
-
-        if not isinstance(data, expected_data_model):
-            raise TypeError(
-                f"{message_class} expects {expected_data_model.__name__} instance, "
-                f"got {type(data).__name__}"
-            )
+        
+        ensure_valid_message_inputs(message_class, data)
 
         config = MessageOptionsRegistry.get(message_class)
         delivery_options = config.delivery_options
