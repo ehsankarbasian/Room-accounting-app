@@ -71,49 +71,37 @@ class NotificationDispatcher:
         attempts = max(1, delivery_options.retry_count + 1)
         timeout_seconds = delivery_options.timeout_seconds
 
-        sender_classes = build_sender_chain(delivery_options, primary_resolved_channel)
+        sender_chain = build_sender_chain(delivery_options, primary_resolved_channel)
 
         last_exception = None
         last_channel_type = primary_resolved_channel.channel_type
         last_identifier = primary_resolved_channel.identifier
 
-        for sender_class in sender_classes:
-
-            resolved_channel = ChannelResolver.resolve(
-                recipient=recipient,
-                options=ChannelSelectionOptions(
-                    channel_override=sender_class,
-                    require_verified=channel_selection_options.require_verified
-                )
-            )
-
-            channel_type = resolved_channel.channel_type
-            identifier = resolved_channel.identifier
-
+        for sender_class in sender_chain:
+            
             try:
-                ensure_permissions(message_class, recipient, resolved_channel)
-            except MessagePermissionDeniedError as permission_exception:
-                last_exception = permission_exception
-                last_channel_type = channel_type
-                last_identifier = identifier
-                continue
+                success, exception, channel_type, identifier = (
+                    NotificationDispatcher._dispatch_single_sender(
+                        sender_class,
+                        recipient,
+                        canonical_message,
+                        channel_selection_options,
+                        attempts,
+                        timeout_seconds,
+                        message_class
+                    )
+                )
 
-            for _ in range(attempts):
-                try:
-                    execute_with_timeout(sender_class, identifier, canonical_message, timeout_seconds)
+                if success:
                     return
 
-                except FuturesTimeoutError:
-                    
-                    last_exception = TimeoutError(
-                        f"Sender execution exceeded timeout of {timeout_seconds} seconds"
-                    )
+                last_exception = exception
+                last_channel_type = channel_type
+                last_identifier = identifier
 
-                except Exception as new_exception:
-                    last_exception = new_exception
-
-            last_channel_type = channel_type
-            last_identifier = identifier
+            except MessagePermissionDeniedError as permission_exception:
+                last_exception = permission_exception
+                continue
 
         retry_exception_object = MaxRetryExceededError(
             attempts=attempts,
@@ -121,4 +109,52 @@ class NotificationDispatcher:
             channel=last_channel_type,
             identifier=last_identifier
         )
+        
         raise retry_exception_object from last_exception
+    
+    
+    @staticmethod
+    def _dispatch_single_sender(
+        sender_class,
+        recipient,
+        canonical_message,
+        channel_selection_options,
+        attempts,
+        timeout_seconds,
+        message_class
+    ):
+
+        resolved_channel = ChannelResolver.resolve(
+            recipient=recipient,
+            options=ChannelSelectionOptions(
+                channel_override=sender_class,
+                require_verified=channel_selection_options.require_verified
+            )
+        )
+
+        channel_type = resolved_channel.channel_type
+        identifier = resolved_channel.identifier
+
+        ensure_permissions(message_class, recipient, resolved_channel)
+
+        last_exception = None
+
+        for _ in range(attempts):
+            try:
+                execute_with_timeout(
+                    sender_class,
+                    identifier,
+                    canonical_message,
+                    timeout_seconds
+                )
+                return True, None, channel_type, identifier
+
+            except FuturesTimeoutError:
+                last_exception = TimeoutError(
+                    f"Sender execution exceeded timeout of {timeout_seconds} seconds"
+                )
+
+            except Exception as new_exception:
+                last_exception = new_exception
+
+        return False, last_exception, channel_type, identifier
