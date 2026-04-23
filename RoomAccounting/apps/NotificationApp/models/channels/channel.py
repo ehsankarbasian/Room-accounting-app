@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 
-from ...registry import SenderRegistry
+from ...registry.sender import SenderRegistry
 from ..managers import NotificationChannelQuerySet
 
 

@@ -2,7 +2,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from ......models import NotificationChannel
-from ......registry import SenderRegistry
+from ......registry.sender import SenderRegistry
 
 from .dispatch_config import register_verify_message_options_for_channel
 from .service import VerificationService

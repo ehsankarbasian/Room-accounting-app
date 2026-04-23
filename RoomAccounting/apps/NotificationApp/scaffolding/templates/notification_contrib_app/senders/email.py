@@ -1,6 +1,6 @@
 from django.core.mail import EmailMultiAlternatives as _Email
 
-from NotificationApp.registry import SenderRegistry
+from NotificationApp.registry.sender import SenderRegistry
 from NotificationApp.interfaces import MessageSenderInterface
 
 from ..message_schema import CanonicalMessage

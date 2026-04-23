@@ -1,6 +1,6 @@
 from typing import List
 
-from ....registry import SenderRegistry
+from ....registry.sender import SenderRegistry
 from ....interfaces import MessageSenderInterface
 
 
