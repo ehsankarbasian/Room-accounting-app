@@ -15,7 +15,7 @@ from concurrent.futures import TimeoutError as FuturesTimeoutError
 from dataclasses import dataclass
 from typing import Optional, Type
 
-from ..registry import MessageOptionsRegistry
+from ..registry.message_options import MessageOptionsRegistry
 from ..interfaces import MessageDefinitionInterface
 
 from .errors import (

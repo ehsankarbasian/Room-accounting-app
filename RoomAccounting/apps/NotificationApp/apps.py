@@ -19,7 +19,7 @@ class NotificationAppConfig(AppConfig):
         register themselves into the framework registries.
         """
 
-        from apps.NotificationApp.registry import autodiscover_modules
+        from apps.NotificationApp.registry.utils import autodiscover_modules
         autodiscover_modules("apps.NotificationApp.contrib.features.internal.features.verification")
 
         root = Path(__file__).resolve().parent / "contrib/features/internal/features"

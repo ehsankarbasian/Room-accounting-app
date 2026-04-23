@@ -2,7 +2,7 @@ from .message import VerifyChannelMessage
 
 from ......dispatching.options import ChannelSelectionOptions
 
-from ......registry import MessageOptionsRegistry
+from ......registry.message_options import MessageOptionsRegistry
 from ......interfaces import MessageSenderInterface
 
 
