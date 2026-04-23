@@ -12,8 +12,8 @@ Responsibilities:
 """
 
 from concurrent.futures import TimeoutError as FuturesTimeoutError
-
-from typing import Type
+from dataclasses import dataclass
+from typing import Optional, Type
 
 from ..registry import MessageOptionsRegistry
 from ..interfaces import MessageDefinitionInterface
@@ -28,6 +28,23 @@ from .pipeline.resolvers import ChannelResolver, ChannelSelectionOptions
 from .pipeline.resolvers import build_sender_chain
 from .pipeline.permissions import ensure_permissions
 from .pipeline.timeout import execute_with_timeout
+
+
+@dataclass
+class SenderDispatchContext:
+    sender_class: Type
+    recipient: object
+    message_class: Type[MessageDefinitionInterface]
+    canonical_message: object
+    channel_selection_options: ChannelSelectionOptions
+    attempts: int
+    timeout_seconds: int
+
+    resolved_channel: Optional[object] = None
+    channel_type: Optional[str] = None
+    identifier: Optional[str] = None
+    last_exception: Optional[Exception] = None
+    success: bool = False
 
 
 class NotificationDispatcher:
@@ -71,33 +88,36 @@ class NotificationDispatcher:
         attempts = max(1, delivery_options.retry_count + 1)
         timeout_seconds = delivery_options.timeout_seconds
 
-        sender_chain = build_sender_chain(delivery_options, primary_resolved_channel)
+        sender_chain = build_sender_chain(
+            delivery_options,
+            primary_resolved_channel
+        )
 
         last_exception = None
         last_channel_type = primary_resolved_channel.channel_type
         last_identifier = primary_resolved_channel.identifier
 
         for sender_class in sender_chain:
-            
-            try:
-                success, exception, channel_type, identifier = (
-                    NotificationDispatcher._dispatch_single_sender(
-                        sender_class,
-                        recipient,
-                        canonical_message,
-                        channel_selection_options,
-                        attempts,
-                        timeout_seconds,
-                        message_class
-                    )
-                )
 
-                if success:
+            context = SenderDispatchContext(
+                sender_class=sender_class,
+                recipient=recipient,
+                message_class=message_class,
+                canonical_message=canonical_message,
+                channel_selection_options=channel_selection_options,
+                attempts=attempts,
+                timeout_seconds=timeout_seconds,
+            )
+
+            try:
+                NotificationDispatcher._dispatch_single_sender(context)
+
+                if context.success:
                     return
 
-                last_exception = exception
-                last_channel_type = channel_type
-                last_identifier = identifier
+                last_exception = context.last_exception
+                last_channel_type = context.channel_type
+                last_identifier = context.identifier
 
             except MessagePermissionDeniedError as permission_exception:
                 last_exception = permission_exception
@@ -115,46 +135,46 @@ class NotificationDispatcher:
     
     @staticmethod
     def _dispatch_single_sender(
-        sender_class,
-        recipient,
-        canonical_message,
-        channel_selection_options,
-        attempts,
-        timeout_seconds,
-        message_class
-    ):
+        context: SenderDispatchContext,
+    ) -> None:
 
         resolved_channel = ChannelResolver.resolve(
-            recipient=recipient,
+            recipient=context.recipient,
             options=ChannelSelectionOptions(
-                channel_override=sender_class,
-                require_verified=channel_selection_options.require_verified
+                channel_override=context.sender_class,
+                require_verified=context.channel_selection_options.require_verified
             )
         )
 
-        channel_type = resolved_channel.channel_type
-        identifier = resolved_channel.identifier
+        context.resolved_channel = resolved_channel
+        context.channel_type = resolved_channel.channel_type
+        context.identifier = resolved_channel.identifier
 
-        ensure_permissions(message_class, recipient, resolved_channel)
+        ensure_permissions(
+            context.message_class,
+            context.recipient,
+            resolved_channel
+        )
 
-        last_exception = None
-
-        for _ in range(attempts):
+        for _ in range(context.attempts):
             try:
                 execute_with_timeout(
-                    sender_class,
-                    identifier,
-                    canonical_message,
-                    timeout_seconds
+                    context.sender_class,
+                    context.identifier,
+                    context.canonical_message,
+                    context.timeout_seconds
                 )
-                return True, None, channel_type, identifier
+
+                context.success = True
+                context.last_exception = None
+                return
 
             except FuturesTimeoutError:
-                last_exception = TimeoutError(
-                    f"Sender execution exceeded timeout of {timeout_seconds} seconds"
+                context.last_exception = TimeoutError(
+                    f"Sender execution exceeded timeout of {context.timeout_seconds} seconds"
                 )
 
             except Exception as new_exception:
-                last_exception = new_exception
+                context.last_exception = new_exception
 
-        return False, last_exception, channel_type, identifier
+        context.success = False
