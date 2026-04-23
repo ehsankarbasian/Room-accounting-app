@@ -1,7 +1,7 @@
 from dataclasses import dataclass, fields
 from typing import Optional, List, Any, Dict
 
-from ..interfaces import MessageSenderInterface
+from ...interfaces import MessageSenderInterface
 
 
 @dataclass(frozen=True)
