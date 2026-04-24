@@ -12,8 +12,8 @@ Responsibilities:
 """
 
 from concurrent.futures import TimeoutError as FuturesTimeoutError
-from dataclasses import dataclass
-from typing import Optional, Type
+from dataclasses import dataclass, field
+from typing import Optional, Type, List
 
 from ..registry.message_options import MessageOptionsRegistry
 from ..interfaces import MessageDefinitionInterface
@@ -45,6 +45,19 @@ class SenderDispatchContext:
     identifier: Optional[str] = None
     last_exception: Optional[Exception] = None
     success: bool = False
+
+
+@dataclass
+class DeliveryStatus:
+    success: bool
+    message_class: Type
+    sender_class: Optional[Type]
+    channel_type: Optional[str]
+    identifier: Optional[str]
+    attempts: int
+    last_exception: Optional[Exception]
+    fallback_used: bool
+    errors: List[Exception] = field(default_factory=list)
 
 
 class NotificationDispatcher:
@@ -93,6 +106,8 @@ class NotificationDispatcher:
             primary_resolved_channel
         )
 
+        errors = []
+
         last_exception = None
         last_channel_type = primary_resolved_channel.channel_type
         last_identifier = primary_resolved_channel.identifier
@@ -113,13 +128,25 @@ class NotificationDispatcher:
                 NotificationDispatcher._dispatch_single_sender(context)
 
                 if context.success:
-                    return
+                    return DeliveryStatus(
+                        success=True,
+                        message_class=message_class,
+                        sender_class=sender_class,
+                        channel_type=context.channel_type,
+                        identifier=context.identifier,
+                        attempts=attempts,
+                        last_exception=None,
+                        fallback_used=(sender_class != sender_chain[0]),
+                        errors=errors
+                    )
 
                 last_exception = context.last_exception
+                errors.append(context.last_exception)
                 last_channel_type = context.channel_type
                 last_identifier = context.identifier
 
             except MessagePermissionDeniedError as permission_exception:
+                errors.append(permission_exception)
                 last_exception = permission_exception
                 continue
 
@@ -128,6 +155,18 @@ class NotificationDispatcher:
             last_exception=last_exception,
             channel=last_channel_type,
             identifier=last_identifier
+        )
+
+        retry_exception_object.delivery_status = DeliveryStatus(
+            success=False,
+            message_class=message_class,
+            sender_class=None,
+            channel_type=last_channel_type,
+            identifier=last_identifier,
+            attempts=attempts,
+            last_exception=last_exception,
+            fallback_used=len(sender_chain) > 1,
+            errors=errors
         )
         
         raise retry_exception_object from last_exception
