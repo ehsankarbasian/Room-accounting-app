@@ -33,6 +33,9 @@ from .pipeline.timeout import execute_with_timeout
 
 @dataclass
 class AttemptTrace:
+    sender_class: Type
+    channel_type: Optional[str]
+    identifier: Optional[str]
     attempt_number: int
     success: bool
     error: Optional[Exception]
@@ -226,6 +229,9 @@ class NotificationDispatcher:
 
                 context.attempt_history.append(
                     AttemptTrace(
+                        sender_class=context.sender_class,
+                        channel_type=context.channel_type,
+                        identifier=context.identifier,
                         attempt_number=attempt_number,
                         success=True,
                         error=None,
@@ -247,6 +253,9 @@ class NotificationDispatcher:
 
                 context.attempt_history.append(
                     AttemptTrace(
+                        sender_class=context.sender_class,
+                        channel_type=context.channel_type,
+                        identifier=context.identifier,
                         attempt_number=attempt_number,
                         success=False,
                         error=error,
@@ -262,6 +271,9 @@ class NotificationDispatcher:
 
                 context.attempt_history.append(
                     AttemptTrace(
+                        sender_class=context.sender_class,
+                        channel_type=context.channel_type,
+                        identifier=context.identifier,
                         attempt_number=attempt_number,
                         success=False,
                         error=new_exception,

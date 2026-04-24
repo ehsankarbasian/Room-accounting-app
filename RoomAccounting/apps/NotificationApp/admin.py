@@ -6,7 +6,7 @@ from .models import (
     NotificationToken,
     ChannelVerificationToken,
 )
-from .registry import SenderRegistry
+from .registry.sender import SenderRegistry
 
 
 class NotificationChannelAdminForm(forms.ModelForm):

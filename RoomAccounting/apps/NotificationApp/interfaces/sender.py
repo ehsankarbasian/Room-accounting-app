@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Any
 
 from .canonical import CanonicalMessageInterface
-from ..registry import SenderRegistry
+from ..registry.sender import SenderRegistry
 
 
 class MessageSenderInterface(ABC):
