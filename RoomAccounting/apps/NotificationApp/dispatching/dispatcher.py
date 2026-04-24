@@ -11,6 +11,7 @@ Responsibilities:
     - Delegate delivery to the appropriate sender
 """
 
+import time
 from concurrent.futures import TimeoutError as FuturesTimeoutError
 from dataclasses import dataclass, field
 from typing import Optional, Type, List
@@ -31,6 +32,14 @@ from .pipeline.timeout import execute_with_timeout
 
 
 @dataclass
+class AttemptTrace:
+    attempt_number: int
+    success: bool
+    error: Optional[Exception]
+    duration_ms: int
+
+
+@dataclass
 class SenderDispatchContext:
     sender_class: Type
     recipient: object
@@ -46,6 +55,8 @@ class SenderDispatchContext:
     last_exception: Optional[Exception] = None
     success: bool = False
 
+    attempt_history: List[AttemptTrace] = field(default_factory=list)
+
 
 @dataclass
 class DeliveryStatus:
@@ -57,6 +68,8 @@ class DeliveryStatus:
     attempts: int
     last_exception: Optional[Exception]
     fallback_used: bool
+
+    attempt_history: List[AttemptTrace] = field(default_factory=list)
     errors: List[Exception] = field(default_factory=list)
 
 
@@ -106,7 +119,7 @@ class NotificationDispatcher:
             primary_resolved_channel
         )
 
-        errors = []
+        errors: List[Exception] = []
 
         last_exception = None
         last_channel_type = primary_resolved_channel.channel_type
@@ -134,16 +147,18 @@ class NotificationDispatcher:
                         sender_class=sender_class,
                         channel_type=context.channel_type,
                         identifier=context.identifier,
-                        attempts=attempts,
+                        attempts=len(context.attempt_history),
                         last_exception=None,
                         fallback_used=(sender_class != sender_chain[0]),
+                        attempt_history=context.attempt_history,
                         errors=errors
                     )
 
                 last_exception = context.last_exception
-                errors.append(context.last_exception)
                 last_channel_type = context.channel_type
                 last_identifier = context.identifier
+
+                errors.append(context.last_exception)
 
             except MessagePermissionDeniedError as permission_exception:
                 errors.append(permission_exception)
@@ -195,7 +210,10 @@ class NotificationDispatcher:
             resolved_channel
         )
 
-        for _ in range(context.attempts):
+        for attempt_number in range(1, context.attempts + 1):
+
+            start_time = time.monotonic()
+
             try:
                 execute_with_timeout(
                     context.sender_class,
@@ -204,16 +222,53 @@ class NotificationDispatcher:
                     context.timeout_seconds
                 )
 
+                duration = int((time.monotonic() - start_time) * 1000)
+
+                context.attempt_history.append(
+                    AttemptTrace(
+                        attempt_number=attempt_number,
+                        success=True,
+                        error=None,
+                        duration_ms=duration
+                    )
+                )
+
                 context.success = True
                 context.last_exception = None
                 return
 
             except FuturesTimeoutError:
-                context.last_exception = TimeoutError(
+
+                duration = int((time.monotonic() - start_time) * 1000)
+
+                error = TimeoutError(
                     f"Sender execution exceeded timeout of {context.timeout_seconds} seconds"
                 )
 
+                context.attempt_history.append(
+                    AttemptTrace(
+                        attempt_number=attempt_number,
+                        success=False,
+                        error=error,
+                        duration_ms=duration
+                    )
+                )
+
+                context.last_exception = error
+
             except Exception as new_exception:
+
+                duration = int((time.monotonic() - start_time) * 1000)
+
+                context.attempt_history.append(
+                    AttemptTrace(
+                        attempt_number=attempt_number,
+                        success=False,
+                        error=new_exception,
+                        duration_ms=duration
+                    )
+                )
+
                 context.last_exception = new_exception
 
         context.success = False
