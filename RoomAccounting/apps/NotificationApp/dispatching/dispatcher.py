@@ -11,27 +11,21 @@ Responsibilities:
     - Delegate delivery to the appropriate sender
 """
 
-import time
-from concurrent.futures import TimeoutError as FuturesTimeoutError
-
 from typing import Type, List
 
 from ..registry.message_options import MessageOptionsRegistry
 from ..interfaces import MessageDefinitionInterface
 
-from .errors import (
-    MessagePermissionDeniedError,
-    MaxRetryExceededError,
-)
+from .errors import MessagePermissionDeniedError, MaxRetryExceededError
+
+from .delivery_result import DeliveryStatus
+from .context import SenderDispatchContext
 
 from .pipeline.validators import ensure_valid_message_inputs
-from .pipeline.resolvers import ChannelResolver, ChannelSelectionOptions
+from .pipeline.resolvers import ChannelResolver
 from .pipeline.resolvers import build_sender_chain
-from .pipeline.permissions import ensure_permissions
-from .pipeline.timeout import execute_with_timeout
 
-from .delivery_result import AttemptTrace, DeliveryStatus
-from .context import SenderDispatchContext
+from .execution.sender_executor import SenderExecutor
 
 
 class NotificationDispatcher:
@@ -99,7 +93,7 @@ class NotificationDispatcher:
             )
 
             try:
-                NotificationDispatcher._dispatch_single_sender(context)
+                SenderExecutor.execute(context)
 
                 if context.success:
                     return DeliveryStatus(
@@ -141,110 +135,8 @@ class NotificationDispatcher:
             identifier=last_identifier,
             attempts=attempts,
             last_exception=last_exception,
-            fallback_used=len(sender_chain) > 1,
+            fallback_used=(len(sender_chain) > 1),
             errors=errors
         )
-        
+
         raise retry_exception_object from last_exception
-    
-    
-    @staticmethod
-    def _dispatch_single_sender(
-        context: SenderDispatchContext,
-    ) -> None:
-
-        resolved_channel = ChannelResolver.resolve(
-            recipient=context.recipient,
-            options=ChannelSelectionOptions(
-                channel_override=context.sender_class,
-                require_verified=context.channel_selection_options.require_verified
-            )
-        )
-
-        context.resolved_channel = resolved_channel
-        context.channel_type = resolved_channel.channel_type
-        context.identifier = resolved_channel.identifier
-
-        ensure_permissions(
-            context.message_class,
-            context.recipient,
-            resolved_channel
-        )
-
-        for attempt_number in range(1, context.attempts + 1):
-
-            start_time = time.monotonic()
-
-            try:
-                execute_with_timeout(
-                    context.sender_class,
-                    context.identifier,
-                    context.canonical_message,
-                    context.timeout_seconds
-                )
-
-                NotificationDispatcher._record_attempt(
-                    context=context,
-                    attempt_number=attempt_number,
-                    start_time=start_time,
-                    success=False,
-                    error=error,
-                )
-
-                context.success = True
-                context.last_exception = None
-                return
-
-            except FuturesTimeoutError:
-
-                error = TimeoutError(
-                    f"Sender execution exceeded timeout of {context.timeout_seconds} seconds"
-                )
-                
-                NotificationDispatcher._record_attempt(
-                    context=context,
-                    attempt_number=attempt_number,
-                    start_time=start_time,
-                    success=False,
-                    error=error,
-                )
-
-                context.last_exception = error
-
-            except Exception as new_exception:
-
-                NotificationDispatcher._record_attempt(
-                    context=context,
-                    attempt_number=attempt_number,
-                    start_time=start_time,
-                    success=False,
-                    error=new_exception,
-                )
-
-                context.last_exception = new_exception
-
-        context.success = False
-    
-    
-    @staticmethod
-    def _record_attempt(
-        context: SenderDispatchContext,
-        attempt_number: int,
-        start_time: float,
-        success: bool,
-        error: Exception | None,
-    ) -> None:
-
-        duration = int((time.monotonic() - start_time) * 1000)
-
-        context.attempt_history.append(
-            AttemptTrace(
-                sender_class=context.sender_class,
-                channel_type=context.channel_type,
-                identifier=context.identifier,
-                attempt_number=attempt_number,
-                success=success,
-                error=error,
-                duration_ms=duration
-            )
-        )
