@@ -19,8 +19,7 @@ from ..interfaces import MessageDefinitionInterface
 from .errors import MaxRetryExceededError
 
 from .pipeline.validators import ensure_valid_message_inputs
-from .pipeline.resolvers import ChannelResolver
-from .pipeline.resolvers import build_sender_chain
+from .pipeline.resolvers import resolve_channel, build_sender_chain
 
 from .execution.sender_executor import SenderExecutor
 
@@ -55,7 +54,7 @@ class NotificationDispatcher:
         delivery_options = config.delivery_options
         channel_selection_options = config.channel_selection_options
 
-        primary_resolved_channel = ChannelResolver.resolve(
+        primary_resolved_channel = resolve_channel(
             recipient=recipient,
             options=channel_selection_options
         )

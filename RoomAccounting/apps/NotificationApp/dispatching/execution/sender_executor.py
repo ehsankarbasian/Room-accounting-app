@@ -9,9 +9,12 @@ from concurrent.futures import TimeoutError as FuturesTimeoutError
 from ..context import SenderDispatchContext
 from ..delivery_result import AttemptTrace, DeliveryStatus
 
-from ..pipeline.resolvers import ChannelResolver, ChannelSelectionOptions
+from ..options.channel_selection import ChannelSelectionOptions
+
+from ..pipeline.resolvers import resolve_channel
 from ..pipeline.permissions import ensure_permissions
 from ..pipeline.timeout import execute_with_timeout
+
 from ..errors import MessagePermissionDeniedError
 
 
@@ -96,7 +99,7 @@ class SenderExecutor:
         permission check, retry loop, timeout handling, and trace recording.
         """
 
-        resolved_channel = ChannelResolver.resolve(
+        resolved_channel = resolve_channel(
             recipient=context.recipient,
             options=ChannelSelectionOptions(
                 channel_override=context.sender_class,
