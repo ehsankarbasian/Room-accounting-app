@@ -13,8 +13,8 @@ Responsibilities:
 
 import time
 from concurrent.futures import TimeoutError as FuturesTimeoutError
-from dataclasses import dataclass, field
-from typing import Optional, Type, List
+
+from typing import Type, List
 
 from ..registry.message_options import MessageOptionsRegistry
 from ..interfaces import MessageDefinitionInterface
@@ -31,25 +31,7 @@ from .pipeline.permissions import ensure_permissions
 from .pipeline.timeout import execute_with_timeout
 
 from .delivery_result import AttemptTrace, DeliveryStatus
-
-
-@dataclass
-class SenderDispatchContext:
-    sender_class: Type
-    recipient: object
-    message_class: Type[MessageDefinitionInterface]
-    canonical_message: object
-    channel_selection_options: ChannelSelectionOptions
-    attempts: int
-    timeout_seconds: int
-
-    resolved_channel: Optional[object] = None
-    channel_type: Optional[str] = None
-    identifier: Optional[str] = None
-    last_exception: Optional[Exception] = None
-    success: bool = False
-
-    attempt_history: List[AttemptTrace] = field(default_factory=list)
+from .context import SenderDispatchContext
 
 
 class NotificationDispatcher:
