@@ -11,15 +11,12 @@ Responsibilities:
     - Delegate delivery to the appropriate sender
 """
 
-from typing import Type, List
+from typing import Type
 
 from ..registry.message_options import MessageOptionsRegistry
 from ..interfaces import MessageDefinitionInterface
 
-from .errors import MessagePermissionDeniedError, MaxRetryExceededError
-
-from .delivery_result import DeliveryStatus
-from .context import SenderDispatchContext
+from .errors import MaxRetryExceededError
 
 from .pipeline.validators import ensure_valid_message_inputs
 from .pipeline.resolvers import ChannelResolver
@@ -32,7 +29,7 @@ class NotificationDispatcher:
 
     # TODO(v2): Introduce a NotificationOptions object to support advanced dispatch controls
     # such as async, scheduling, and etc.
-    
+
     @staticmethod
     def send(
         recipient,
@@ -51,7 +48,7 @@ class NotificationDispatcher:
             KeyError
                 If the sender has not been registered.
         """
-        
+
         ensure_valid_message_inputs(message_class, data)
 
         config = MessageOptionsRegistry.get(message_class)
@@ -63,8 +60,7 @@ class NotificationDispatcher:
             options=channel_selection_options
         )
 
-        mapper_class = message_class.Mapper
-        canonical_message = mapper_class.map(data=data)
+        canonical_message = message_class.Mapper.map(data=data)
 
         attempts = max(1, delivery_options.retry_count + 1)
         timeout_seconds = delivery_options.timeout_seconds
@@ -74,69 +70,27 @@ class NotificationDispatcher:
             primary_resolved_channel
         )
 
-        errors: List[Exception] = []
+        delivery_result = SenderExecutor.execute_chain(
+            sender_chain=sender_chain,
+            recipient=recipient,
+            message_class=message_class,
+            canonical_message=canonical_message,
+            channel_selection_options=channel_selection_options,
+            attempts=attempts,
+            timeout_seconds=timeout_seconds,
+            primary_resolved_channel=primary_resolved_channel,
+        )
 
-        last_exception = None
-        last_channel_type = primary_resolved_channel.channel_type
-        last_identifier = primary_resolved_channel.identifier
-
-        for sender_class in sender_chain:
-
-            context = SenderDispatchContext(
-                sender_class=sender_class,
-                recipient=recipient,
-                message_class=message_class,
-                canonical_message=canonical_message,
-                channel_selection_options=channel_selection_options,
-                attempts=attempts,
-                timeout_seconds=timeout_seconds,
-            )
-
-            try:
-                SenderExecutor.execute(context)
-
-                if context.success:
-                    return DeliveryStatus(
-                        success=True,
-                        message_class=message_class,
-                        sender_class=sender_class,
-                        channel_type=context.channel_type,
-                        identifier=context.identifier,
-                        attempts=len(context.attempt_history),
-                        last_exception=None,
-                        fallback_used=(sender_class != sender_chain[0]),
-                        attempt_history=context.attempt_history,
-                        errors=errors
-                    )
-
-                last_exception = context.last_exception
-                last_channel_type = context.channel_type
-                last_identifier = context.identifier
-
-                errors.append(context.last_exception)
-
-            except MessagePermissionDeniedError as permission_exception:
-                errors.append(permission_exception)
-                last_exception = permission_exception
-                continue
+        if delivery_result.success:
+            return delivery_result
 
         retry_exception_object = MaxRetryExceededError(
             attempts=attempts,
-            last_exception=last_exception,
-            channel=last_channel_type,
-            identifier=last_identifier
+            last_exception=delivery_result.last_exception,
+            channel=delivery_result.channel_type,
+            identifier=delivery_result.identifier
         )
 
-        retry_exception_object.delivery_status = DeliveryStatus(
-            success=False,
-            message_class=message_class,
-            sender_class=None,
-            channel_type=last_channel_type,
-            identifier=last_identifier,
-            attempts=attempts,
-            last_exception=last_exception,
-            fallback_used=(len(sender_chain) > 1),
-            errors=errors
-        )
+        retry_exception_object.delivery_status = delivery_result
 
-        raise retry_exception_object from last_exception
+        raise retry_exception_object from delivery_result.last_exception

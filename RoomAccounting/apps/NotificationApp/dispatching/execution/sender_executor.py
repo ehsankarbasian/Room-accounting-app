@@ -1,24 +1,96 @@
 """
 SenderExecutor is responsible for performing the actual delivery attempt loop
-for a single Sender class, including retries, timeout handling, and attempt tracing.
+for sender classes, including retries, timeout handling, and attempt tracing.
 """
 
 import time
 from concurrent.futures import TimeoutError as FuturesTimeoutError
 
 from ..context import SenderDispatchContext
-from ..delivery_result import AttemptTrace
+from ..delivery_result import AttemptTrace, DeliveryStatus
 
 from ..pipeline.resolvers import ChannelResolver, ChannelSelectionOptions
 from ..pipeline.permissions import ensure_permissions
 from ..pipeline.timeout import execute_with_timeout
+from ..errors import MessagePermissionDeniedError
 
 
 class SenderExecutor:
-    """Executes delivery attempts for a single sender within the notification pipeline."""
+    """Executes delivery attempts for sender chains within the notification pipeline."""
 
     @staticmethod
-    def execute(context: SenderDispatchContext) -> None:
+    def execute_chain(
+        sender_chain,
+        recipient,
+        message_class,
+        canonical_message,
+        channel_selection_options,
+        attempts,
+        timeout_seconds,
+        primary_resolved_channel,
+    ):
+
+        errors = []
+
+        last_exception = None
+        last_channel_type = primary_resolved_channel.channel_type
+        last_identifier = primary_resolved_channel.identifier
+
+        for sender_class in sender_chain:
+
+            context = SenderDispatchContext(
+                sender_class=sender_class,
+                recipient=recipient,
+                message_class=message_class,
+                canonical_message=canonical_message,
+                channel_selection_options=channel_selection_options,
+                attempts=attempts,
+                timeout_seconds=timeout_seconds,
+            )
+
+            try:
+                SenderExecutor._execute_sender(context)
+
+                if context.success:
+                    return DeliveryStatus(
+                        success=True,
+                        message_class=message_class,
+                        sender_class=sender_class,
+                        channel_type=context.channel_type,
+                        identifier=context.identifier,
+                        attempts=len(context.attempt_history),
+                        last_exception=None,
+                        fallback_used=(sender_class != sender_chain[0]),
+                        attempt_history=context.attempt_history,
+                        errors=errors
+                    )
+
+                last_exception = context.last_exception
+                last_channel_type = context.channel_type
+                last_identifier = context.identifier
+
+                errors.append(context.last_exception)
+
+            except MessagePermissionDeniedError as permission_exception:
+                errors.append(permission_exception)
+                last_exception = permission_exception
+                continue
+
+        return DeliveryStatus(
+            success=False,
+            message_class=message_class,
+            sender_class=None,
+            channel_type=last_channel_type,
+            identifier=last_identifier,
+            attempts=attempts,
+            last_exception=last_exception,
+            fallback_used=(len(sender_chain) > 1),
+            errors=errors
+        )
+
+
+    @staticmethod
+    def _execute_sender(context: SenderDispatchContext) -> None:
         """
         Perform the delivery execution flow for a single sender, including
         permission check, retry loop, timeout handling, and trace recording.
