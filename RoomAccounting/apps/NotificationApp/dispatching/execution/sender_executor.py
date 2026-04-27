@@ -137,31 +137,26 @@ class SenderExecutor:
                 context.last_exception = None
                 return
 
-            except FuturesTimeoutError:
-                error = TimeoutError(
-                    f"Sender execution exceeded timeout of {context.timeout_seconds} seconds"
-                )
+            except Exception as error:
+
+                if isinstance(error, FuturesTimeoutError):
+                    exception_to_record = TimeoutError(
+                        f"Sender '{context.sender_class.__class__.__name__}' timed out "
+                        f"after {context.timeout_seconds} seconds."
+                    )
+                else:
+                    exception_to_record = error
 
                 SenderExecutor._record_attempt(
                     context=context,
                     attempt_number=attempt_number,
                     start_time=start_time,
                     success=False,
-                    error=error,
+                    error=exception_to_record,
                 )
 
-                context.last_exception = error
+                context.last_exception = exception_to_record
 
-            except Exception as new_exception:
-                SenderExecutor._record_attempt(
-                    context=context,
-                    attempt_number=attempt_number,
-                    start_time=start_time,
-                    success=False,
-                    error=new_exception,
-                )
-
-                context.last_exception = new_exception
 
         context.success = False
 
@@ -175,6 +170,7 @@ class SenderExecutor:
         success: bool,
         error: Exception | None,
     ) -> None:
+        
         duration = int((time.monotonic() - start_time) * 1000)
 
         context.attempt_history.append(
