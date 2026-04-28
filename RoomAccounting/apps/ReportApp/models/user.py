@@ -7,14 +7,14 @@ from apps.ReportApp.models._base import verbose_name_plural
 class User(AbstractUser):
 
     class Role(models.TextChoices):
-        OWNER = "owner", "Owner"
+        OWNER = "room_owner", "RoomOwner"
         PERSON = "person", "Person"
 
     role = models.CharField(
         max_length=10,
         choices=Role.choices,
         db_index=True,
-        default="owner",
+        default="owner_owner",
     )
 
     email = models.EmailField(unique=True)
