@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models import Q
 
-from apps.ReportApp.models._base import verbose_name_plural
+from utils.verbose import verbose_name_plural
 
 from apps.ReportApp.models import Transaction, Spend
 
@@ -9,7 +9,7 @@ from apps.ReportApp.models import Transaction, Spend
 class Person(models.Model):
 
     user = models.OneToOneField(
-        "User",
+        "AuthApp.User",
         on_delete=models.CASCADE,
         related_name="person_profile"
     )

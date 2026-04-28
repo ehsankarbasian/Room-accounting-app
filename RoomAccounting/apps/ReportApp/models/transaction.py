@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models import Q
 
-from apps.ReportApp.models._base import verbose_name_plural
+from utils.verbose import verbose_name_plural
 
 from typing import TYPE_CHECKING
 

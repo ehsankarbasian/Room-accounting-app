@@ -48,7 +48,7 @@ ADMIN_PRIORITY = [
 
 # Application definition
 
-AUTH_USER_MODEL = 'ReportApp.User'
+AUTH_USER_MODEL = 'AuthApp.User'
 
 INSTALLED_APPS = [
     'django.contrib.admin',

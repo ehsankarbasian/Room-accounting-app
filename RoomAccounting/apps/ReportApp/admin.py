@@ -1,9 +1,5 @@
 from django.contrib import admin
-from apps.ReportApp.models import Room, Person, Spend, Spenders, Partners, User, Transaction
-
-
-class RoomInLine(admin.TabularInline):
-    model = Room
+from apps.ReportApp.models import Room, Person, Spend, Spenders, Partners, Transaction
 
 
 class PersonInLine(admin.TabularInline):
@@ -21,27 +17,6 @@ class SpendersInLine(admin.TabularInline):
 
 class PartnersInLine(admin.TabularInline):
     model = Partners
-
-
-@admin.register(User)
-class UserAdmin(admin.ModelAdmin):
-    list_display = ['username', 'email', 'verified_email', 'verified_phone', 'fullname', 'phone_number']
-    list_editable = ['verified_email', 'verified_phone']
-    list_filter = ['verified_email', 'verified_phone']
-    search_fields = ['username', 'email']
-    fieldsets = (
-        ('General Info', {
-            'fields': ('username',
-                       ('email', 'phone_number'))
-        }),
-        ('More info', {
-            'fields': (('verified_email', 'verified_phone', 'fullname'),
-                       ('date_joined', 'last_login'),
-                       ('is_staff', 'is_superuser'))
-        })
-    )
-    readonly_fields = ['username', 'email', 'date_joined', 'last_login', 'is_staff', 'is_superuser']
-    inlines = [RoomInLine]
 
 
 @admin.register(Room)

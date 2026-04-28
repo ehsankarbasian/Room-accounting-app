@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models import Q
 
-from apps.ReportApp.models._base import verbose_name_plural
+from utils.verbose import verbose_name_plural
 
 from apps.ReportApp.models import Transaction
 
@@ -9,7 +9,7 @@ from apps.ReportApp.models import Transaction
 class Room(models.Model):
     created_at = models.DateTimeField(auto_now=True)
     name = models.CharField(max_length=100, default="new_room")
-    creator = models.ForeignKey("User", on_delete=models.CASCADE, null=True)
+    creator = models.ForeignKey("AuthApp.User", on_delete=models.CASCADE, null=True)
 
     class Meta:
         verbose_name_plural = verbose_name_plural('Rooms')

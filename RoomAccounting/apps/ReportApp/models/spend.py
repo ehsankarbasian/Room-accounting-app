@@ -1,7 +1,9 @@
+from collections import defaultdict
+
 from django.db import models
 from django.db.models import Prefetch
 
-from apps.ReportApp.models._base import verbose_name_plural, DefaultZeroDict
+from utils.verbose import verbose_name_plural
 
 from apps.ReportApp.models import Spenders, Partners
 
@@ -58,7 +60,7 @@ class Spend(models.Model):
 
     @property
     def partner_dict(self):
-        result = DefaultZeroDict()
+        result = defaultdict(0)
 
         for partner in self.prefetched_partners:
             result[partner.partner_person.id] = partner.weight
@@ -67,7 +69,7 @@ class Spend(models.Model):
 
     @property
     def spender_dict(self):
-        result = DefaultZeroDict()
+        result = defaultdict(0)
 
         for spender in self.prefetched_spenders:
             result[spender.spender_person.id] = spender.weight
