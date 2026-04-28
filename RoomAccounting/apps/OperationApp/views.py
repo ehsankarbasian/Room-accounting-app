@@ -4,6 +4,8 @@ from random import randint
 from django.shortcuts import redirect, render, get_object_or_404
 from django.template.loader import get_template
 from django.views.generic.base import View
+from django.db import transaction
+from django.contrib.auth import get_user_model
 
 from apps.ReportApp.models import Room, Person, Spend, Spenders, Partners, Transaction
 
@@ -11,6 +13,9 @@ from apps.OperationApp.email_generator import EmailGenerator
 
 from apps.AuthApp.persmissions.mixins import PermissionMixin
 from apps.AuthApp.persmissions.permissions import IsAuthenticated
+
+
+User = get_user_model()
 
 
 # TODO: Use ModelViews to CRUD
@@ -50,13 +55,23 @@ class EditRoomView(PermissionMixin, View):
 class AddPersonView(PermissionMixin, View):
     permission_classes = (IsAuthenticated, )
     
+    @transaction.atomic
     def post(self, request, room_id):
         room = get_object_or_404(Room, id=room_id, creator__id=request.user.id)
         
         name = request.POST['person_name']
         email = request.POST['email']
         phone = request.POST['phone']
-        person = Person.objects.create(name=name, email=email, phone=phone, room=room,
+
+        user = User.objects.create(
+            username=email,
+            email=email,
+            phone_number=phone,
+            fullname=name,
+            role=User.Role.PERSON
+        )
+        
+        person = Person.objects.create(user=user, name=name, email=email, phone=phone, room=room,
                                     verify_email_token=token_hex(64), verify_phone_code=randint(100000, 999999))
 
         context = {'person_id': person.id,
