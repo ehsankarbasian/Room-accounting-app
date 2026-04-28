@@ -7,9 +7,16 @@ from apps.ReportApp.models import Transaction, Spend
 
 
 class Person(models.Model):
+
+    user = models.OneToOneField(
+        "User",
+        on_delete=models.CASCADE,
+        related_name="person_profile"
+    )
+
     name = models.CharField(max_length=100, default="new_person")
     phone = models.CharField(max_length=20)
-    email = models.EmailField(unique=False)
+    email = models.EmailField()
     room = models.ForeignKey("Room", on_delete=models.CASCADE)
 
     verify_email_token = models.CharField(max_length=64)
@@ -52,4 +59,4 @@ class Person(models.Model):
         self.save()
 
     def __str__(self):
-        return self.name + " (room: " + self.room.name + ")"
+        return f"{self.name} (room: {self.room.name})"
