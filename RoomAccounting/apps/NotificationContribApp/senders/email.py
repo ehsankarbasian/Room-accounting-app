@@ -18,11 +18,16 @@ class EmailSender(MessageSenderInterface):
         """
         Convert CanonicalMessage into an email payload.
         """
+        
+        buttons_as_text = ""
+        for button in message.buttons + message.button_links:
+            buttons_as_text += f'\n{button.text}:\n{button.target}\n'
 
         return {
             "subject": "reset password",
             "html_content": message.text,
             "text_content": "message",
+            "buttons_as_text": buttons_as_text,
         }
 
 
@@ -43,5 +48,16 @@ class EmailSender(MessageSenderInterface):
             payload["html_content"],
             "text/html",
         )
+        
+        print("\n", "-" * 100)
+        print("\nSending ...\n")
 
-        email_obj.send()
+        print("Email payload: ", payload)
+        print("Email object: ", email_obj)
+
+        print("\nmessage receiver identifier:")
+        print(f"    {identifier}")
+
+        print("\n", "-" * 100, "\n")
+
+        # email_obj.send()

@@ -1,1 +1,1 @@
-from sms_client.sms import send_text_sms
+from .sms import send_text_sms
