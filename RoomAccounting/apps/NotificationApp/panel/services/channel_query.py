@@ -1,6 +1,7 @@
 from django.contrib.contenttypes.models import ContentType
 
 from ...models import NotificationChannel
+
 from .exceptions import ChannelNotFound
 
 
