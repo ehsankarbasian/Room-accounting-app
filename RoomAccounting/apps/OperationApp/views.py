@@ -1,13 +1,12 @@
 from secrets import token_hex
 from random import randint
 
-from django.shortcuts import redirect, render, get_object_or_404
-from django.template.loader import get_template
+from django.shortcuts import redirect, get_object_or_404
 from django.views.generic.base import View
 from django.db import transaction
 from django.contrib.auth import get_user_model
 
-from apps.ReportApp.models import Room, Person, Spend, Spenders, Partners, Transaction
+from apps.ReportApp.models import Room, Person, Spend, Spenders, Partners
 
 from apps.OperationApp.email_generator import EmailGenerator
 
@@ -126,28 +125,3 @@ class AddSpendView(PermissionMixin, View):
         spend = Spend.objects.get(id=spend.id)
         EmailGenerator.send_new_spend_to_person(spend)
         return redirect('ReportApp:home')
-
-
-class AddTransactionView(PermissionMixin, View):
-    permission_classes = (IsAuthenticated, )
-    
-    def post(self, request, room_id):
-        room = get_object_or_404(Room, id=room_id, creator__id=request.user.id)
-        
-        amount = request.POST['amount']
-        payer_id = request.POST['Payer']
-        receiver_id = request.POST['Receiver']
-
-        if payer_id == receiver_id:
-            return _result_page(request, "ERROR: The payer and the receiver are the same")
-
-        payer = Person.objects.get(id=payer_id)
-        receiver = Person.objects.get(id=receiver_id)
-        transaction = Transaction.objects.create(amount=amount, payer=payer, receiver=receiver)
-
-        EmailGenerator.send_new_transaction_to_person(transaction)
-        return redirect('ReportApp:home')
-
-
-def _result_page(request, result):
-    return render(request, 'result.html', context={'result': result})
