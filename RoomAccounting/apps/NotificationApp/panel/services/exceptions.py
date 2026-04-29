@@ -13,15 +13,3 @@ class UnsupportedChannelType(ChannelServiceException):
 
 class ChannelNotFound(ChannelServiceException):
     pass
-
-
-class ChannelAlreadyVerified(ChannelServiceException):
-    pass
-
-
-class InvalidVerificationToken(ChannelServiceException):
-    pass
-
-
-class VerificationTokenExpired(ChannelServiceException):
-    pass

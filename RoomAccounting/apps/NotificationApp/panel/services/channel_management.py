@@ -3,6 +3,9 @@ from ...models import NotificationChannel
 from .exceptions import ChannelNotFound
 
 
+# TODO: disable/enable channel
+
+
 def delete_channel(channel_id):
     
     try:
