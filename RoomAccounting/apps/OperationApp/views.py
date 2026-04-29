@@ -14,6 +14,9 @@ from apps.OperationApp.email_generator import EmailGenerator
 from apps.AuthApp.persmissions.mixins import PermissionMixin
 from apps.AuthApp.persmissions.permissions import IsAuthenticated
 
+from apps.NotificationContribApp.senders import SmsSender, EmailSender
+from apps.NotificationApp.models import NotificationChannel
+
 
 User = get_user_model()
 
@@ -71,17 +74,26 @@ class AddPersonView(PermissionMixin, View):
             role=User.Role.PERSON
         )
         
-        person = Person.objects.create(user=user, name=name, email=email, phone=phone, room=room,
-                                    verify_email_token=token_hex(64), verify_phone_code=randint(100000, 999999))
+        Person.objects.create(
+            user=user,
+            name=name,
+            email=email,
+            phone=phone,
+            room=room,
+            verify_email_token=token_hex(64),
+            verify_phone_code=randint(100000, 999999)
+        )
 
-        context = {'person_id': person.id,
-                    'name': name,
-                    'mode': 'verifyPersonEmail',
-                    'verify_email_token': person.verify_email_token}
-        html_content = get_template('AuthApp/email_verification.html').render(context=context)
-
-        message = "Hello " + name + ". please click on the button below to verify your email"
-        send_html_email("Verify email", message, [email], html_content)
+        NotificationChannel.objects.create(
+            identifier=phone,
+            channel_type=SmsSender.sender_key,
+            recipient=user
+        )
+        NotificationChannel.objects.create(
+            identifier=email,
+            channel_type=EmailSender.sender_key,
+            recipient=user
+        )
 
         return redirect('ReportApp:home')
 
