@@ -1,10 +1,11 @@
 from django.contrib.contenttypes.models import ContentType
 
-from NotificationApp.models import NotificationChannel
+from ...models import NotificationChannel
 from .exceptions import ChannelNotFound
 
 
 def list_recipient_channels(recipient):
+    
     recipient_content_type = ContentType.objects.get_for_model(recipient)
 
     return NotificationChannel.objects.filter(
@@ -14,6 +15,7 @@ def list_recipient_channels(recipient):
 
 
 def get_channel(channel_id):
+    
     try:
         return NotificationChannel.objects.get(id=channel_id)
     except NotificationChannel.DoesNotExist:
@@ -21,6 +23,7 @@ def get_channel(channel_id):
 
 
 def get_primary_channel(recipient):
+    
     recipient_content_type = ContentType.objects.get_for_model(recipient)
 
     return NotificationChannel.objects.filter(

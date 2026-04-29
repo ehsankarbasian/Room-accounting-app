@@ -25,4 +25,3 @@ class InvalidVerificationToken(ChannelServiceException):
 
 class VerificationTokenExpired(ChannelServiceException):
     pass
-
