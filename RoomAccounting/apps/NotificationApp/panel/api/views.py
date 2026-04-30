@@ -61,7 +61,8 @@ def channels_collection_view(request):
 def channel_detail_view(request, channel_id):
 
     try:
-        channel = channels.get_channel(channel_id)
+        recipient = request.user
+        channel = channels.get_channel(channel_id, recipient)
     except channels.ChannelNotFound:
         raise NotFound("Channel not found")
 
@@ -79,14 +80,16 @@ def channel_detail_view(request, channel_id):
         updated_channel = serializer.save()
         return Response(ChannelReadSerializer(updated_channel).data)
 
-    channels.delete_channel(channel_id)
+    recipient = request.user
+    channels.delete_channel(channel_id, recipient)
     return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 @api_view(["POST"])
 def make_primary_channel_view(request, channel_id):
 
-    channels.mark_as_primary(channel_id)
+    recipient = request.user
+    channels.mark_as_primary(channel_id, recipient)
     return Response(status=status.HTTP_204_NO_CONTENT)
 
 

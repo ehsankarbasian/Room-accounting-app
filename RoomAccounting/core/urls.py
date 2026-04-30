@@ -26,6 +26,8 @@ from apps.AuthApp.apps import AuthAppConfig
 from apps.ReportApp.apps import ReportAppConfig
 from apps.OperationApp.apps import OperationAppConfig
 
+from apps.NotificationApp.apps import NotificationAppConfig
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -36,6 +38,9 @@ urlpatterns = [
     path(ReportAppConfig.name + "/", include('apps.ReportApp.urls')),
     path(OperationAppConfig.name + "/", include('apps.OperationApp.urls')),
 ]
+
+
+urlpatterns += [path(NotificationAppConfig.name + "/", include('apps.NotificationApp.panel.urls'))]
 
 
 # if settings.DEBUG:

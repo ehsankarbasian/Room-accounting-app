@@ -1,0 +1,77 @@
+from django.shortcuts import render, redirect
+
+from ...panel.services import channels
+
+
+def channel_list_view(request):
+    recipient = request.user
+
+    channel_list = channels.list_recipient_channels(recipient)
+
+    return render(
+        request,
+        "panel/channels/list.html",
+        {
+            "channels": channel_list
+        }
+    )
+
+
+def create_channel_view(request):
+    recipient = request.user
+
+    if request.method == "POST":
+
+        channel_type = request.POST.get("channel_type")
+        identifier = request.POST.get("identifier")
+        priority = request.POST.get("priority")
+
+        channels.create_channel(
+            recipient=recipient,
+            channel_type=channel_type,
+            identifier=identifier,
+            priority=int(priority)
+        )
+
+        return redirect("panel_channel_list")
+
+    return render(request, "panel/channels/create_form.html")
+
+
+def delete_channel_view(request, channel_id):
+
+    recipient = request.user
+
+    try:
+        channels.delete_channel(channel_id, recipient)
+    except channels.ChannelNotFound:
+        pass
+
+    return redirect("panel_channel_list")
+
+
+def make_primary_view(request, channel_id):
+
+    recipient = request.user
+    channels.mark_as_primary(channel_id, recipient)
+    channel = channels.get_channel(channel_id, recipient)
+
+    return render(
+        request,
+        "panel/channels/channel_row.html",
+        {"channel": channel}
+    )
+
+
+def set_priority_view(request, channel_id):
+
+    recipient = request.user
+    priority = int(request.POST.get("priority"))
+    channels.set_priority(channel_id, recipient, priority)
+    channel = channels.get_channel(channel_id, recipient)
+
+    return render(
+        request,
+        "panel/channels/channel_row.html",
+        {"channel": channel}
+    )

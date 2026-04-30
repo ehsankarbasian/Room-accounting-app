@@ -6,7 +6,7 @@ from .exceptions import ChannelNotFound
 # TODO: disable/enable channel
 
 
-def delete_channel(channel_id):
+def delete_channel(channel_id, recipient):
     
     try:
         channel = NotificationChannel.objects.get(id=channel_id)
@@ -30,7 +30,7 @@ def update_identifier(channel_id, new_identifier):
     return channel
 
 
-def mark_as_primary(channel_id):
+def mark_as_primary(channel_id, recipient):
     
     try:
         channel = NotificationChannel.objects.get(id=channel_id)

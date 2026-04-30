@@ -15,7 +15,7 @@ def list_recipient_channels(recipient):
     ).order_by("priority")
 
 
-def get_channel(channel_id):
+def get_channel(channel_id, recipient):
     
     try:
         return NotificationChannel.objects.get(id=channel_id)
