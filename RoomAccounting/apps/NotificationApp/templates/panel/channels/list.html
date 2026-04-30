@@ -1,0 +1,32 @@
+{% extends "panel/base.html" %}
+
+{% block content %}
+
+<a href="{% url 'panel_channel_create' %}">
+Add Channel
+</a>
+
+<table>
+
+<thead>
+<tr>
+<th>Type</th>
+<th>Identifier</th>
+<th>Priority</th>
+<th>Primary</th>
+<th>Verified</th>
+<th>Actions</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for channel in channels %}
+{% include "panel/channels/channel_row.html" %}
+{% endfor %}
+
+</tbody>
+
+</table>
+
+{% endblock %}

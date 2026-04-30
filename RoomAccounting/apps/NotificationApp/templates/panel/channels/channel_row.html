@@ -1,0 +1,43 @@
+<tr id="channel-{{ channel.id }}">
+
+<td>{{ channel.channel_type }}</td>
+
+<td>{{ channel.identifier }}</td>
+
+<td>{{ channel.priority }}</td>
+
+<td>
+{% if channel.is_primary %}
+✅
+{% endif %}
+</td>
+
+<td>
+{% if channel.is_verified %}
+✅
+{% endif %}
+</td>
+
+<td>
+
+<button
+hx-post="{% url 'panel_channel_primary' channel.id %}"
+hx-target="#channel-{{ channel.id }}"
+hx-swap="outerHTML">
+
+Make Primary
+
+</button>
+
+<form
+hx-post="{% url 'panel_channel_delete' channel.id %}"
+hx-target="closest tr"
+hx-swap="outerHTML">
+
+<button>Delete</button>
+
+</form>
+
+</td>
+
+</tr>

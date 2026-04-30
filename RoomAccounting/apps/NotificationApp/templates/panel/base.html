@@ -1,0 +1,28 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Notification Panel</title>
+
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+
+    <link rel="stylesheet" href="{% static 'panel/panel.css' %}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Notification Channels</h1>
+
+{% block content %}
+{% endblock %}
+
+</div>
+
+</body>
+</html>
