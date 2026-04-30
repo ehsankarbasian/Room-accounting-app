@@ -12,6 +12,29 @@ from .serializers import (
 )
 
 
+# TODO: Security hardening
+# - Ensure channel ownership checks in all endpoints
+# - Prevent users from accessing channels of other recipients
+
+# TODO: DRF permissions
+# - Add IsAuthenticated permission
+# - Add custom permission for channel ownership if needed
+
+# TODO: Exception mapping
+# - Map service layer exceptions to proper HTTP responses
+# - ChannelNotFound -> 404
+# - DuplicateChannel -> 409
+# - InvalidChannelType -> 400
+
+# TODO: Validation improvements
+# - Validate priority values
+# - Prevent invalid state transitions
+
+# TODO: API documentation
+# - Add OpenAPI schema
+# - Provide usage examples for frontend clients
+
+
 @api_view(["GET", "POST"])
 def channels_collection_view(request):
 
