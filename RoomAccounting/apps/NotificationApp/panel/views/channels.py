@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponseBadRequest
+from django.http import HttpResponseBadRequest, HttpResponse
 
 from ...registry.sender import SenderRegistry
 from ...panel.services import channels
@@ -64,11 +64,10 @@ def make_primary_view(request, channel_id):
         return HttpResponseBadRequest("Channel must be verified")
     
     channels.mark_as_primary(channel_id, recipient)
-    return render(
-        request,
-        "panel/channels/channel_row.html",
-        {"channel": channel}
-    )
+    
+    response = HttpResponse()
+    response['HX-Refresh'] = 'true'
+    return response
 
 
 def set_priority_view(request, channel_id):
