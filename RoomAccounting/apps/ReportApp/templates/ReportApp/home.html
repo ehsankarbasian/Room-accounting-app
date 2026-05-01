@@ -20,19 +20,30 @@
 
                         <hr>
                         <form action="{% url 'AuthApp:logout' %}" method="POST">
-                            <button type="submit"><u><b style="font-size: 32px">Logout</b></u></button>
+                            <button type="submit" style="padding: 8px 14px; border-radius: 6px; background: #3b82f6; color: #ffffff;"><u><b>
+                                Logout</b></u></button>
                         </form>
 
                         <br>
 
                         <hr>
                         <form action="{% url 'AuthApp:forgot_password' %}" method="GET">
-                            <input type="email" name="email"/><br/><br>
-                            <button type="submit"><u><b style="font-size: 32px">Forgot Password</b></u></button>
+                            Email Address: <input type="email" name="email"/><br/><br>
+                            <button type="submit" style="padding: 8px 14px; border-radius: 6px; background: #3b82f6; color: #ffffff;"><u><b>
+                                Forgot Password</b></u></button>
                         </form>
+
+                        <br>
+
                         <hr>
+                        
+                            <a href="{% url 'manage_channels' %}" target="_blank" style="padding: 8px 14px; border-radius: 6px; background: #3b82f6; color: #ffffff;">
+                                Manage Notification Channels
+                            </a>
+
                     </div>
 
+                    <hr>
                     <h2 style="color: #ffffff">
 
                         You can
