@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.http import HttpResponseBadRequest
 
 from ...registry.sender import SenderRegistry
 from ...panel.services import channels
@@ -57,9 +58,12 @@ def delete_channel_view(request, channel_id):
 def make_primary_view(request, channel_id):
 
     recipient = request.user
-    channels.mark_as_primary(channel_id, recipient)
     channel = channels.get_channel(channel_id, recipient)
-
+    
+    if not channel.is_verified:
+        return HttpResponseBadRequest("Channel must be verified")
+    
+    channels.mark_as_primary(channel_id, recipient)
     return render(
         request,
         "panel/channels/channel_row.html",

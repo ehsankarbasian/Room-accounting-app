@@ -18,12 +18,14 @@
     </td>
 
     <td>
-        <button
-            hx-post="{% url 'panel_channel_primary' channel.id %}"
-            hx-target="#channel-{{ channel.id }}"
-            hx-swap="outerHTML">
-            Make Primary
-        </button>
+        {% if channel.is_verified %}
+            <button
+                hx-post="{% url 'panel_channel_primary' channel.id %}"
+                hx-target="#channel-{{ channel.id }}"
+                hx-swap="outerHTML">
+                Make Primary
+            </button>
+        {% endif %}
 
         <form
             hx-post="{% url 'panel_channel_delete' channel.id %}"
