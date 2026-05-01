@@ -3,21 +3,42 @@
 
 {% block content %}
 
-    <h2>Create Channel</h2>
+<h2>Create Channel</h2>
 
-    <form method="post">
-        {% csrf_token %}
+<form method="post">
+    {% csrf_token %}
 
-        <label>Channel Type</label>
-        <input type="text" name="channel_type">
+    <label for="channel_type">Channel Type</label>
+    <select id="channel_type" name="channel_type" required>
+        <option value="">Select channel type</option>
 
-        <label>Identifier</label>
-        <input type="text" name="identifier">
+        {% for channel_type in channel_types %}
+            <option value="{{ channel_type }}">
+                {{ channel_type }}
+            </option>
+        {% endfor %}
+    </select>
 
-        <label>Priority</label>
-        <input type="number" name="priority" value="10">
+    <label for="identifier">Identifier</label>
+    <input
+        id="identifier"
+        type="text"
+        name="identifier"
+        placeholder="Enter channel identifier"
+        required
+    >
 
-        <button type="submit">Create</button>
-    </form>
+    <label for="priority">Priority</label>
+    <input
+        id="priority"
+        type="number"
+        name="priority"
+        value="10"
+        min="1"
+    >
+
+    <button type="submit">Create</button>
+
+</form>
 
 {% endblock %}

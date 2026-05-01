@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 
+from ...registry.sender import SenderRegistry
 from ...panel.services import channels
 
 
@@ -35,7 +36,10 @@ def create_channel_view(request):
 
         return redirect("panel_channel_list")
 
-    return render(request, "panel/channels/create_form.html")
+    registered_channel_types = SenderRegistry.get_registered_types()
+    context = {"channel_types": registered_channel_types}
+    
+    return render(request, "panel/channels/create_form.html", context)
 
 
 def delete_channel_view(request, channel_id):
