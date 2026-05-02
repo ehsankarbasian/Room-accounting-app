@@ -55,6 +55,22 @@ def delete_channel_view(request, channel_id):
     return redirect("panel_channel_list")
 
 
+def update_channel_priority_view(request, channel_id):
+
+    if request.method == "POST":
+
+        priority = request.POST.get("priority")
+
+        channels.set_priority(
+            channel_id=channel_id,
+            priority=int(priority),
+        )
+
+        return redirect("panel_channel_list")
+
+    return redirect("panel_channel_list")
+
+
 def make_primary_view(request, channel_id):
 
     recipient = request.user
