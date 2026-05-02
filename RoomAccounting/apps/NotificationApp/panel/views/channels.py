@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.http import HttpResponseBadRequest, HttpResponse
 
 from ...registry.sender import SenderRegistry
@@ -35,7 +35,9 @@ def create_channel_view(request):
             priority=int(priority)
         )
 
-        return redirect("panel_channel_list")
+        response = HttpResponse()
+        response['HX-Refresh'] = 'true'
+        return response
 
     registered_channel_types = SenderRegistry.get_registered_types()
     context = {"channel_types": registered_channel_types}
@@ -52,7 +54,9 @@ def delete_channel_view(request, channel_id):
     except channels.ChannelNotFound:
         pass
 
-    return redirect("panel_channel_list")
+    response = HttpResponse()
+    response['HX-Refresh'] = 'true'
+    return response
 
 
 def update_channel_priority_view(request, channel_id):
@@ -66,9 +70,9 @@ def update_channel_priority_view(request, channel_id):
             priority=int(priority),
         )
 
-        return redirect("panel_channel_list")
-
-    return redirect("panel_channel_list")
+    response = HttpResponse()
+    response['HX-Refresh'] = 'true'
+    return response
 
 
 def make_primary_view(request, channel_id):
@@ -84,17 +88,3 @@ def make_primary_view(request, channel_id):
     response = HttpResponse()
     response['HX-Refresh'] = 'true'
     return response
-
-
-def set_priority_view(request, channel_id):
-
-    recipient = request.user
-    priority = int(request.POST.get("priority"))
-    channels.set_priority(channel_id, recipient, priority)
-    channel = channels.get_channel(channel_id, recipient)
-
-    return render(
-        request,
-        "panel/channels/channel_row.html",
-        {"channel": channel}
-    )
