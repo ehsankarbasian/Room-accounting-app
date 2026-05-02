@@ -60,6 +60,8 @@ def delete_channel_view(request, channel_id):
 
 
 def update_channel_priority_view(request, channel_id):
+    
+    # TODO (Pre Drag&Drop option): Implement priority normalization to avoid collisions and maintain sequential order.
 
     if request.method == "POST":
 
