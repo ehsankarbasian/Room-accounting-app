@@ -1,0 +1,13 @@
+
+V 1.X
+Edit priority with Inine input
+
+V 2.X
+Edit priority by drag and drop
+Test Send Button
+Channel Verification UI (Enter Code)
+Verification Try-Again Button
+
+V 3.X
+Channel Health Status (healthy, failing, slow)
+Channel Detail Page
