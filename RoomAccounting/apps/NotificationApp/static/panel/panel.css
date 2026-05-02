@@ -38,6 +38,18 @@ a:hover {
     transform: translateY(-1px);
 }
 
+.priority-input {
+    width: 70px;
+    text-align: center;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    padding: 3px;
+}
+.priority-input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;

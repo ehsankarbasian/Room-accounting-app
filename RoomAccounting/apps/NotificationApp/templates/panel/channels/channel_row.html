@@ -1,9 +1,23 @@
-
 <tr id="channel-{{ channel.id }}">
 
     <td>{{ channel.channel_type }}</td>
     <td>{{ channel.identifier }}</td>
-    <td>{{ channel.priority }}</td>
+
+    <!-- Priority Input -->
+    <td>
+        <input
+            type="number"
+            name="priority"
+            value="{{ channel.priority }}"
+            min="0"
+            class="priority-input"
+            
+            hx-post="{% url 'panel_set_channel_priority' channel.id %}"
+            hx-trigger="change"
+            hx-include="this"
+            hx-swap="none"
+        />
+    </td>
 
     <td>
         {% if channel.is_primary %}
