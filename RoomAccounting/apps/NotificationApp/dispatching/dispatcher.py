@@ -22,7 +22,7 @@ from .pipeline.validators import ensure_valid_message_inputs
 from .pipeline.resolvers import resolve_channel, build_sender_chain
 
 from .execution.sender_executor import SenderExecutor
-
+from .delivery_result import DeliveryStatus
 
 class NotificationDispatcher:
 
@@ -34,7 +34,7 @@ class NotificationDispatcher:
         recipient,
         message_class: Type[MessageDefinitionInterface],
         data: Type,
-    ):
+    ) -> DeliveryStatus:
         """
         Execute the notification delivery pipeline.
 
@@ -80,16 +80,21 @@ class NotificationDispatcher:
             primary_resolved_channel=primary_resolved_channel,
         )
 
-        if delivery_result.success:
-            return delivery_result
+        if not delivery_result.success:
 
-        retry_exception_object = MaxRetryExceededError(
-            attempts=attempts,
-            last_exception=delivery_result.last_exception,
-            channel=delivery_result.channel_type,
-            identifier=delivery_result.identifier
-        )
+            retry_exception_object = MaxRetryExceededError(
+                attempts=attempts,
+                last_exception=delivery_result.last_exception,
+                channel=delivery_result.channel_type,
+                identifier=delivery_result.identifier
+            )
+            
+            if (
+                delivery_result.last_exception and
+                delivery_result.last_exception not in delivery_result.errors
+            ):
+                delivery_result.errors.append(delivery_result.last_exception)
 
-        retry_exception_object.delivery_status = delivery_result
+            delivery_result.last_exception = retry_exception_object
 
-        raise retry_exception_object from delivery_result.last_exception
+        return delivery_result
